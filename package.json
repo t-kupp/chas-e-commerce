@@ -17,14 +17,8 @@
     "node": ">=18"
   },
   "packageManager": "npm@10.9.2",
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/@strapi",
-      "**/@strapi/**"
-    ]
-  }
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
