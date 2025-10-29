@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pokemons",
+  "info": {
+    "singularName": "pokemon",
+    "pluralName": "pokemons",
+    "displayName": "Pokemon"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::type.type",
+      "inversedBy": "pokemon"
+    },
+    "condition": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::condition.condition",
+      "inversedBy": "pokemon"
+    },
+    "rarity": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::rarity.rarity",
+      "inversedBy": "pokemon"
+    },
+    "stock": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

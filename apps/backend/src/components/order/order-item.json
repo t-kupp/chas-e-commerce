@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_order_order_items",
+  "info": {
+    "displayName": "Order Item",
+    "icon": "shoppingCart"
+  },
+  "options": {},
+  "attributes": {
+    "pokemon": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::pokemon.pokemon"
+    },
+    "Quantity": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

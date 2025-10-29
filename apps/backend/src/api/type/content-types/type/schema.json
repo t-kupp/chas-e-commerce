@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "types",
+  "info": {
+    "singularName": "type",
+    "pluralName": "types",
+    "displayName": "Type"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "pokemon": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::pokemon.pokemon",
+      "mappedBy": "type"
+    }
+  }
+}
