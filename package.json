@@ -16,9 +16,15 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@10.9.2",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "yarn@1.22.22",
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@strapi",
+      "**/@strapi/**"
+    ]
+  }
 }
