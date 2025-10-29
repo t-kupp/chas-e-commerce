@@ -10940,6 +10940,7 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "file:apps/mobile"
   dependencies:
     "@expo/vector-icons" "^15.0.3"
+    "@react-native/virtualized-lists" "^0.82.1"
     "@react-navigation/bottom-tabs" "^7.4.0"
     "@react-navigation/elements" "^2.6.3"
     "@react-navigation/native" "^7.1.8"
