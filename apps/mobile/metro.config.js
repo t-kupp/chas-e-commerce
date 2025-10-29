@@ -18,4 +18,13 @@ config.resolver.nodeModulesPaths = [
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
 
+// 4. Ignore backend build artifacts
+config.watchFolders = config.watchFolders || [];
+config.resolver.blockList = [
+  /apps\/backend\/dist\/.*/,
+  /apps\/backend\/\.tmp\/.*/,
+  /apps\/backend\/\.cache\/.*/,
+  /apps\/backend\/build\/.*/,
+];
+
 module.exports = config;

@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "npm run build:backend && turbo run dev",
+    "build:backend": "cd apps/backend && npm run build",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
@@ -16,8 +17,8 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@1.22.22",
-   "workspaces": {
+  "packageManager": "npm@11.6.2",
+  "workspaces": {
     "packages": [
       "apps/*",
       "packages/*"
