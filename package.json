@@ -33,5 +33,8 @@
       "**/@strapi",
       "**/@strapi/**"
     ]
+  },
+  "dependencies": {
+    "@next/third-parties": "^16.0.1"
   }
 }
