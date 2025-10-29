@@ -9,7 +9,7 @@
     "ios": "expo start --ios --tunnel",
     "web": "expo start --web",
     "lint": "expo lint",
-    "dev": "expo start"
+    "dev": "expo start --tunnel"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
