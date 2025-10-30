@@ -13,7 +13,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chas-e-commerce-web.vercel.app"),
+  metadataBase: new URL("http://localhost:3000"),
   title: {
     default: "Pokemon Cards Store - Rare & Collectible Trading Cards",
     template: "%s | Pokemon Cards Store", // %s does so pages will show "Page Name | Pokemon Cards Store"
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "sv-SE",
-    url: "https://chas-e-commerce-web.vercel.app",
+    url: "http://localhost:3000",
     siteName: "Pokemon Cards Store",
     title: "Pokemon Cards Store - Rare & Collectible Trading Cards",
     description:
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 
   // additional metadata
   alternates: {
-    canonical: "https://chas-e-commerce-web.vercel.app",
+    canonical: "http://localhost:3000",
   },
 };
 
