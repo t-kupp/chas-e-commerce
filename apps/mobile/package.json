@@ -3,13 +3,13 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --tunnel",
+    "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
-    "ios": "expo start --ios --tunnel",
+    "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "dev": "expo start --tunnel"
+    "dev": "expo start"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
