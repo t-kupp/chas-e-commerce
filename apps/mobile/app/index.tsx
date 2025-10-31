@@ -1,14 +1,14 @@
-import {Text, View} from "react-native";
-import "./global.css";
+import React from "react";
+import {View} from "react-native";
+import Footer from "./components/footer";
+import Header from "./components/header";
 
-export default function Index() {
+export default function HomePage() {
   return (
     <View>
-      <Text className="text-red-900 m-10">
-        Hello Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi
-        eum debitis, excepturi voluptates accusantium omnis? Ab id fuga enim
-        esse.
-      </Text>
+      <Header />
+
+      <Footer />
     </View>
   );
 }
