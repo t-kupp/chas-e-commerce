@@ -78,7 +78,7 @@ export default function ProductGrid() {
 
   return (
     <section className="max-w-7xl mx-auto px-4">
-      <div className="mb-6 flex justify-end">
+      <div className="mb-6 mt-6 flex justify-end">
         <div className="flex items-center gap-3">
           <label htmlFor="sort" className="text-sm font-medium">
             Sort by:

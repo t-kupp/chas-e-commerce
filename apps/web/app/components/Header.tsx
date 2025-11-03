@@ -128,7 +128,7 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full fixed top-0 z-50 bg-gray-800 text-white mt-16 border-b-8 border-yellow-400">
+    <header className="w-full fixed top-0 z-50 bg-gray-800 text-white border-b-8 border-yellow-400">
       <div className="xl:mx-16! px-4 py-3 flex items-center justify-between h-16">
         {/* logo */}
         <div className="flex items-center">
@@ -168,8 +168,7 @@ export default function Header() {
                     setShowSuggestions(false);
                   }}
                   aria-label="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   <X size={16} />
                 </button>
               )}
@@ -202,8 +201,7 @@ export default function Header() {
                                     onClick={() =>
                                       handleSuggestionClick(pokemon.slug)
                                     }
-                                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
-                                  >
+                                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left">
                                     <img
                                       src={imageUrl}
                                       alt={pokemon.name}
@@ -232,8 +230,7 @@ export default function Header() {
                                 <button
                                   type="button"
                                   onClick={() => handleTypeClick(type.slug)}
-                                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
-                                >
+                                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left">
                                   <div className="w-12 h-12 rounded bg-linear-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold">
                                     {type.title.charAt(0)}
                                   </div>
@@ -260,26 +257,22 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-6 ml-6">
           <Link
             href="/products"
-            className="hover:text-yellow-400! hover:underline"
-          >
+            className="hover:text-yellow-400! hover:underline">
             Products
           </Link>
           <Link
             href="/types"
-            className="hover:text-yellow-400! hover:underline"
-          >
+            className="hover:text-yellow-400! hover:underline">
             Types
           </Link>
           <Link
             href="/about"
-            className="hover:text-yellow-400! hover:underline"
-          >
+            className="hover:text-yellow-400! hover:underline">
             About us
           </Link>
           <Link
             href="/contact"
-            className="hover:text-yellow-400! hover:underline"
-          >
+            className="hover:text-yellow-400! hover:underline">
             Contact
           </Link>
         </nav>
@@ -308,22 +301,19 @@ export default function Header() {
           <Link
             href="/favorites"
             aria-label="Favorites"
-            className="relative p-2 hover:bg-yellow-400"
-          >
+            className="relative p-2 hover:bg-yellow-400">
             <Heart className="text-gray-700" />
           </Link>
           <Link
             href="/account"
             aria-label="Account"
-            className="p-2 hover:bg-yellow-400"
-          >
+            className="p-2 hover:bg-yellow-400">
             <User className="text-gray-700" />
           </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative p-2 hover:bg-yellow-400"
-          >
+            className="relative p-2 hover:bg-yellow-400">
             <ShoppingCart className="text-gray-700" size={20} />
           </Link>
 
@@ -331,8 +321,7 @@ export default function Header() {
           <button
             className="p-2 rounded-full hover:bg-yellow-400"
             aria-label="Toggle menu"
-            onClick={() => setMobileOpen((s) => !s)}
-          >
+            onClick={() => setMobileOpen((s) => !s)}>
             {mobileOpen ? (
               <X className="text-gray-700" size={24} />
             ) : (
@@ -374,8 +363,7 @@ export default function Header() {
                       setShowSuggestions(false);
                     }}
                     aria-label="Clear search"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
-                  >
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600">
                     <X size={18} />
                   </button>
                 )}
@@ -408,8 +396,7 @@ export default function Header() {
                                       onClick={() =>
                                         handleSuggestionClick(pokemon.slug)
                                       }
-                                      className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0"
-                                    >
+                                      className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0">
                                       <img
                                         src={imageUrl}
                                         alt={pokemon.name}
@@ -438,8 +425,7 @@ export default function Header() {
                                   <button
                                     type="button"
                                     onClick={() => handleTypeClick(type.slug)}
-                                    className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0"
-                                  >
+                                    className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0">
                                     <div className="w-10 h-10 rounded bg-linear-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
                                       {type.title.charAt(0)}
                                     </div>
@@ -468,29 +454,25 @@ export default function Header() {
               <Link
                 href="/products"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
-              >
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors">
                 Products
               </Link>
               <Link
                 href="/types"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
-              >
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors">
                 Types
               </Link>
               <Link
                 href="/about"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
-              >
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors">
                 About us
               </Link>
               <Link
                 href="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
-              >
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors">
                 Contact
               </Link>
             </nav>
