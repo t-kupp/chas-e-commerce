@@ -1,14 +1,25 @@
 import {Text, View} from "react-native";
-// import "./global.css";
+import "./global.css";
 
-export default function Index() {
+export default function HomePage() {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [productY, setProductY] = useState(0);
+
+  const scrollToProducts = () => {
+    scrollViewRef.current?.scrollTo({ y: productY, animated: true });
+  };
+
   return (
-    <View>
-      <Text className="text-red-900 m-10">
-        Hello Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi
-        eum debitis, excepturi voluptates accusantium omnis? Ab id fuga enim
-        esse.
-      </Text>
+    <View className="flex-1">
+      <Header />
+      <ScrollView ref={scrollViewRef} className="flex-1">
+        <Hero onShopNowPress={scrollToProducts} />
+        <Filter />
+        <View onLayout={(event) => setProductY(event.nativeEvent.layout.y)}>
+          <ProductCard />
+        </View>
+        <Footer />
+      </ScrollView>
     </View>
   );
 }
