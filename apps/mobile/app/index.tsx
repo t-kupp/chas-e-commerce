@@ -8,8 +8,8 @@ import ProductCard from "./components/productCard";
 export default function HomePage() {
   return (
     <View className="flex-1">
+      <Header />
       <ScrollView className="flex-1">
-        <Header />
         <Hero />
         <ProductCard />
       </ScrollView>
