@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import {View} from "react-native";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import Hero from "./components/hero";
