@@ -1,11 +1,15 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 
-export default function Hero() {
+interface HeroProps {
+  onShopNowPress: () => void;
+}
+
+export default function Hero({ onShopNowPress }: HeroProps) {
   return (
     <ImageBackground
       source={require("../assets/images/pokeimg.jpg")} // Add your image path here
-      style={{ height: 700 }}
+      style={{ height: 800 }}
       className="w-full"
       resizeMode="cover"
     >
@@ -20,8 +24,10 @@ export default function Hero() {
         <Text className="text-white text-lg text-center mb-8">
           Buy Rare Cards
         </Text>
-
-        <TouchableOpacity className="bg-yellow-400 px-10 py-4 rounded-lg">
+        <TouchableOpacity
+          className="bg-yellow-400 px-10 py-4 rounded-lg"
+          onPress={onShopNowPress}
+        >
           <Text className="text-slate-900 font-bold text-lg">Shop Now</Text>
         </TouchableOpacity>
       </View>
