@@ -5,12 +5,18 @@ import { Pokemon } from "../../../shared/types/pokemon";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-type SortOption = "name-asc" | "name-desc" | "price-asc" | "price-desc";
+type SortOption =
+  | "date-newest"
+  | "date-oldest"
+  | "name-asc"
+  | "name-desc"
+  | "price-asc"
+  | "price-desc";
 
 export default function ProductGrid() {
   const [data, setData] = useState<Pokemon[] | null>(null);
   const [filteredData, setFilteredData] = useState<Pokemon[] | null>(null);
-  const [sortBy, setSortBy] = useState<SortOption>("name-asc");
+  const [sortBy, setSortBy] = useState<SortOption>("date-newest");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Fetch data on page load
@@ -48,6 +54,10 @@ export default function ProductGrid() {
           return a.price - b.price;
         case "price-desc":
           return b.price - a.price;
+        case "date-newest":
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "date-oldest":
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         default:
           return 0;
       }
@@ -79,6 +89,8 @@ export default function ProductGrid() {
             onChange={handleSortChange}
             className="px-4 py-2 border border-foreground/10 rounded  text-sm"
           >
+            <option value="date-newest">Date Added (Newest First)</option>
+            <option value="date-oldest">Date Added (Oldest First)</option>
             <option value="name-asc">Name (A-Z)</option>
             <option value="name-desc">Name (Z-A)</option>
             <option value="price-asc">Price (Low to High)</option>
