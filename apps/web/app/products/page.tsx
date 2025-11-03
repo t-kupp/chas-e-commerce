@@ -16,9 +16,15 @@ export const metadata: Metadata = {
   },
 };
 
-async function getAllPokemon() {
+async function getAllPokemon(searchQuery?: string) {
   try {
-    const res = await fetch("http://localhost:1337/api/pokemons?populate=*", {
+    let url = "http://localhost:1337/api/pokemons?populate=*";
+
+    if (searchQuery) {
+      url += `&filters[name][$containsi]=${encodeURIComponent(searchQuery)}`;
+    }
+
+    const res = await fetch(url, {
       next: { revalidate: 60 },
     });
     const data = await res.json();
@@ -29,8 +35,17 @@ async function getAllPokemon() {
   }
 }
 
-export default async function ProductsPage() {
-  const pokemon = await getAllPokemon();
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const params = await searchParams;
+  const searchQuery = params.q;
+  const pokemon = await getAllPokemon(searchQuery);
+
+  console.log("Search query:", searchQuery);
+  console.log("Pokemon found:", pokemon.length);
 
   // JSON-LD for product listing
   const jsonLd = {
@@ -62,39 +77,67 @@ export default async function ProductsPage() {
       />
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">All Pokemon Cards</h1>
+        <h1 className="text-4xl font-bold mb-4">
+          {searchQuery
+            ? `Search Results for "${searchQuery}"`
+            : "All Pokemon Cards"}
+        </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {pokemon.map((p: any) => {
-            const imageUrl = p.image?.url
-              ? `http://localhost:1337${p.image.url}`
-              : "/placeholder-card.jpg";
+        {searchQuery && (
+          <p className="text-gray-600 mb-8">
+            Found {pokemon.length} {pokemon.length === 1 ? "card" : "cards"}
+          </p>
+        )}
 
-            return (
+        {pokemon.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-xl text-gray-600">
+              {searchQuery
+                ? `No Pokemon cards found matching "${searchQuery}"`
+                : "No Pokemon cards available"}
+            </p>
+            {searchQuery && (
               <Link
-                key={p.id}
-                href={`/products/${p.slug}`}
-                className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
+                href="/products"
+                className="text-blue-600 hover:underline mt-4 inline-block"
               >
-                <img
-                  src={imageUrl}
-                  alt={p.name}
-                  className="w-full h-64 object-cover rounded mb-4"
-                />
-                <h2 className="text-xl font-semibold mb-2">{p.name}</h2>
-                <p className="text-gray-600 mb-2">
-                  {p.rarity?.title || "Pokemon Card"}
-                </p>
-                <p className="text-2xl font-bold text-blue-600">${p.price}</p>
-                {p.stock > 0 ? (
-                  <p className="text-green-600 text-sm mt-2">In Stock</p>
-                ) : (
-                  <p className="text-red-600 text-sm mt-2">Out of Stock</p>
-                )}
+                View all products
               </Link>
-            );
-          })}
-        </div>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {pokemon.map((p: any) => {
+              const imageUrl = p.image?.url
+                ? `http://localhost:1337${p.image.url}`
+                : "/placeholder-card.jpg";
+
+              return (
+                <Link
+                  key={p.id}
+                  href={`/products/${p.slug}`}
+                  className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={p.name}
+                    className="w-full h-64 object-cover rounded mb-4"
+                  />
+                  <h2 className="text-xl font-semibold mb-2">{p.name}</h2>
+                  <p className="text-gray-600 mb-2">
+                    {p.rarity?.title || "Pokemon Card"}
+                  </p>
+                  <p className="text-2xl font-bold text-blue-600">${p.price}</p>
+                  {p.stock > 0 ? (
+                    <p className="text-green-600 text-sm mt-2">In Stock</p>
+                  ) : (
+                    <p className="text-red-600 text-sm mt-2">Out of Stock</p>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </>
   );
