@@ -128,14 +128,14 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full bg-white border-b border-b-gray-500/20 fixed top-0 z-50">
+    <header className="w-full fixed top-0 z-50 bg-gray-800 text-white mt-16 border-b-8 border-yellow-400">
       <div className="xl:mx-16! px-4 py-3 flex items-center justify-between h-16">
         {/* logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-gray-800">
-              Pokemon Store
-            </span>
+            <h3 className="text-2xl font-extrabold text-yellow-400 tracking-wider">
+              POKÉMON STORE
+            </h3>
           </Link>
         </div>
 
@@ -158,7 +158,7 @@ export default function Header() {
                   query.trim().length >= 2 && setShowSuggestions(true)
                 }
                 placeholder="Search Pokemon"
-                className="w-full h-12 rounded-md bg-gray-100 py-2 pl-12! pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full h-12 rounded-md bg-gray-100 text-black py-2 pl-12! pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               {query && (
                 <button
@@ -176,7 +176,7 @@ export default function Header() {
 
               {/* Suggestions dropdown */}
               {showSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 p-2!">
                   {isLoading ? (
                     <div className="p-4 text-center text-gray-500">
                       Loading...
@@ -187,7 +187,7 @@ export default function Header() {
                       {/* pokemon suggestions */}
                       {suggestions.pokemon.length > 0 && (
                         <div>
-                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
+                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2!">
                             Pokemon Cards
                           </div>
                           <ul>
@@ -223,7 +223,7 @@ export default function Header() {
                       {/* type suggestions */}
                       {suggestions.types.length > 0 && (
                         <div>
-                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 border-t">
+                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2!">
                             Types
                           </div>
                           <ul>
@@ -234,7 +234,7 @@ export default function Header() {
                                   onClick={() => handleTypeClick(type.slug)}
                                   className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
                                 >
-                                  <div className="w-12 h-12 rounded bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                                  <div className="w-12 h-12 rounded bg-gradient-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold">
                                     {type.title.charAt(0)}
                                   </div>
                                   <span className="text-gray-800 font-medium">
@@ -260,52 +260,40 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-6 ml-6">
           <Link
             href="/products"
-            className="text-gray-700 hover:text-blue-600 hover:underline"
+            className="hover:text-yellow-400! hover:underline"
           >
             Products
           </Link>
           <Link
             href="/types"
-            className="text-gray-700 hover:text-blue-600 hover:underline"
+            className="hover:text-yellow-400! hover:underline"
           >
             Types
           </Link>
           <Link
             href="/about"
-            className="text-gray-700 hover:text-blue-600 hover:underline"
+            className="hover:text-yellow-400! hover:underline"
           >
             About us
           </Link>
           <Link
             href="/contact"
-            className="text-gray-700 hover:text-blue-600 hover:underline"
+            className="hover:text-yellow-400! hover:underline"
           >
             Contact
           </Link>
         </nav>
 
         {/* desktop icons */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/favorites"
-            aria-label="Favorites"
-            className="relative p-2 rounded-full hover:bg-gray-100"
-          >
-            <Heart className="text-gray-700" />
+        <div className="hidden md:flex items-center gap-3 ">
+          <Link href="/favorites" aria-label="Favorites">
+            <Heart className="text-white hover:text-yellow-400" />
           </Link>
-          <Link
-            href="/account"
-            aria-label="Account"
-            className="p-2 rounded-full hover:bg-gray-100"
-          >
-            <User className="text-gray-700" />
+          <Link href="/account" aria-label="Account">
+            <User className="text-white hover:text-yellow-400" />
           </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="relative p-2 rounded-full hover:bg-gray-100"
-          >
-            <ShoppingCart className="text-gray-700" />
+          <Link href="/cart" aria-label="Cart">
+            <ShoppingCart className="text-white hover:text-yellow-400" />
             {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
             {/* {cartCount > 0 && (
               <span className="cartAmount absolute -right-3 -top-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
@@ -320,28 +308,28 @@ export default function Header() {
           <Link
             href="/favorites"
             aria-label="Favorites"
-            className="relative p-2 rounded-full hover:bg-gray-100"
+            className="relative p-2 hover:bg-yellow-400"
           >
             <Heart className="text-gray-700" />
           </Link>
           <Link
             href="/account"
             aria-label="Account"
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 hover:bg-yellow-400"
           >
             <User className="text-gray-700" />
           </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative p-2 rounded-full hover:bg-gray-100"
+            className="relative p-2 hover:bg-yellow-400"
           >
             <ShoppingCart className="text-gray-700" size={20} />
           </Link>
 
           {/* mobile menu button */}
           <button
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-yellow-400"
             aria-label="Toggle menu"
             onClick={() => setMobileOpen((s) => !s)}
           >
@@ -452,7 +440,7 @@ export default function Header() {
                                     onClick={() => handleTypeClick(type.slug)}
                                     className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0"
                                   >
-                                    <div className="w-10 h-10 rounded bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                                    <div className="w-10 h-10 rounded bg-gradient-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
                                       {type.title.charAt(0)}
                                     </div>
                                     <span className="text-gray-800 font-medium text-sm">
