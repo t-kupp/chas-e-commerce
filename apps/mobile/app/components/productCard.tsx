@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react";
 import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
+import {Link} from "expo-router";
 
 interface Pokemon {
   id: number;
   name: string;
   price: number;
   stock: number | null;
+  documentId: string;
   image?: {
     url: string;
   };
@@ -62,12 +64,19 @@ export default function ProductCard() {
             </Text>
 
             <Text className="text-xs text-gray-500 mb-2">
-              {pokemon.stock ? `Stock: ${pokemon.stock}` : "Limited"}
+              {pokemon.stock ? `Stock: ${pokemon.stock}` : "Out of Stock"}
             </Text>
 
             <Text className="text-xl font-bold text-blue-600 mb-3">
               ${pokemon.price}
             </Text>
+
+            {/* View Details länk */}
+            <Link href={`/productCardDetailPage/${pokemon.documentId}`}>
+              <Text className="text-blue-600 underline mb-3 text-center">
+                View Details
+              </Text>
+            </Link>
 
             <TouchableOpacity
               className="bg-blue-500 py-2 px-4 rounded-md"
