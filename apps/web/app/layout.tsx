@@ -79,9 +79,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col pt-18!`}
+      >
         <Header />
-        {children}
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
       <GoogleAnalytics gaId="G-8EJ2LZQSRB" />
