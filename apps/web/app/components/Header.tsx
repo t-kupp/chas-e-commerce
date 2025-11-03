@@ -234,7 +234,7 @@ export default function Header() {
                                   onClick={() => handleTypeClick(type.slug)}
                                   className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
                                 >
-                                  <div className="w-12 h-12 rounded bg-gradient-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold">
+                                  <div className="w-12 h-12 rounded bg-linear-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold">
                                     {type.title.charAt(0)}
                                   </div>
                                   <span className="text-gray-800 font-medium">
@@ -440,7 +440,7 @@ export default function Header() {
                                     onClick={() => handleTypeClick(type.slug)}
                                     className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0"
                                   >
-                                    <div className="w-10 h-10 rounded bg-gradient-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
+                                    <div className="w-10 h-10 rounded bg-linear-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
                                       {type.title.charAt(0)}
                                     </div>
                                     <span className="text-gray-800 font-medium text-sm">
