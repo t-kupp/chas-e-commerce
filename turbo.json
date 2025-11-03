@@ -1,6 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  "globalEnv": ["NEXT_PUBLIC_STRAPI_URL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
