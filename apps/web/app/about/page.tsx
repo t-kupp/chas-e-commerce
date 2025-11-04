@@ -268,7 +268,7 @@ export default function AboutPage() {
                 We&apos;re always looking for new members to join our league.
               </p>
               <Link
-                href="/careers"
+                href="#"
                 className="mt-3 text-yellow-700 hover:underline focus:underline font-medium text-sm focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:rounded"
               >
                 View open roles
