@@ -55,9 +55,13 @@ export default function ProductGrid() {
         case "price-desc":
           return b.price - a.price;
         case "date-newest":
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
         case "date-oldest":
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
         default:
           return 0;
       }
@@ -74,10 +78,11 @@ export default function ProductGrid() {
     console.log("Added to cart: " + card.name);
   }
 
-  if (!filteredData) return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
+  if (!filteredData)
+    return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
 
   return (
-    <section className="max-w-7xl mx-auto px-4">
+    <section id="products-section" className="max-w-7xl mx-auto px-4">
       <div className="mb-6 mt-6 flex justify-end">
         <div className="flex items-center gap-3">
           <label htmlFor="sort" className="text-sm font-medium">
@@ -87,8 +92,7 @@ export default function ProductGrid() {
             id="sort"
             value={sortBy}
             onChange={handleSortChange}
-            className="px-4 py-2 border border-foreground/10 rounded  text-sm"
-          >
+            className="px-4 py-2 border border-foreground/10 rounded  text-sm">
             <option value="date-newest">Date Added (Newest First)</option>
             <option value="date-oldest">Date Added (Oldest First)</option>
             <option value="name-asc">Name (A-Z)</option>
@@ -103,8 +107,7 @@ export default function ProductGrid() {
           return (
             <div
               key={card.id}
-              className="w-full h-full px-4 py-6 bg-foreground/5  flex flex-col gap-4 rounded text-center items-center"
-            >
+              className="w-full h-full px-4 py-6 bg-foreground/5  flex flex-col gap-4 rounded text-center items-center">
               <div className="w-2/3 ">
                 <Image
                   width={1024}
@@ -119,8 +122,7 @@ export default function ProductGrid() {
               <div className="px-3 w-full">
                 <button
                   onClick={() => handleAddToCart(card)}
-                  className="bg-foreground text-background w-full rounded py-3 text-sm hover:opacity-80 active:opacity-70"
-                >
+                  className="bg-foreground text-background w-full rounded py-3 text-sm hover:opacity-80 active:opacity-70">
                   Add to Cart
                 </button>
               </div>

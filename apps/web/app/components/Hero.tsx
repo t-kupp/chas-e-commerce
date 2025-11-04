@@ -1,6 +1,16 @@
+"use client";
 import Link from "next/link";
 
 export default function Hero() {
+  const scrollToProducts = () => {
+    const productsSection = document.getElementById("products-section");
+    if (productsSection) {
+      productsSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
   return (
     <section className="relative h-[80vh] flex items-center overflow-hidden">
       {/* Background Image */}
@@ -44,7 +54,9 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform text-white/80">
+      <button
+        onClick={scrollToProducts}
+        className="absolute bottom-8 left-1/2 transform text-white/80">
         <div className="animate-bounce">
           <svg
             className="w-6 h-6 drop-shadow-lg"
@@ -59,7 +71,7 @@ export default function Hero() {
             />
           </svg>
         </div>
-      </div>
+      </button>
     </section>
   );
 }
