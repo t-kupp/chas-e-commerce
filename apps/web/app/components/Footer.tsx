@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-  <footer className="bg-gray-800 text-gray-300 border-t-8 border-yellow-400">
+    <footer className="bg-gray-800 text-gray-300 border-t-8 border-yellow-400">
       <div className="xl:mx-16! py-6! px-6! xl:px-0!">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/*  logo */}
@@ -32,7 +32,7 @@ export default function Footer() {
             <ul className="space-y-3! text-sm">
               <li>
                 <a
-                  href="/category/booster-packs"
+                  href="/products"
                   className="hover:text-yellow-400! transition-colors"
                 >
                   Booster Packs
@@ -40,7 +40,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/category/deck-boxes"
+                  href="/products"
                   className="hover:text-yellow-400! transition-colors"
                 >
                   Deck Boxes
@@ -48,7 +48,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/category/single-cards"
+                  href="/products"
                   className="hover:text-yellow-400! transition-colors"
                 >
                   Single Cards
