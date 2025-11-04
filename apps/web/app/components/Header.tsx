@@ -128,8 +128,8 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full fixed top-0 z-50 bg-gray-800 text-white mt-16 border-b-8 border-yellow-400">
-      <div className="xl:mx-16! px-4 py-3 flex items-center justify-between h-16">
+    <header className="w-full fixed top-0 z-50 bg-gray-800 text-white border-b-8 border-yellow-400">
+      <div className="xl:mx-16 px-4 py-3 flex items-center justify-between h-16">
         {/* logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
@@ -158,7 +158,7 @@ export default function Header() {
                   query.trim().length >= 2 && setShowSuggestions(true)
                 }
                 placeholder="Search Pokemon"
-                className="w-full h-12 rounded-md bg-gray-100 text-black py-2 pl-12! pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full h-12 rounded-md bg-gray-100 text-black py-2 pl-12 pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               {query && (
                 <button
@@ -176,7 +176,7 @@ export default function Header() {
 
               {/* Suggestions dropdown */}
               {showSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 p-2!">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 p-2">
                   {isLoading ? (
                     <div className="p-4 text-center text-gray-500">
                       Loading...
@@ -187,7 +187,7 @@ export default function Header() {
                       {/* pokemon suggestions */}
                       {suggestions.pokemon.length > 0 && (
                         <div>
-                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2!">
+                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2">
                             Pokemon Cards
                           </div>
                           <ul>
@@ -223,7 +223,7 @@ export default function Header() {
                       {/* type suggestions */}
                       {suggestions.types.length > 0 && (
                         <div>
-                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2!">
+                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2">
                             Types
                           </div>
                           <ul>
@@ -260,25 +260,19 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-6 ml-6">
           <Link
             href="/products"
-            className="hover:text-yellow-400! hover:underline"
+            className="hover:text-yellow-400 hover:underline"
           >
             Products
           </Link>
-          <Link
-            href="/types"
-            className="hover:text-yellow-400! hover:underline"
-          >
+          <Link href="/types" className="hover:text-yellow-400 hover:underline">
             Types
           </Link>
-          <Link
-            href="/about"
-            className="hover:text-yellow-400! hover:underline"
-          >
+          <Link href="/about" className="hover:text-yellow-400 hover:underline">
             About us
           </Link>
           <Link
             href="/contact"
-            className="hover:text-yellow-400! hover:underline"
+            className="hover:text-yellow-400 hover:underline"
           >
             Contact
           </Link>
@@ -364,7 +358,7 @@ export default function Header() {
                     query.trim().length >= 2 && setShowSuggestions(true)
                   }
                   placeholder="Search Pokemon or Types..."
-                  className="w-full h-11 rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10! pr-10 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  className="w-full h-11 rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-10 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
                 {query && (
                   <button
