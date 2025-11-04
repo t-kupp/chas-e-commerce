@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import { AuthProvider } from "./context/auth";
+
 import "./globals.css";
 
 const geistSans = localFont({
@@ -82,9 +84,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col pt-18!`}
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
       <GoogleAnalytics gaId="G-8EJ2LZQSRB" />
     </html>
