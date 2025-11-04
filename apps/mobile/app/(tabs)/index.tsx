@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
-import { View, ScrollView } from "react-native";
+import React, {useRef, useState} from "react";
+import {View, ScrollView} from "react-native";
 import Footer from "../components/footer";
 import Hero from "../components/hero";
 import ProductCard from "../components/productCard";
-import Filter, { SortOption } from "../components/filter";
+import Filter, {SortOption} from "../components/filter";
 
 export default function HomePage() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -11,7 +11,7 @@ export default function HomePage() {
   const [selectedSort, setSelectedSort] = useState<SortOption>(null);
 
   const scrollToProducts = () => {
-    scrollViewRef.current?.scrollTo({ y: productY, animated: true });
+    scrollViewRef.current?.scrollTo({y: productY, animated: true});
   };
 
   return (
@@ -19,7 +19,7 @@ export default function HomePage() {
       <ScrollView ref={scrollViewRef} className="flex-1">
         <Hero onShopNowPress={scrollToProducts} />
         <Filter selectedSort={selectedSort} onSortChange={setSelectedSort} />
-        <View>
+        <View onLayout={(event) => setProductY(event.nativeEvent.layout.y)}>
           <ProductCard sortBy={selectedSort} />
         </View>
         <Footer />

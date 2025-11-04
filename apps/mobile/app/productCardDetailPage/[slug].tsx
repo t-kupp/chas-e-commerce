@@ -2,10 +2,13 @@ import React, {useState, useEffect} from "react";
 import {View, Text, Image, TouchableOpacity, ScrollView} from "react-native";
 import {useLocalSearchParams, router} from "expo-router";
 import {Pokemon} from "../../types";
+import {useCart} from "./../context/CartContext";
 
 export default function ProductDetail() {
   const {slug} = useLocalSearchParams();
   const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL;
+
+  const {addItem} = useCart();
 
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,7 +60,18 @@ export default function ProductDetail() {
         </Text>
 
         {/* Köp-knapp */}
-        <TouchableOpacity className="bg-blue-500 py-4 px-6 rounded-lg">
+        <TouchableOpacity
+          onPress={() =>
+            addItem({
+              id: pokemon.id,
+              name: pokemon.name,
+              price: pokemon.price,
+              image: pokemon.image?.url,
+              quantity: 1,
+            })
+          }
+          className="bg-blue-500 py-4 px-6 rounded-lg"
+        >
           <Text className="text-white font-bold text-lg text-center">
             Add to Cart
           </Text>
