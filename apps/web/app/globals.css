@@ -58,8 +58,9 @@ button {
 
 /* Focus visible for keyboard navigation */
 *:focus-visible {
-  outline: 3px solid #facc15; 
+  outline: 3px solid #facc15;
   outline-offset: 2px;
+  border-radius: 0.25rem;
 }
 
 /* Enhanced focus indicators for interactive elements */
