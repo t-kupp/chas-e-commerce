@@ -40,26 +40,34 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* hero */}
-      <section className="bg-gray-800 text-white border-b-8 border-yellow-400">
+      <section
+        className="bg-gray-800 text-white border-b-8 border-yellow-400"
+        aria-labelledby="page-title"
+      >
         <div className="px-4 py-20 text-center">
-          <h1 className="md:text-6xl font-extrabold tracking-tight text-yellow-400">
+          <h1
+            id="page-title"
+            className="text-4xl md:text-6xl font-extrabold tracking-tight text-yellow-400"
+          >
             About Pokémon Store
           </h1>
           <p className="mt-4 text-gray-200 text-xl max-w-3xl mx-auto">
-            We’re a fan-run store for Pokémon TCG collectors and players. We
-            curate rare and everyday cards with a focus on{" "}
-            <b>authenticity, fair prices, and fast shipping.</b>
+            We&apos;re a fan-run store for Pokémon TCG collectors and players.
+            We curate rare and everyday cards with a focus on{" "}
+            <strong>authenticity, fair prices, and fast shipping.</strong>
           </p>
-          <div className="mt-8 flex justify-center gap-4">
+          <div className="mt-8 flex justify-center gap-4 flex-wrap">
             <Link
               href="/products"
-              className="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-6 py-3 rounded-xl shadow-lg transition-transform duration-200 transform hover:scale-105"
+              className="inline-block bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 text-gray-900 font-bold px-6 py-3 rounded-xl shadow-lg transition-colors focus:outline-none focus:ring-4 focus:ring-yellow-500"
+              aria-label="Browse our product collection"
             >
               Start Collecting
             </Link>
             <Link
               href="/contact"
-              className="inline-block border-2 border-yellow-400 text-yellow-400 hover:bg-yellow-400/20 px-6 py-3 rounded-xl font-medium transition-colors"
+              className="inline-block border-2 border-yellow-400 text-yellow-400 hover:bg-yellow-400/20 focus:bg-yellow-400/20 px-6 py-3 rounded-xl font-medium transition-colors focus:outline-none focus:ring-4 focus:ring-yellow-500"
+              aria-label="Contact our team"
             >
               Contact the Team
             </Link>
@@ -70,14 +78,23 @@ export default function AboutPage() {
       <main className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid gap-12 lg:grid-cols-5">
           {/* our core values */}
-          <article className="lg:col-span-2 bg-white rounded-xl shadow-xl p-8 h-full flex flex-col justify-start">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b pb-3 border-yellow-400/50">
+          <article
+            className="lg:col-span-2 bg-white rounded-xl shadow-xl p-8 h-full flex flex-col justify-start"
+            aria-labelledby="core-values-heading"
+          >
+            <h2
+              id="core-values-heading"
+              className="text-3xl font-bold text-gray-900 mb-6 border-b pb-3 border-yellow-400/50"
+            >
               Our Core Values
             </h2>
             <ul className="space-y-6 text-gray-700">
               {/* value 1: authenticity */}
               <li className="flex items-start gap-4">
-                <ShieldCheck className="w-8 h-8 text-red-600 shrink-0 mt-1" />
+                <ShieldCheck
+                  className="w-8 h-8 text-red-600 shrink-0 mt-1"
+                  aria-hidden="true"
+                />
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">
                     Guaranteed Genuine
@@ -90,20 +107,26 @@ export default function AboutPage() {
               </li>
               {/* value 2: speed & condition */}
               <li className="flex items-start gap-4">
-                <Truck className="w-8 h-8 text-blue-600 shrink-0 mt-1" />
+                <Truck
+                  className="w-8 h-8 text-blue-600 shrink-0 mt-1"
+                  aria-hidden="true"
+                />
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">
                     Swift & Secure Shipping
                   </h3>
                   <p className="text-sm mt-1">
                     We use industrial-grade packaging and fast logistics to
-                    ensure your cards arrive in <b>Mint Condition</b>.
+                    ensure your cards arrive in <strong>Mint Condition</strong>.
                   </p>
                 </div>
               </li>
               {/* value 3: community first */}
               <li className="flex items-start gap-4">
-                <Globe className="w-8 h-8 text-green-600 shrink-0 mt-1" />
+                <Globe
+                  className="w-8 h-8 text-green-600 shrink-0 mt-1"
+                  aria-hidden="true"
+                />
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">
                     Built by Collectors
@@ -119,50 +142,75 @@ export default function AboutPage() {
 
           {/* our story & mission */}
           <div className="lg:col-span-3 space-y-12">
-            <article className="bg-white rounded-xl shadow-xl p-8 border-l-4 border-yellow-400">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <article
+              className="bg-white rounded-xl shadow-xl p-8 border-l-4 border-yellow-400"
+              aria-labelledby="origin-story-heading"
+            >
+              <h2
+                id="origin-story-heading"
+                className="text-3xl font-bold text-gray-900 mb-4 flex items-center gap-2"
+              >
                 Our Origin Story
               </h2>
               <p className="mt-4 text-gray-700 leading-relaxed">
                 Pokémon Store started as a small group of collectors who met
                 over trades and tournaments. We wanted a place where fellow fans
                 could find both rare pulls and everyday staples{" "}
-                <b>curated with care and presented honestly.</b> Over time we
-                grew into a trusted online shop that focuses intensely on
-                authenticity, quality grading, and a truly excellent customer
+                <strong>curated with care and presented honestly.</strong> Over
+                time we grew into a trusted online shop that focuses intensely
+                on authenticity, quality grading, and a truly excellent customer
                 experience. We are here to simplify and celebrate the art of
                 collecting.
               </p>
             </article>
 
             {/* mission & join CTA block */}
-            <aside className="bg-gray-800 text-white rounded-xl shadow-2xl p-8">
-              <h2 className="text-3xl font-bold text-yellow-400 mb-4">
+            <aside
+              className="bg-gray-800 text-white rounded-xl shadow-2xl p-8"
+              aria-labelledby="mission-heading"
+            >
+              <h2
+                id="mission-heading"
+                className="text-3xl font-bold text-yellow-400 mb-4"
+              >
                 Our Mission: The Journey Continues
               </h2>
               <p className="text-gray-300">
-                To make collecting <b>accessible and fun</b> — whether you’re
-                chasing a rare holo or building a competitive deck. We source
-                responsibly and work to keep the community first. Every purchase
-                helps us keep running and providing the best cards!
+                To make collecting <strong>accessible and fun</strong> — whether
+                you&apos;re chasing a rare holo or building a competitive deck.
+                We source responsibly and work to keep the community first.
+                Every purchase helps us keep running and providing the best
+                cards!
               </p>
 
               <div className="mt-8 border-t border-gray-700 pt-6">
-                <h4 className="text-lg font-bold text-yellow-400 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-yellow-400 flex items-center gap-2">
                   Catch Exclusive Drops
-                </h4>
+                </h3>
                 <p className="mt-2 text-sm text-gray-400">
                   Sign up for early access to rare cards, sales, and special
                   offers.
                 </p>
-                <form className="mt-4 flex max-w-md">
+                <form
+                  className="mt-4 flex max-w-md"
+                  aria-label="Newsletter signup form"
+                >
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    Email address
+                  </label>
                   <input
+                    id="newsletter-email"
                     type="email"
                     placeholder="you@email.com"
-                    aria-label="Email"
-                    className="flex-1 rounded-l-lg border-none p-3 text-gray-900 bg-white text-sm focus:outline-none focus:ring-4 focus:ring-yellow-400/50"
+                    required
+                    aria-required="true"
+                    className="flex-1 rounded-l-lg border-none p-3 text-gray-900 bg-white text-sm focus:outline-none focus:ring-4 focus:ring-yellow-400"
                   />
-                  <button className="bg-red-600 hover:bg-red-700 text-white rounded-r-lg px-6 font-bold transition-colors">
+                  <button
+                    type="submit"
+                    className="bg-red-600 hover:bg-red-700 focus:bg-red-700 text-white rounded-r-lg px-6 font-bold transition-colors focus:outline-none focus:ring-4 focus:ring-red-500"
+                    aria-label="Join newsletter"
+                  >
                     Join
                   </button>
                 </form>
@@ -172,11 +220,14 @@ export default function AboutPage() {
         </div>
 
         {/* team section */}
-        <section className="mt-16 pt-8 border-t border-gray-200">
-          <h2 className="text-3xl font-bold text-gray-900">
+        <section
+          className="mt-16 pt-8 border-t border-gray-200"
+          aria-labelledby="team-heading"
+        >
+          <h2 id="team-heading" className="text-3xl font-bold text-gray-900">
             Meet Our Trainers
           </h2>
-          <p className="mt-3 text-gray-600 text-lg">
+          <p className="mt-3 text-gray-700 text-lg">
             The small crew of dedicated collectors and players making Poké Store
             run.
           </p>
@@ -202,7 +253,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                 </div>
-                <p className="mt-3 text-sm text-gray-700 italic border-t pt-3 mt-3 border-gray-100">
+                <p className="text-sm text-gray-700 italic border-t pt-3 border-gray-100">
                   {member.description}
                 </p>
               </article>
@@ -210,15 +261,15 @@ export default function AboutPage() {
 
             {/* join us card */}
             <article className="hidden lg:flex flex-col justify-center items-center bg-gray-100 rounded-xl p-6 shadow-inner border-4 border-dashed border-gray-400 text-center">
-              <h4 className="text-xl font-bold text-gray-600">
+              <h3 className="text-xl font-bold text-gray-700">
                 Could this be you?
-              </h4>
-              <p className="text-sm mt-2 text-gray-500">
-                We're always looking for new members to join our league.
+              </h3>
+              <p className="text-sm mt-2 text-gray-600">
+                We&apos;re always looking for new members to join our league.
               </p>
               <Link
                 href="/careers"
-                className="mt-3 text-yellow-600 hover:underline font-medium text-sm"
+                className="mt-3 text-yellow-700 hover:underline focus:underline font-medium text-sm focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:rounded"
               >
                 View open roles
               </Link>
@@ -227,10 +278,16 @@ export default function AboutPage() {
         </section>
 
         {/* final CTA */}
-        <section className="mt-16 bg-gray-800 text-white rounded-xl shadow-2xl p-8 text-center">
-          <h3 className="text-3xl font-bold text-yellow-400">
+        <section
+          className="mt-16 bg-gray-800 text-white rounded-xl shadow-2xl p-8 text-center"
+          aria-labelledby="final-cta-heading"
+        >
+          <h2
+            id="final-cta-heading"
+            className="text-3xl font-bold text-yellow-400"
+          >
             Ready to Catch Your Next Card?
-          </h3>
+          </h2>
           <p className="mt-3 text-gray-300 text-lg">
             Explore our curated inventory or reach out if you have questions
             about authenticity or sourcing.
@@ -238,7 +295,8 @@ export default function AboutPage() {
           <div className="mt-6">
             <Link
               href="/products"
-              className="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-8 py-4 rounded-xl text-lg shadow-lg transition-transform duration-200 transform hover:scale-105"
+              className="inline-block bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 text-gray-900 font-bold px-8 py-4 rounded-xl text-lg shadow-lg transition-colors focus:outline-none focus:ring-4 focus:ring-yellow-500"
+              aria-label="Browse our Pokemon card collection"
             >
               Browse The Collection
             </Link>
