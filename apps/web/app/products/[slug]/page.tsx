@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 interface Pokemon {
   id: number;
@@ -191,7 +192,9 @@ export default async function ProductPage({
         <div className="grid md:grid-cols-2 gap-8">
           {/* product Image */}
           <div>
-            <img
+            <Image
+              width={1024}
+              height={1024}
               src={imageUrl}
               alt={pokemon.name}
               className="w-full rounded-lg shadow-lg"
@@ -239,8 +242,7 @@ export default async function ProductPage({
 
             <button
               className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
-              disabled={pokemon.stock === 0}
-            >
+              disabled={pokemon.stock === 0}>
               {pokemon.stock > 0 ? "Add to Cart" : "Out of Stock"}
             </button>
           </div>

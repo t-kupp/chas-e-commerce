@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
+import Link from "next/link";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
@@ -107,18 +108,24 @@ export default function ProductGrid() {
           return (
             <div
               key={card.id}
-              className="w-full h-full px-4 py-6 bg-foreground/5  flex flex-col gap-4 rounded text-center items-center">
-              <div className="w-2/3 ">
-                <Image
-                  width={1024}
-                  height={1024}
-                  src={`${STRAPI_URL}${card.image.url}`}
-                  alt={`Card of ${card.name}`}
-                  className="w-full h-full rounded-lg  mx-auto"
-                />
-              </div>
-              <p>{card.name}</p>
-              <p className="font-semibold text-2xl">${card.price.toFixed(2)}</p>
+              className="w-full h-full px-4 py-6 bg-foreground/5 flex flex-col gap-4 rounded items-center text-center">
+              <Link
+                href={`/products/${card.slug}`}
+                className="flex flex-col gap-2 justify-center items-center">
+                <div className="w-2/3 ">
+                  <Image
+                    width={1024}
+                    height={1024}
+                    src={`${STRAPI_URL}${card.image.url}`}
+                    alt={`Card of ${card.name}`}
+                    className="w-full h-full rounded-lg flex flex-col justify-center mx-auto"
+                  />
+                </div>
+                <p>{card.name}</p>
+                <p className="font-semibold text-2xl">
+                  ${card.price.toFixed(2)}
+                </p>
+              </Link>
               <div className="px-3 w-full">
                 <button
                   onClick={() => handleAddToCart(card)}
