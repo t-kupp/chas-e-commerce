@@ -289,12 +289,6 @@ export default function Header() {
             Products
           </Link>
           <Link
-            href="/types"
-            className="hover:text-yellow-400 hover:underline px-2 py-1"
-          >
-            Types
-          </Link>
-          <Link
             href="/about"
             className="hover:text-yellow-400 hover:underline px-2 py-1"
           >
@@ -544,13 +538,6 @@ export default function Header() {
                 className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
               >
                 Products
-              </Link>
-              <Link
-                href="/types"
-                onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
-              >
-                Types
               </Link>
               <Link
                 href="/about"
