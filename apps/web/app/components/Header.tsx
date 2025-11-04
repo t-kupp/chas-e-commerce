@@ -134,12 +134,12 @@ export default function Header() {
         <div className="flex items-center">
           <Link
             href="/"
-            className="flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-yellow-400-lg"
+            className="flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-yellow-400 focus:rounded-lg"
             aria-label="Pokémon Store Home"
           >
-            <h1 className="text-2xl font-extrabold text-yellow-400 tracking-wider">
+            <span className="text-2xl font-extrabold text-yellow-400 tracking-wider">
               POKÉMON STORE
-            </h1>
+            </span>
           </Link>
         </div>
 
