@@ -1,28 +1,18 @@
 import React, {useState, useEffect} from "react";
 import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
 import {Link} from "expo-router";
-
-interface Pokemon {
-  id: number;
-  name: string;
-  price: number;
-  stock: number | null;
-  documentId: string;
-  image?: {
-    url: string;
-  };
-}
+import {Pokemon} from "@/types";
 
 export default function ProductCard() {
+  const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL;
+
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
 
   async function loadPokemons() {
-    const res = await fetch(
-      "http://localhost:1337/api/pokemons?populate[0]=image"
-    );
+    const res = await fetch(`${STRAPI_URL}/api/pokemons?populate=*`);
     const data = await res.json();
-    setPokemons(Array.isArray(data.data) ? data.data : []);
+    setPokemons(data.data);
     setLoading(false);
   }
 
