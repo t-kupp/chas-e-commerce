@@ -1,80 +1,49 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 
-const types = [
-  "bug",
-  "dark",
-  "dragon",
-  "electric",
-  "fairy",
-  "fighting",
-  "fire",
-  "flying",
-  "ghost",
-  "grass",
-  "ground",
-  "ice",
-  "normal",
-  "poison",
-  "psychic",
-  "rock",
-  "steel",
-  "water",
-];
+export type SortOption =
+  | "name-asc"
+  | "name-desc"
+  | "price-asc"
+  | "price-desc"
+  | null;
 
-const typeColors: { [key: string]: string } = {
-  bug: "#A8B820",
-  dark: "#705848",
-  dragon: "#7038F8",
-  electric: "#F8D030",
-  fairy: "#EE99AC",
-  fighting: "#C03028",
-  fire: "#F08030",
-  flying: "#A890F0",
-  ghost: "#705898",
-  grass: "#78C850",
-  ground: "#E0C068",
-  ice: "#98D8D8",
-  normal: "#A8A878",
-  poison: "#A040A0",
-  psychic: "#F85888",
-  rock: "#B8A038",
-  steel: "#B8B8D0",
-  water: "#6890F0",
-};
+interface FilterProps {
+  selectedSort: SortOption;
+  onSortChange: (sort: SortOption) => void;
+}
 
-export default function Filter() {
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+export default function Filter({ selectedSort, onSortChange }: FilterProps) {
+  const sortOptions: { value: SortOption; label: string }[] = [
+    { value: null, label: "Default" },
+    { value: "name-asc", label: "A-Z" },
+    { value: "name-desc", label: "Z-A" },
+    { value: "price-asc", label: "Price: Low to High" },
+    { value: "price-desc", label: "Price: High to Low" },
+  ];
 
   return (
-    <View className="p-10">
-      <Text className="text-2xl font-bold mb-4">Filter by Type</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="flex-row"
-      >
-        {types.map((type) => (
+    <View className="p-4">
+      <Text className="text-xl font-bold mb-3">Sort by</Text>
+      <View className="flex-row flex-wrap">
+        {sortOptions.map((option) => (
           <TouchableOpacity
-            key={type}
-            onPress={() => setSelectedType(type)}
-            style={{
-              backgroundColor: typeColors[type],
-              marginHorizontal: 8,
-              paddingHorizontal: 24,
-              paddingVertical: 12,
-              borderRadius: 9999,
-              borderWidth: 4,
-              borderColor: selectedType === type ? "#FBBF24" : typeColors[type],
-              alignItems: "center",
-            }}
+            key={option.label}
+            onPress={() => onSortChange(option.value)}
+            className={`px-4 py-2 mr-2 mb-2 rounded-full ${
+              selectedSort === option.value ? "bg-blue-600" : "bg-gray-200"
+            }`}
           >
-            <Text className="text-base font-bold text-white capitalize">
-              {type}
+            <Text
+              className={`font-medium ${
+                selectedSort === option.value ? "text-white" : "text-gray-800"
+              }`}
+            >
+              {option.label}
             </Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </View>
     </View>
   );
 }

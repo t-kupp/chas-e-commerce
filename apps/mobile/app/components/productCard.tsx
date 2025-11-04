@@ -1,9 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Link} from "expo-router";
-import {Pokemon} from "@/types";
+import React, { useState, useEffect } from "react";
+import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Link } from "expo-router";
+import { Pokemon } from "@/types";
+import { SortOption } from "./filter";
 
-export default function ProductCard() {
+interface ProductCardProps {
+  sortBy?: SortOption;
+}
+
+export default function ProductCard({ sortBy }: ProductCardProps) {
   const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL;
 
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -20,6 +25,24 @@ export default function ProductCard() {
     loadPokemons();
   }, []);
 
+  // Apply sorting to pokemons
+  const sortedPokemons = React.useMemo(() => {
+    const pokemonsCopy = [...pokemons];
+
+    switch (sortBy) {
+      case "name-asc":
+        return pokemonsCopy.sort((a, b) => a.name.localeCompare(b.name));
+      case "name-desc":
+        return pokemonsCopy.sort((a, b) => b.name.localeCompare(a.name));
+      case "price-asc":
+        return pokemonsCopy.sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return pokemonsCopy.sort((a, b) => b.price - a.price);
+      default:
+        return pokemonsCopy;
+    }
+  }, [pokemons, sortBy]);
+
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center">
@@ -31,7 +54,7 @@ export default function ProductCard() {
   return (
     <ScrollView>
       <View className="flex-row flex-wrap justify-center p-2">
-        {pokemons.map((pokemon) => (
+        {sortedPokemons.map((pokemon) => (
           <View
             key={pokemon.id}
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 m-2 w-44 items-center"
@@ -39,7 +62,7 @@ export default function ProductCard() {
             {/* Bild */}
             {pokemon.image?.url ? (
               <Image
-                source={{uri: `http://localhost:1337${pokemon.image.url}`}}
+                source={{ uri: `http://localhost:1337${pokemon.image.url}` }}
                 className="w-full h-56 rounded-md mb-3"
                 resizeMode="cover"
               />
