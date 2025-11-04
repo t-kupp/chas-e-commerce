@@ -8,6 +8,9 @@ import { Heart, ShoppingCart, User, Search, Menu, X } from "lucide-react";
 //====== ADD BACK LATER WHEN CART IS WORKING =====
 // import { useCart } from "@/context/cart";
 
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
 interface Pokemon {
   id: number;
   name: string;
@@ -76,10 +79,10 @@ export default function Header() {
         // fetch pokemon and types in parallel
         const [pokemonRes, typesRes] = await Promise.all([
           fetch(
-            `http://localhost:1337/api/pokemons?filters[name][$containsi]=${encodeURIComponent(query.trim())}&populate=image&pagination[limit]=5`
+            `${STRAPI_URL}/api/pokemons?filters[name][$containsi]=${encodeURIComponent(query.trim())}&populate=image&pagination[limit]=5`
           ),
           fetch(
-            `http://localhost:1337/api/types?filters[title][$containsi]=${encodeURIComponent(query.trim())}&pagination[limit]=3`
+            `${STRAPI_URL}/api/types?filters[title][$containsi]=${encodeURIComponent(query.trim())}&pagination[limit]=3`
           ),
         ]);
 
@@ -207,7 +210,7 @@ export default function Header() {
                           <ul role="group" aria-label="Pokemon suggestions">
                             {suggestions.pokemon.map((pokemon) => {
                               const imageUrl = pokemon.image?.url
-                                ? `http://localhost:1337${pokemon.image.url}`
+                                ? `${STRAPI_URL}${pokemon.image.url}`
                                 : "/placeholder-card.png";
                               return (
                                 <li key={`pokemon-${pokemon.id}`} role="option">
@@ -450,7 +453,7 @@ export default function Header() {
                             <ul role="group" aria-label="Pokemon suggestions">
                               {suggestions.pokemon.map((pokemon) => {
                                 const imageUrl = pokemon.image?.url
-                                  ? `http://localhost:1337${pokemon.image.url}`
+                                  ? `${STRAPI_URL}${pokemon.image.url}`
                                   : "/placeholder-card.png";
                                 return (
                                   <li
