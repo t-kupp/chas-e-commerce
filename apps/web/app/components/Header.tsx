@@ -132,10 +132,14 @@ export default function Header() {
       <div className="xl:mx-16 px-4 py-3 flex items-center justify-between h-16">
         {/* logo */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <h3 className="text-2xl font-extrabold text-yellow-400 tracking-wider">
+          <Link
+            href="/"
+            className="flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-yellow-400-lg"
+            aria-label="Pokémon Store Home"
+          >
+            <h1 className="text-2xl font-extrabold text-yellow-400 tracking-wider">
               POKÉMON STORE
-            </h3>
+            </h1>
           </Link>
         </div>
 
@@ -147,7 +151,7 @@ export default function Header() {
             </label>
             <div className="relative" ref={searchRef}>
               <span className="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
-                <Search size={18} />
+                <Search size={18} aria-hidden="true" />
               </span>
               <input
                 id="site-search"
@@ -158,7 +162,10 @@ export default function Header() {
                   query.trim().length >= 2 && setShowSuggestions(true)
                 }
                 placeholder="Search Pokemon"
-                className="w-full h-12 rounded-md bg-gray-100 text-black py-2 pl-12 pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                aria-autocomplete="list"
+                aria-controls="search-suggestions"
+                aria-expanded={showSuggestions}
+                className="w-full h-12 rounded-md bg-gray-100 text-black py-2 pl-12 pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-yellow-400"
               />
               {query && (
                 <button
@@ -170,13 +177,17 @@ export default function Header() {
                   aria-label="Clear search"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  <X size={16} />
+                  <X size={16} aria-hidden="true" />
                 </button>
               )}
 
               {/* Suggestions dropdown */}
               {showSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 p-2">
+                <div
+                  id="search-suggestions"
+                  role="listbox"
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 p-2"
+                >
                   {isLoading ? (
                     <div className="p-4 text-center text-gray-500">
                       Loading...
@@ -187,27 +198,31 @@ export default function Header() {
                       {/* pokemon suggestions */}
                       {suggestions.pokemon.length > 0 && (
                         <div>
-                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2">
+                          <div
+                            className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2"
+                            role="presentation"
+                          >
                             Pokemon Cards
                           </div>
-                          <ul>
+                          <ul role="group" aria-label="Pokemon suggestions">
                             {suggestions.pokemon.map((pokemon) => {
                               const imageUrl = pokemon.image?.url
                                 ? `http://localhost:1337${pokemon.image.url}`
                                 : "/placeholder-card.png";
                               return (
-                                <li key={`pokemon-${pokemon.id}`}>
+                                <li key={`pokemon-${pokemon.id}`} role="option">
                                   <button
                                     type="button"
                                     onClick={() =>
                                       handleSuggestionClick(pokemon.slug)
                                     }
-                                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
+                                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 focus:bg-gray-100 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400 rounded"
                                   >
                                     <img
                                       src={imageUrl}
-                                      alt={pokemon.name}
+                                      alt=""
                                       className="w-12 h-12 object-cover rounded"
+                                      aria-hidden="true"
                                     />
                                     <span className="text-gray-800 font-medium">
                                       {pokemon.name}
@@ -223,18 +238,24 @@ export default function Header() {
                       {/* type suggestions */}
                       {suggestions.types.length > 0 && (
                         <div>
-                          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2">
+                          <div
+                            className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-t border-yellow-400 mb-2"
+                            role="presentation"
+                          >
                             Types
                           </div>
-                          <ul>
+                          <ul role="group" aria-label="Type suggestions">
                             {suggestions.types.map((type) => (
-                              <li key={`type-${type.id}`}>
+                              <li key={`type-${type.id}`} role="option">
                                 <button
                                   type="button"
                                   onClick={() => handleTypeClick(type.slug)}
-                                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
+                                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 focus:bg-gray-100 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400 rounded"
                                 >
-                                  <div className="w-12 h-12 rounded bg-linear-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold">
+                                  <div
+                                    className="w-12 h-12 rounded bg-linear-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold"
+                                    aria-hidden="true"
+                                  >
                                     {type.title.charAt(0)}
                                   </div>
                                   <span className="text-gray-800 font-medium">
@@ -257,37 +278,67 @@ export default function Header() {
             </div>
           </form>
         </div>
-        <nav className="hidden md:flex items-center gap-6 ml-6">
+        <nav
+          className="hidden md:flex items-center gap-6 ml-6"
+          aria-label="Main navigation"
+        >
           <Link
             href="/products"
-            className="hover:text-yellow-400 hover:underline"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
           >
             Products
           </Link>
-          <Link href="/types" className="hover:text-yellow-400 hover:underline">
+          <Link
+            href="/types"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
             Types
           </Link>
-          <Link href="/about" className="hover:text-yellow-400 hover:underline">
+          <Link
+            href="/about"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
             About us
           </Link>
           <Link
             href="/contact"
-            className="hover:text-yellow-400 hover:underline"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
           >
             Contact
           </Link>
         </nav>
 
         {/* desktop icons */}
-        <div className="hidden md:flex items-center gap-3 ">
-          <Link href="/favorites" aria-label="Favorites">
-            <Heart className="text-white hover:text-yellow-400" />
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            href="/favorites"
+            aria-label="Favorites"
+            className="p-2 rounded hover:bg-yellow-400/20"
+          >
+            <Heart
+              className="text-white hover:text-yellow-400"
+              aria-hidden="true"
+            />
           </Link>
-          <Link href="/account" aria-label="Account">
-            <User className="text-white hover:text-yellow-400" />
+          <Link
+            href="/account"
+            aria-label="Account"
+            className="p-2 rounded hover:bg-yellow-400/20"
+          >
+            <User
+              className="text-white hover:text-yellow-400"
+              aria-hidden="true"
+            />
           </Link>
-          <Link href="/cart" aria-label="Cart">
-            <ShoppingCart className="text-white hover:text-yellow-400" />
+          <Link
+            href="/cart"
+            aria-label="Cart"
+            className="p-2 rounded hover:bg-yellow-400/20"
+          >
+            <ShoppingCart
+              className="text-white hover:text-yellow-400"
+              aria-hidden="true"
+            />
             {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
             {/* {cartCount > 0 && (
               <span className="cartAmount absolute -right-3 -top-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
@@ -302,35 +353,37 @@ export default function Header() {
           <Link
             href="/favorites"
             aria-label="Favorites"
-            className="relative p-2 hover:bg-yellow-400"
+            className="relative p-2 rounded hover:bg-yellow-400/20"
           >
-            <Heart className="text-gray-700" />
+            <Heart className="text-white" aria-hidden="true" />
           </Link>
           <Link
             href="/account"
             aria-label="Account"
-            className="p-2 hover:bg-yellow-400"
+            className="p-2 rounded hover:bg-yellow-400/20"
           >
-            <User className="text-gray-700" />
+            <User className="text-white" aria-hidden="true" />
           </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative p-2 hover:bg-yellow-400"
+            className="relative p-2 rounded hover:bg-yellow-400/20"
           >
-            <ShoppingCart className="text-gray-700" size={20} />
+            <ShoppingCart className="text-white" size={20} aria-hidden="true" />
           </Link>
 
           {/* mobile menu button */}
           <button
-            className="p-2 rounded-full hover:bg-yellow-400"
-            aria-label="Toggle menu"
+            className="p-2 rounded hover:bg-yellow-400/20"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
             onClick={() => setMobileOpen((s) => !s)}
           >
             {mobileOpen ? (
-              <X className="text-gray-700" size={24} />
+              <X className="text-white" size={24} aria-hidden="true" />
             ) : (
-              <Menu className="text-gray-700" size={24} />
+              <Menu className="text-white" size={24} aria-hidden="true" />
             )}
           </button>
         </div>
@@ -338,16 +391,16 @@ export default function Header() {
 
       {/* mobile menu panel */}
       {mobileOpen && (
-        <div className="md:hidden bg-white shadow-lg">
+        <div id="mobile-menu" className="md:hidden bg-white shadow-lg">
           <div className="px-4 py-4 flex flex-col gap-4">
             {/* mobile Search */}
             <form onSubmit={onSubmit} className="relative">
               <label htmlFor="mobile-search" className="sr-only">
-                Search
+                Search pokemons
               </label>
               <div className="relative" ref={mobileSearchRef}>
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">
-                  <Search size={18} />
+                  <Search size={18} aria-hidden="true" />
                 </span>
                 <input
                   id="mobile-search"
@@ -358,7 +411,10 @@ export default function Header() {
                     query.trim().length >= 2 && setShowSuggestions(true)
                   }
                   placeholder="Search Pokemon or Types..."
-                  className="w-full h-11 rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-10 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  aria-autocomplete="list"
+                  aria-controls="mobile-search-suggestions"
+                  aria-expanded={showSuggestions}
+                  className="w-full h-11 rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-10 text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-400 focus:border-transparent"
                 />
                 {query && (
                   <button
@@ -370,13 +426,17 @@ export default function Header() {
                     aria-label="Clear search"
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
                   >
-                    <X size={18} />
+                    <X size={18} aria-hidden="true" />
                   </button>
                 )}
 
                 {/* mobile suggestions dropdown */}
                 {showSuggestions && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl max-h-80 overflow-y-auto z-50">
+                  <div
+                    id="mobile-search-suggestions"
+                    role="listbox"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl max-h-80 overflow-y-auto z-50"
+                  >
                     {isLoading ? (
                       <div className="p-4 text-center text-gray-500">
                         Loading...
@@ -387,27 +447,34 @@ export default function Header() {
                         {/* pokemon suggestions */}
                         {suggestions.pokemon.length > 0 && (
                           <div>
-                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
+                            <div
+                              className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50"
+                              role="presentation"
+                            >
                               Pokemon Cards
                             </div>
-                            <ul>
+                            <ul role="group" aria-label="Pokemon suggestions">
                               {suggestions.pokemon.map((pokemon) => {
                                 const imageUrl = pokemon.image?.url
                                   ? `http://localhost:1337${pokemon.image.url}`
                                   : "/placeholder-card.png";
                                 return (
-                                  <li key={`mobile-pokemon-${pokemon.id}`}>
+                                  <li
+                                    key={`mobile-pokemon-${pokemon.id}`}
+                                    role="option"
+                                  >
                                     <button
                                       type="button"
                                       onClick={() =>
                                         handleSuggestionClick(pokemon.slug)
                                       }
-                                      className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0"
+                                      className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 focus:bg-blue-100 transition-colors text-left border-b border-gray-100 last:border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400"
                                     >
                                       <img
                                         src={imageUrl}
-                                        alt={pokemon.name}
+                                        alt=""
                                         className="w-10 h-10 object-cover rounded"
+                                        aria-hidden="true"
                                       />
                                       <span className="text-gray-800 font-medium text-sm">
                                         {pokemon.name}
@@ -423,18 +490,27 @@ export default function Header() {
                         {/* yype suggestions */}
                         {suggestions.types.length > 0 && (
                           <div>
-                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 border-t">
+                            <div
+                              className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 border-t"
+                              role="presentation"
+                            >
                               Types
                             </div>
-                            <ul>
+                            <ul role="group" aria-label="Type suggestions">
                               {suggestions.types.map((type) => (
-                                <li key={`mobile-type-${type.id}`}>
+                                <li
+                                  key={`mobile-type-${type.id}`}
+                                  role="option"
+                                >
                                   <button
                                     type="button"
                                     onClick={() => handleTypeClick(type.slug)}
-                                    className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors text-left border-b border-gray-100 last:border-0"
+                                    className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 focus:bg-blue-100 transition-colors text-left border-b border-gray-100 last:border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400"
                                   >
-                                    <div className="w-10 h-10 rounded bg-linear-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
+                                    <div
+                                      className="w-10 h-10 rounded bg-linear-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg"
+                                      aria-hidden="true"
+                                    >
                                       {type.title.charAt(0)}
                                     </div>
                                     <span className="text-gray-800 font-medium text-sm">
@@ -458,32 +534,35 @@ export default function Header() {
             </form>
 
             {/* mobile navigation Links */}
-            <nav className="flex flex-col gap-1 border-t pt-3">
+            <nav
+              className="flex flex-col gap-1 border-t pt-3"
+              aria-label="Mobile navigation"
+            >
               <Link
                 href="/products"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
               >
                 Products
               </Link>
               <Link
                 href="/types"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
               >
                 Types
               </Link>
               <Link
                 href="/about"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
               >
                 About us
               </Link>
               <Link
                 href="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="py-3 px-3 text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors"
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
               >
                 Contact
               </Link>
