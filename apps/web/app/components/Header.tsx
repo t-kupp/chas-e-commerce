@@ -3,7 +3,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { Heart, ShoppingCart, User, Search, Menu, X } from "lucide-react";
+import { useAuth } from "../../app/context/auth";
+import {
+  Search,
+  Menu,
+  X,
+  Heart,
+  ShoppingCart,
+  User,
+  LogOut,
+} from "lucide-react";
 
 //====== ADD BACK LATER WHEN CART IS WORKING =====
 // import { useCart } from "@/context/cart";
@@ -33,6 +42,7 @@ interface SearchSuggestions {
 
 export default function Header() {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestions>({
@@ -307,68 +317,123 @@ export default function Header() {
 
         {/* desktop icons */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/favorites"
-            aria-label="Favorites"
-            className="p-2 rounded hover:bg-yellow-400/20"
-          >
-            <Heart
-              className="text-white hover:text-yellow-400"
-              aria-hidden="true"
-            />
-          </Link>
-          <Link
-            href="/account"
-            aria-label="Account"
-            className="p-2 rounded hover:bg-yellow-400/20"
-          >
-            <User
-              className="text-white hover:text-yellow-400"
-              aria-hidden="true"
-            />
-          </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="p-2 rounded hover:bg-yellow-400/20"
-          >
-            <ShoppingCart
-              className="text-white hover:text-yellow-400"
-              aria-hidden="true"
-            />
-            {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
-            {/* {cartCount > 0 && (
-              <span className="cartAmount absolute -right-3 -top-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
-                {cartCount}
+          {user ? (
+            <>
+              <Link
+                href="/favorites"
+                aria-label="Favorites"
+                className="p-2 rounded hover:bg-yellow-400/20"
+              >
+                <Heart
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+              </Link>
+              <Link
+                href="/account"
+                aria-label="Account"
+                className="p-2 rounded hover:bg-yellow-400/20"
+              >
+                <User
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+              </Link>
+              <Link
+                href="/cart"
+                aria-label="Cart"
+                className="p-2 rounded hover:bg-yellow-400/20 relative"
+              >
+                <ShoppingCart
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+                {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
+                {/* {cartCount > 0 && (
+                <span className="cartAmount absolute -right-1 -top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                    {cartCount}
+                  </span>
+              )} */}
+              </Link>
+              <span className="text-gray-400">|</span>
+
+              <span className="text-sm">
+                Hello <b> {user.username}</b>!
               </span>
-            )} */}
-          </Link>
+              <button
+                onClick={logout}
+                aria-label="Logout"
+                className="p-2 rounded hover:bg-red-600/20 transition"
+              >
+                <LogOut
+                  className="text-white hover:text-red-400"
+                  size={20}
+                  aria-hidden="true"
+                />
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/auth"
+              className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg font-medium transition"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
 
         {/* mobile icons and menu button */}
         <div className="flex md:hidden items-center gap-2">
-          <Link
-            href="/favorites"
-            aria-label="Favorites"
-            className="relative p-2 rounded hover:bg-yellow-400/20"
-          >
-            <Heart className="text-white" aria-hidden="true" />
-          </Link>
-          <Link
-            href="/account"
-            aria-label="Account"
-            className="p-2 rounded hover:bg-yellow-400/20"
-          >
-            <User className="text-white" aria-hidden="true" />
-          </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="relative p-2 rounded hover:bg-yellow-400/20"
-          >
-            <ShoppingCart className="text-white" size={20} aria-hidden="true" />
-          </Link>
-
+          {user ? (
+            <>
+              <Link
+                href="/favorites"
+                aria-label="Favorites"
+                className="p-2 rounded hover:bg-yellow-400/20"
+              >
+                <Heart
+                  className="text-white hover:text-yellow-400"
+                  size={20}
+                  aria-hidden="true"
+                />
+              </Link>
+              <Link
+                href="/cart"
+                aria-label="Cart"
+                className="p-2 rounded hover:bg-yellow-400/20 relative"
+              >
+                <ShoppingCart
+                  className="text-white hover:text-yellow-400"
+                  size={20}
+                  aria-hidden="true"
+                />
+                {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
+                {/* {cartCount > 0 && (
+                <span className="cartAmount absolute -right-1 -top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                    {cartCount}
+                  </span>
+              )} */}
+              </Link>
+              <button
+                onClick={logout}
+                aria-label="Logout"
+                className="p-2 rounded hover:bg-red-600/20 transition"
+              >
+                <LogOut
+                  className="text-white hover:text-red-400"
+                  size={20}
+                  aria-hidden="true"
+                />
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/auth"
+              className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded-lg text-sm"
+            >
+              Sign In
+            </Link>
+          )}
           {/* mobile menu button */}
           <button
             className="p-2 rounded hover:bg-yellow-400/20"
@@ -556,6 +621,24 @@ export default function Header() {
               >
                 Contact
               </Link>
+              {user && (
+                <>
+                  <Link
+                    href="/orders"
+                    onClick={() => setMobileOpen(false)}
+                    className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
+                  >
+                    My Orders
+                  </Link>
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileOpen(false)}
+                    className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
+                  >
+                    Account
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         </div>
