@@ -13,26 +13,31 @@ const teamMembers = [
     name: "Embla A.",
     role: "Head Card Curator",
     description: "Masters inventory and authenticates rare cards.",
+    image: "/embla.jpg",
   },
   {
     name: "Jan TK.",
     role: "Customer Success Trainer",
     description: "Ensures every collector has a 5-star experience.",
+    image: "/jan.jpg",
   },
   {
     name: "Daniel T.",
     role: "Swift Logistics Operator",
     description: "In charge of fast, secure, and damage-free shipping.",
+    image: "/daniel.jpg",
   },
   {
     name: "Joel K.",
     role: "Digital Deck Strategist",
     description: "Optimizes the site and merchandising for easy finding.",
+    image: "/joel.jpg",
   },
   {
     name: "Zarha B.",
     role: "Community Guild Leader",
     description: "Manages social media and collector outreach.",
+    image: "/zarha.JPEG",
   },
 ];
 
@@ -239,10 +244,12 @@ export default function AboutPage() {
                 className="bg-white rounded-xl p-6 shadow-lg border-t-4 border-gray-800 hover:shadow-2xl transition-shadow duration-300"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center border-4 border-gray-800 shrink-0">
-                    <span className="text-xl font-extrabold text-gray-700">
-                      {member.name.charAt(0)}
-                    </span>
+                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center border-4 border-gray-800 shrink-0 overflow-hidden">
+                    <img
+                      src={member.image}
+                      alt={`${member.name} - ${member.role}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div>
                     <div className="text-xl font-bold text-gray-900">
