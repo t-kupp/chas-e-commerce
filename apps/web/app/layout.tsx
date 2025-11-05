@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { AuthProvider } from "./context/auth";
 import { WishlistProvider } from "./context/wishlist";
+import { generateOrganizationSchema, generateWebsiteSchema } from "./lib/seo";
 
 import "./globals.css";
 
@@ -18,7 +19,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: {
     default: "Pokemon Cards Store - Rare & Collectible Trading Cards",
     template: "%s | Pokemon Cards Store", // %s does so pages will show "Page Name | Pokemon Cards Store"
@@ -37,11 +40,10 @@ export const metadata: Metadata = {
   creator: "Pokemon Cards Store",
   publisher: "Pokemon Cards Store",
 
-  // open graph for social media sharing
   openGraph: {
     type: "website",
     locale: "sv-SE",
-    url: "http://localhost:3000",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
     siteName: "Pokemon Cards Store",
     title: "Pokemon Cards Store - Rare & Collectible Trading Cards",
     description:
@@ -56,7 +58,6 @@ export const metadata: Metadata = {
     ],
   },
 
-  // robots and indexing
   robots: {
     index: true,
     follow: true,
@@ -69,9 +70,8 @@ export const metadata: Metadata = {
     },
   },
 
-  // additional metadata
   alternates: {
-    canonical: "http://localhost:3000",
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   },
 };
 
@@ -80,8 +80,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationSchema = generateOrganizationSchema();
+  const websiteSchema = generateWebsiteSchema();
+
   return (
-    <html lang="en">
+    <html lang="sv">
+      <head>
+        {/* schema.org organization markup */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        {/* schema.org website markup with search functionality */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col pt-18!`}
       >

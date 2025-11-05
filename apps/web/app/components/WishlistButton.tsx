@@ -5,7 +5,7 @@ import { useWishlist } from "../context/wishlist";
 import { Pokemon } from "../../../shared/types/pokemon";
 
 interface WishlistButtonProps {
-  pokemon: Pokemon;
+  pokemon: any;
   variant?: "icon" | "button";
   className?: string;
 }

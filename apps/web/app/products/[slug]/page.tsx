@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import QuantitySelector from "../../components/QuantitySelector";
 import WishlistButton from "../../components/WishlistButton";
+import Breadcrumb from "../../components/Breadcrumb";
 
 interface Pokemon {
   id: number;
@@ -16,6 +16,26 @@ interface Pokemon {
     alternativeText?: string;
     width?: number;
     height?: number;
+    formats?: {
+      medium?: {
+        width?: number;
+        height?: number;
+        url?: string;
+      };
+      thumbnail?: {
+        width?: number;
+        height?: number;
+        url?: string;
+      };
+      // add other formats if needed
+      [key: string]:
+        | {
+            width?: number;
+            height?: number;
+            url?: string;
+          }
+        | undefined;
+    };
   };
   type?: {
     title: string;
@@ -130,7 +150,7 @@ export async function generateStaticParams() {
     );
     const data = await res.json();
 
-    return data.data.map((pokemon: any) => ({
+    return data.data.map((pokemon: { slug: string }) => ({
       slug: pokemon.slug,
     }));
   } catch (error) {
@@ -193,26 +213,30 @@ export default async function ProductPage({
       />
 
       <div className="h-[85vh] container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
-          <Link href="/" className="hover:text-gray-900">
-            Home
-          </Link>
-          <span>/</span>
-          <Link href="/products" className="hover:text-gray-900">
-            Products
-          </Link>
-          <span>/</span>
-          <span className="text-yellow-600">{pokemon.name}</span>
-        </nav>
+        {/* Breadcrumb with Schema.org markup */}
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Products", href: "/products" },
+          ]}
+          currentPage={pokemon.name}
+        />
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Product Image */}
           <div className="rounded-2xl pt-2">
             <div className="flex justify-center px-20 overflow-hidden rounded-xl">
               <Image
-                width={pokemon.image.formats.medium.width}
-                height={pokemon.image.formats.medium.height}
+                width={
+                  pokemon.image?.formats?.medium?.width ||
+                  pokemon.image?.width ||
+                  800
+                }
+                height={
+                  pokemon.image?.formats?.medium?.height ||
+                  pokemon.image?.height ||
+                  800
+                }
                 src={imageUrl}
                 alt={pokemon.name}
               />

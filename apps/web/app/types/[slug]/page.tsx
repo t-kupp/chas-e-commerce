@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import ProductCard from "../../components/ProductCard";
 import PageHeader from "../../components/PageHeader";
+import Breadcrumb from "../../components/Breadcrumb";
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -84,19 +85,14 @@ export default async function TypePage({ params }: TypePageProps) {
       />
 
       <main className="container mx-auto px-4 py-8 md:py-12">
-
-        {/* breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
-          <Link href="/" className="hover:text-gray-900">
-            Home
-          </Link>
-          <span>/</span>
-          <Link href="/types" className="hover:text-gray-900">
-            Types
-          </Link>
-          <span>/</span>
-          <span className="text-yellow-600">{type.title}</span>
-        </nav>
+        {/* breadcrumb with schema.org markup */}
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Types", href: "/types" },
+          ]}
+          currentPage={type.title}
+        />
 
         {pokemonCount === 0 ? (
           <div className="text-center py-16">
@@ -121,9 +117,11 @@ export default async function TypePage({ params }: TypePageProps) {
           <>
             {/* product grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {type.pokemon?.map((pokemon: any) => (
-                <ProductCard key={pokemon.id} pokemon={pokemon} />
-              ))}
+              {type.pokemon?.map(
+                (pokemon: { id: number; [key: string]: unknown }) => (
+                  <ProductCard key={pokemon.id} pokemon={pokemon as never} />
+                )
+              )}
             </div>
           </>
         )}

@@ -1,3 +1,18 @@
+// Type-related interfaces
+export interface TypeAttributes {
+  title?: string;
+  slug?: string;
+  pokemon?: { data?: unknown[] };
+}
+
+export interface TypeItem {
+  attributes?: TypeAttributes;
+  title?: string;
+  slug?: string;
+  pokemon?: unknown[];
+}
+
+// Type image data
 interface TypeData {
   image: string;
 }
