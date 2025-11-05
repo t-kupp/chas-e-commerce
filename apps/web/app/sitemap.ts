@@ -77,5 +77,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...productPages];
+  // type pages
+  const typePages = types.map((t: any) => ({
+    url: `${baseUrl}/types/${t.slug}`,
+    lastModified: new Date(t.updatedAt),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...productPages, ...typePages];
 }
