@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from "react";
-import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Link} from "expo-router";
-import {Pokemon} from "@/types";
-import {SortOption} from "./filter";
-import {useCart} from "../context/CartContext";
+import React, { useState, useEffect } from "react";
+import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Link } from "expo-router";
+import { Pokemon } from "@/types";
+import { SortOption } from "./filter";
+import { useCart } from "../context/CartContext";
 
 interface ProductCardProps {
   sortBy?: SortOption;
 }
 
-export default function ProductCard({sortBy}: ProductCardProps) {
+export default function ProductCard({ sortBy }: ProductCardProps) {
   const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL;
-  const {addItem} = useCart();
+  const { addItem } = useCart();
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +63,7 @@ export default function ProductCard({sortBy}: ProductCardProps) {
             {/* Bild */}
             {pokemon.image?.url ? (
               <Image
-                source={{uri: `http://localhost:1337${pokemon.image.url}`}}
+                source={{ uri: `http://localhost:1337${pokemon.image.url}` }}
                 className="w-full h-56 rounded-md mb-3"
                 resizeMode="cover"
               />
