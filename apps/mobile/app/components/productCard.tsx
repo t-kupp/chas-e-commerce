@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Link } from "expo-router";
-import { Pokemon } from "@/types";
-import { SortOption } from "./filter";
+import React, {useState, useEffect} from "react";
+import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
+import {Link} from "expo-router";
+import {Pokemon} from "@/types";
+import {SortOption} from "./filter";
+import {useCart} from "../context/CartContext";
 
 interface ProductCardProps {
   sortBy?: SortOption;
 }
 
-export default function ProductCard({ sortBy }: ProductCardProps) {
+export default function ProductCard({sortBy}: ProductCardProps) {
   const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL;
-
+  const {addItem} = useCart();
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -62,7 +63,7 @@ export default function ProductCard({ sortBy }: ProductCardProps) {
             {/* Bild */}
             {pokemon.image?.url ? (
               <Image
-                source={{ uri: `http://localhost:1337${pokemon.image.url}` }}
+                source={{uri: `http://localhost:1337${pokemon.image.url}`}}
                 className="w-full h-56 rounded-md mb-3"
                 resizeMode="cover"
               />
@@ -80,20 +81,28 @@ export default function ProductCard({ sortBy }: ProductCardProps) {
               {pokemon.stock ? `Stock: ${pokemon.stock}` : "Out of Stock"}
             </Text>
 
-            <Text className="text-xl font-bold text-blue-600 mb-3">
+            <Text className="text-xl font-bold black mb-3">
               ${pokemon.price}
             </Text>
 
             {/* View Details länk */}
             <Link href={`/productCardDetailPage/${pokemon.documentId}`}>
-              <Text className="text-blue-600 underline mb-3 text-center">
+              <Text className="black underline mb-3 text-center">
                 View Details
               </Text>
             </Link>
 
             <TouchableOpacity
-              className="bg-blue-500 py-2 px-4 rounded-md"
-              onPress={() => console.log(`Buy ${pokemon.name}`)}
+              className="bg-black py-2 px-4 rounded-md"
+              onPress={() =>
+                addItem({
+                  id: pokemon.id,
+                  name: pokemon.name,
+                  price: pokemon.price,
+                  image: pokemon.image?.url,
+                  quantity: 1,
+                })
+              }
             >
               <Text className="text-white font-medium text-center">
                 Buy Now

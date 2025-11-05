@@ -70,7 +70,7 @@ export default function ProductDetail() {
               quantity: 1,
             })
           }
-          className="bg-blue-500 py-4 px-6 rounded-lg"
+          className="bg-black py-4 px-6 rounded-lg"
         >
           <Text className="text-white font-bold text-lg text-center">
             Add to Cart
