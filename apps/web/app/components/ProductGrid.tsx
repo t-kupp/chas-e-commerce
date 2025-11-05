@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
-import Link from "next/link";
+import { useCart } from "../context/cart";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
@@ -19,6 +20,8 @@ export default function ProductGrid() {
   const [filteredData, setFilteredData] = useState<Pokemon[] | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("date-newest");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { addToCart } = useCart();
 
   // Fetch data on page load
   useEffect(() => {
@@ -56,13 +59,9 @@ export default function ProductGrid() {
         case "price-desc":
           return b.price - a.price;
         case "date-newest":
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         case "date-oldest":
-          return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         default:
           return 0;
       }
@@ -75,12 +74,7 @@ export default function ProductGrid() {
     setSortBy(e.target.value as SortOption);
   }
 
-  function handleAddToCart(card: Pokemon) {
-    console.log("Added to cart: " + card.name);
-  }
-
-  if (!filteredData)
-    return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
+  if (!filteredData) return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
 
   return (
     <section id="products-section" className="max-w-7xl mx-auto px-4">
@@ -93,7 +87,8 @@ export default function ProductGrid() {
             id="sort"
             value={sortBy}
             onChange={handleSortChange}
-            className="px-4 py-2 border border-foreground/10 rounded  text-sm">
+            className="px-4 py-2 border border-foreground/10 rounded  text-sm"
+          >
             <option value="date-newest">Date Added (Newest First)</option>
             <option value="date-oldest">Date Added (Oldest First)</option>
             <option value="name-asc">Name (A-Z)</option>
@@ -108,10 +103,12 @@ export default function ProductGrid() {
           return (
             <div
               key={card.id}
-              className="w-full h-full px-4 py-6 bg-foreground/5 flex flex-col gap-4 rounded items-center text-center">
+              className="w-full h-full px-4 py-6 bg-foreground/5 flex flex-col gap-4 rounded items-center text-center"
+            >
               <Link
                 href={`/products/${card.slug}`}
-                className="flex flex-col gap-2 justify-center items-center">
+                className="flex flex-col gap-2 justify-center items-center"
+              >
                 <div className="w-2/3 ">
                   <Image
                     width={1024}
@@ -122,14 +119,13 @@ export default function ProductGrid() {
                   />
                 </div>
                 <p>{card.name}</p>
-                <p className="font-semibold text-2xl">
-                  ${card.price.toFixed(2)}
-                </p>
+                <p className="font-semibold text-2xl">${card.price.toFixed(2)}</p>
               </Link>
               <div className="px-3 w-full">
                 <button
-                  onClick={() => handleAddToCart(card)}
-                  className="bg-foreground text-background w-full rounded py-3 text-sm hover:opacity-80 active:opacity-70">
+                  onClick={() => addToCart(card)}
+                  className="bg-foreground text-background w-full rounded py-3 text-sm hover:opacity-80 active:opacity-70"
+                >
                   Add to Cart
                 </button>
               </div>
