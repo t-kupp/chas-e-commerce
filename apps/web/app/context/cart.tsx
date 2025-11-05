@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
 
 interface CartContextType {
@@ -23,8 +23,33 @@ export interface CartItem {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const CART_STORAGE_KEY = "pokemon-cart";
+
 export default function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    // Initialize cart from localStorage on mount
+    if (typeof window !== "undefined") {
+      try {
+        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+        return savedCart ? JSON.parse(savedCart) : [];
+      } catch (error) {
+        console.error("Failed to load cart from localStorage:", error);
+        return [];
+      }
+    }
+    return [];
+  });
+
+  // Sync cart to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      } catch (error) {
+        console.error("Failed to save cart to localStorage:", error);
+      }
+    }
+  }, [cart]);
 
   function addToCart(pokemon: Pokemon) {
     // Check if item in cart exists
