@@ -1,8 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
-import Link from "next/link";
+import ProductCard from "./ProductCard";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
@@ -83,7 +82,7 @@ export default function ProductGrid() {
     return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
 
   return (
-    <section id="products-section" className="max-w-7xl mx-auto px-4">
+    <section id="products-section" className="max-w-7xl mx-auto px-4 mb-12">
       <div className="mb-6 mt-6 flex justify-end">
         <div className="flex items-center gap-3">
           <label htmlFor="sort" className="text-sm font-medium">
@@ -93,7 +92,8 @@ export default function ProductGrid() {
             id="sort"
             value={sortBy}
             onChange={handleSortChange}
-            className="px-4 py-2 border border-foreground/10 rounded  text-sm">
+            className="px-4 py-2 border border-foreground/10 rounded  text-sm"
+          >
             <option value="date-newest">Date Added (Newest First)</option>
             <option value="date-oldest">Date Added (Oldest First)</option>
             <option value="name-asc">Name (A-Z)</option>
@@ -104,38 +104,13 @@ export default function ProductGrid() {
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
-        {filteredData.map((card) => {
-          return (
-            <div
-              key={card.id}
-              className="w-full h-full px-4 py-6 bg-foreground/5 flex flex-col gap-4 rounded items-center text-center">
-              <Link
-                href={`/products/${card.slug}`}
-                className="flex flex-col gap-2 justify-center items-center">
-                <div className="w-2/3 ">
-                  <Image
-                    width={1024}
-                    height={1024}
-                    src={`${STRAPI_URL}${card.image.url}`}
-                    alt={`Card of ${card.name}`}
-                    className="w-full h-full rounded-lg flex flex-col justify-center mx-auto"
-                  />
-                </div>
-                <p>{card.name}</p>
-                <p className="font-semibold text-2xl">
-                  ${card.price.toFixed(2)}
-                </p>
-              </Link>
-              <div className="px-3 w-full">
-                <button
-                  onClick={() => handleAddToCart(card)}
-                  className="bg-foreground text-background w-full rounded py-3 text-sm hover:opacity-80 active:opacity-70">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          );
-        })}
+        {filteredData.map((card) => (
+          <ProductCard
+            key={card.id}
+            pokemon={card}
+            onAddToCart={handleAddToCart}
+          />
+        ))}
       </div>
     </section>
   );

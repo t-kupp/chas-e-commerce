@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { AuthProvider } from "./context/auth";
+import { WishlistProvider } from "./context/wishlist";
 
 import "./globals.css";
 
@@ -85,9 +86,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col pt-18!`}
       >
         <AuthProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <WishlistProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </WishlistProvider>
         </AuthProvider>
       </body>
       <GoogleAnalytics gaId="G-8EJ2LZQSRB" />

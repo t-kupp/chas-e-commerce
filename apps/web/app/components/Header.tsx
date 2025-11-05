@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../app/context/auth";
+import { useWishlist } from "../../app/context/wishlist";
 import {
   Search,
   Menu,
@@ -43,6 +44,7 @@ interface SearchSuggestions {
 export default function Header() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const { wishlistCount } = useWishlist();
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestions>({
@@ -302,6 +304,12 @@ export default function Header() {
             Products
           </Link>
           <Link
+            href="/types"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
+            Types
+          </Link>
+          <Link
             href="/about"
             className="hover:text-yellow-400 hover:underline px-2 py-1"
           >
@@ -320,14 +328,19 @@ export default function Header() {
           {user ? (
             <>
               <Link
-                href="/favorites"
-                aria-label="Favorites"
-                className="p-2 rounded hover:bg-yellow-400/20"
+                href="/wishlist"
+                aria-label="Wishlist"
+                className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
                 <Heart
                   className="text-white hover:text-yellow-400"
                   aria-hidden="true"
                 />
+                {wishlistCount > 0 && (
+                  <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
               <Link
                 href="/account"
@@ -348,9 +361,10 @@ export default function Header() {
                   className="text-white hover:text-yellow-400"
                   aria-hidden="true"
                 />
+
                 {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
                 {/* {cartCount > 0 && (
-                <span className="cartAmount absolute -right-1 -top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
                     {cartCount}
                   </span>
               )} */}
@@ -387,15 +401,20 @@ export default function Header() {
           {user ? (
             <>
               <Link
-                href="/favorites"
-                aria-label="Favorites"
-                className="p-2 rounded hover:bg-yellow-400/20"
+                href="/wishlist"
+                aria-label="Wishlist"
+                className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
                 <Heart
                   className="text-white hover:text-yellow-400"
                   size={20}
                   aria-hidden="true"
                 />
+                {wishlistCount > 0 && (
+                  <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
               <Link
                 href="/cart"
@@ -407,9 +426,10 @@ export default function Header() {
                   size={20}
                   aria-hidden="true"
                 />
+
                 {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
                 {/* {cartCount > 0 && (
-                <span className="cartAmount absolute -right-1 -top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
                     {cartCount}
                   </span>
               )} */}
@@ -608,6 +628,13 @@ export default function Header() {
                 Products
               </Link>
               <Link
+                href="/types"
+                onClick={() => setMobileOpen(false)}
+                className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
+              >
+                Types
+              </Link>
+              <Link
                 href="/about"
                 onClick={() => setMobileOpen(false)}
                 className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
@@ -623,6 +650,13 @@ export default function Header() {
               </Link>
               {user && (
                 <>
+                  <Link
+                    href="/wishlist"
+                    onClick={() => setMobileOpen(false)}
+                    className="py-3 px-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-100 rounded-md font-medium transition-colors"
+                  >
+                    My Wishlist
+                  </Link>
                   <Link
                     href="/orders"
                     onClick={() => setMobileOpen(false)}

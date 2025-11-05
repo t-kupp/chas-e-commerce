@@ -192,7 +192,7 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* favorites */}
+          {/* wishlist */}
           <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
             <div className="flex items-center justify-between">
               <div>
@@ -236,7 +236,7 @@ export default function AccountPage() {
                 </Link>
 
                 <Link
-                  href="/favorites"
+                  href="/wishlist"
                   className="flex items-center gap-3 p-4 bg-gray-50 hover:bg-red-50 rounded-lg transition group"
                 >
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition">
