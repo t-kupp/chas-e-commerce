@@ -11,7 +11,15 @@ export default function robots(): MetadataRoute.Robots {
         // allows crawlers to access the root and all pages by default
         allow: "/",
         // block crawlers from accessing:
-        disallow: ["/api/", "/admin/", "/_next/", "/private/"],
+        disallow: [
+          "/api/",
+          "/admin/",
+          "/_next/",
+          "/private/",
+          "/account",
+          "/orders",
+          "/wishlist",
+        ],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

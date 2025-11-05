@@ -61,6 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/auth`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.3,
+    },
   ];
 
   // product pages
@@ -71,13 +77,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // type pages
-  const typePages = types.map((t: any) => ({
-    url: `${baseUrl}/types/${t.slug}`,
-    lastModified: new Date(t.updatedAt),
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
-
-  return [...staticPages, ...productPages, ...typePages];
+  return [...staticPages, ...productPages];
 }
