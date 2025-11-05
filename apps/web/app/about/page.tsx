@@ -37,7 +37,7 @@ const teamMembers = [
     name: "Zarha B.",
     role: "Community Guild Leader",
     description: "Manages social media and collector outreach.",
-    image: "/zarha.JPEG",
+    image: "/zarha.jpg",
   },
 ];
 
