@@ -1,47 +1,37 @@
-import React, {createContext, useContext, useMemo, useState} from "react";
-
-type CartItem = {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-};
-
-export type CartContextType = {
-  total: number;
-  items: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: number) => void;
-  clearCart: () => void;
-  increaseItem: (id: number) => void;
-  decreaseItem: (id: number) => void;
-  updateQuantity: (id: number, qty: number) => void;
-};
+import React, {createContext, useContext, useState} from "react";
+import {CartContextType, CartItem} from "../../../shared/types/pokemon";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({children}: {children: React.ReactNode}) {
   const [items, setItems] = useState<CartItem[]>([]);
 
+  // Add item to cart
   const addItem = (item: CartItem) => {
     setItems((prev) => {
       const existing = prev.find((p) => p.id === item.id);
+
+      // If item exists, increase quantity
       if (existing) {
-        return prev.map((p) =>
-          p.id === item.id ? {...p, quantity: p.quantity + item.quantity} : p
+        return prev.map((prevItem) =>
+          prevItem.id === item.id
+            ? {...prevItem, quantity: prevItem.quantity + item.quantity}
+            : prevItem
         );
       }
       return [...prev, item];
     });
   };
 
+  // Remove item from cart
   const removeItem = (id: number) => {
     setItems((prev) => prev.filter((p) => p.id !== id));
   };
 
+  // Clear cart
   const clearCart = () => setItems([]);
 
+  // Increase item quantity
   const increaseItem = (id: number) => {
     setItems((prev) =>
       prev.map((p) =>
@@ -50,6 +40,7 @@ export function CartProvider({children}: {children: React.ReactNode}) {
     );
   };
 
+  // Decrease item quantity
   const decreaseItem = (id: number) => {
     setItems((prev) =>
       prev.map((p) =>
@@ -58,16 +49,18 @@ export function CartProvider({children}: {children: React.ReactNode}) {
     );
   };
 
-  const updateQuantity = (id: number, qty: number) => {
-    setItems((prev) =>
-      prev.map((p) => (p.id === id ? {...p, quantity: Math.max(1, qty)} : p))
+  // Update item quantity
+  const updateQuantity = (id: number, quantity: number) => {
+    // Ensure quantity is only 1 or more
+    const amount = Math.max(1, Math.floor(Number(quantity) || 0));
+
+    setItems((prevItems) =>
+      prevItems.map((p) => (p.id === id ? {...p, quantity: amount} : p))
     );
   };
 
-  const total = useMemo(
-    () => items.reduce((sum, i) => sum + i.price * i.quantity, 0),
-    [items]
-  );
+  // Total price
+  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
     <CartContext.Provider

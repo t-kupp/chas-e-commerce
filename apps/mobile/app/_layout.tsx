@@ -7,9 +7,7 @@ export default function RootLayout() {
   return (
     <CartProvider>
       <Stack>
-        {/* Tabs som huvudlayout utan header */}
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-
         <Stack.Screen
           name="productCardDetailPage/[slug]"
           options={{

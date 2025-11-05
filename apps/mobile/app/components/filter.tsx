@@ -1,25 +1,26 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {View, Text, ScrollView, TouchableOpacity} from "react-native";
 import React from "react";
+import {SortOption} from "../../../shared/types/pokemon";
 
-export type SortOption =
-  | "name-asc"
-  | "name-desc"
-  | "price-asc"
-  | "price-desc"
-  | null;
+// export type SortOption =
+//   | "name-asc"
+//   | "name-desc"
+//   | "price-asc"
+//   | "price-desc"
+//   | null;
 
 interface FilterProps {
   selectedSort: SortOption;
   onSortChange: (sort: SortOption) => void;
 }
 
-export default function Filter({ selectedSort, onSortChange }: FilterProps) {
-  const sortOptions: { value: SortOption; label: string }[] = [
-    { value: null, label: "Default" },
-    { value: "name-asc", label: "A-Z" },
-    { value: "name-desc", label: "Z-A" },
-    { value: "price-asc", label: "Price: Low to High" },
-    { value: "price-desc", label: "Price: High to Low" },
+export default function Filter({selectedSort, onSortChange}: FilterProps) {
+  const sortOptions: {value: SortOption; label: string}[] = [
+    {value: null, label: "Default"},
+    {value: "name-asc", label: "A-Z"},
+    {value: "name-desc", label: "Z-A"},
+    {value: "price-asc", label: "Price: Low to High"},
+    {value: "price-desc", label: "Price: High to Low"},
   ];
 
   return (

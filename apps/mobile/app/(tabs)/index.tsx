@@ -3,7 +3,8 @@ import {View, ScrollView} from "react-native";
 import Footer from "../components/footer";
 import Hero from "../components/hero";
 import ProductCard from "../components/productCard";
-import Filter, {SortOption} from "../components/filter";
+import {SortOption} from "../../../shared/types/pokemon";
+import Filter from "../components/filter";
 
 export default function HomePage() {
   const scrollViewRef = useRef<ScrollView>(null);

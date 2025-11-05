@@ -81,3 +81,29 @@ export interface Pokemon {
   condition: Condition;
   rarity: Rarity;
 }
+
+export type CartItem = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
+export type CartContextType = {
+  total: number;
+  items: CartItem[];
+  addItem: (item: CartItem) => void;
+  removeItem: (id: number) => void;
+  clearCart: () => void;
+  increaseItem: (id: number) => void;
+  decreaseItem: (id: number) => void;
+  updateQuantity: (id: number, qty: number) => void;
+};
+
+export type SortOption =
+  | "name-asc"
+  | "name-desc"
+  | "price-asc"
+  | "price-desc"
+  | null;
