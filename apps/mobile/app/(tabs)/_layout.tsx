@@ -33,7 +33,7 @@ export default function RootLayout() {
           tabBarIcon: ({color, size}) => (
             <Ionicons name="cart-outline" size={size} color={color} />
           ),
-          tabBarBadge: badge, // <-- visar antal på ikonen
+          tabBarBadge: badge,
         }}
       />
 
