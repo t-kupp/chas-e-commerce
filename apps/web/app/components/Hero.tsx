@@ -36,7 +36,7 @@ export default function Hero() {
             </div>
 
             <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
-              POKEMON{" "}
+              POKÉMON{" "}
               <span className="text-yellow-400 bg-clip-text">STORE</span>
             </h1>
 

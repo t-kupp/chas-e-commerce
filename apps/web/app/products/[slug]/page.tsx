@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import QuantitySelector from "../../components/QuantitySelector";
 
 interface Pokemon {
   id: number;
@@ -55,7 +57,8 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const pokemon = await getPokemon(params.slug);
+  const { slug } = await params;
+  const pokemon = await getPokemon(slug);
 
   if (!pokemon) {
     return {
@@ -63,7 +66,6 @@ export async function generateMetadata({
       description: "This Pokemon card could not be found.",
     };
   }
-
   const imageUrl = pokemon.image?.url
     ? `http://localhost:1337${pokemon.image.url}`
     : "/placeholder-card.jpg";
@@ -141,7 +143,8 @@ export default async function ProductPage({
 }: {
   params: { slug: string };
 }) {
-  const pokemon = await getPokemon(params.slug);
+  const { slug } = await params;
+  const pokemon = await getPokemon(slug);
 
   if (!pokemon) {
     notFound();
@@ -188,63 +191,197 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* product Image */}
-          <div>
-            <Image
-              width={1024}
-              height={1024}
-              src={imageUrl}
-              alt={pokemon.name}
-              className="w-full rounded-lg shadow-lg"
-            />
+      <div className="h-[85vh] container mx-auto px-4 py-8">
+        {/* Breadcrumb */}
+        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
+          <Link href="/" className="hover:text-gray-900">
+            Home
+          </Link>
+          <span>/</span>
+          <Link href="/products" className="hover:text-gray-900">
+            Products
+          </Link>
+          <span>/</span>
+          <span className="text-yellow-600">{pokemon.name}</span>
+        </nav>
+
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Product Image */}
+          <div className="rounded-2xl pt-2">
+            <div className="flex justify-center px-20 overflow-hidden rounded-xl">
+              <Image
+                width={pokemon.image.formats.medium.width}
+                height={pokemon.image.formats.medium.height}
+                src={imageUrl}
+                alt={pokemon.name}
+              />
+            </div>
           </div>
 
-          {/* product Info */}
-          <div>
-            <h1 className="text-4xl font-bold mb-4">{pokemon.name}</h1>
+          {/* Product Info */}
+          <div className="space-y-6">
+            {/* Title */}
+            <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+              {pokemon.name}
+            </h1>
 
-            <div className="mb-4">
-              <span className="text-3xl font-bold text-blue-600">
-                ${pokemon.price}
+            {/* Price */}
+            <div className="text-3xl font-bold text-gray-900">
+              ${pokemon.price}
+            </div>
+
+            {/* Stock Status */}
+            <div className="flex items-center space-x-2">
+              <div
+                className={`w-2 h-2 rounded-full ${pokemon.stock > 0 ? "bg-green-500" : "bg-red-500"}`}></div>
+              <span
+                className={`text-sm font-medium ${pokemon.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+                {pokemon.stock}{" "}
+                {pokemon.stock > 0 ? "In stock" : "Out of stock"}
               </span>
             </div>
 
-            <div className="space-y-2 mb-6">
-              {pokemon.type && (
-                <p>
-                  <strong>Type:</strong> {pokemon.type.title}
-                </p>
-              )}
-              {pokemon.rarity && (
-                <p>
-                  <strong>Rarity:</strong> {pokemon.rarity.title}
-                </p>
-              )}
-              {pokemon.condition && (
-                <p>
-                  <strong>Condition:</strong> {pokemon.condition.title}
-                </p>
-              )}
-              <p>
-                <strong>Stock:</strong>
-                {pokemon.stock > 0 ? (
-                  <span className="text-green-600">
-                    {" "}
-                    {pokemon.stock} available
-                  </span>
-                ) : (
-                  <span className="text-red-600"> Out of stock</span>
-                )}
-              </p>
-            </div>
+            {/* Quantity Selector */}
+            {pokemon.stock > 0 && <QuantitySelector maxStock={pokemon.stock} />}
 
+            {/* Add to Cart Button */}
             <button
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+              className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
+                pokemon.stock > 0
+                  ? "bg-yellow-500 hover:bg-yellow-600"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
               disabled={pokemon.stock === 0}>
-              {pokemon.stock > 0 ? "Add to Cart" : "Out of Stock"}
+              <span className="flex items-center justify-center space-x-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5 6m0 0h8"
+                  />
+                </svg>
+                <span>
+                  {pokemon.stock > 0 ? "Add to cart" : "Out of Stock"}
+                </span>
+              </span>
             </button>
+
+            {/* Product Details Accordions */}
+            <div className="pt-6">
+              {/* Product Information */}
+              <details className="group border-t border-gray-200">
+                <summary className="flex items-center justify-between cursor-pointer py-3 text-lg font-medium text-gray-900">
+                  Product information
+                  <svg
+                    className="w-5 h-5 transition-transform group-open:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div className="pb-4 space-y-3 text-gray-600">
+                  {pokemon.type && (
+                    <div className="flex justify-between">
+                      <span className="font-medium">Type:</span>
+                      <span>{pokemon.type.title}</span>
+                    </div>
+                  )}
+                  {pokemon.rarity && (
+                    <div className="flex justify-between">
+                      <span className="font-medium">Rarity:</span>
+                      <span>{pokemon.rarity.title}</span>
+                    </div>
+                  )}
+                  {pokemon.condition && (
+                    <div className="flex justify-between">
+                      <span className="font-medium">Condition:</span>
+                      <span>{pokemon.condition.title}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="font-medium">Stock:</span>
+                    <span>{pokemon.stock} available</span>
+                  </div>
+                </div>
+              </details>
+
+              {/* Specifications */}
+              <details className="group border-y border-gray-200">
+                <summary className="flex items-center justify-between cursor-pointer py-3 text-lg font-medium text-gray-900">
+                  Specifications
+                  <svg
+                    className="w-5 h-5 transition-transform group-open:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div className="pb-4 space-y-3 text-gray-600">
+                  <div className="flex justify-between">
+                    <span className="font-medium">Card Type:</span>
+                    <span>Trading Card</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Game:</span>
+                    <span>Pokémon TCG</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Language:</span>
+                    <span>English</span>
+                  </div>
+                </div>
+              </details>
+
+              {/* Delivery & Payment */}
+              <details className="group border-b border-gray-200">
+                <summary className="flex items-center justify-between cursor-pointer py-3 text-lg font-medium text-gray-900">
+                  Delivery & payment
+                  <svg
+                    className="w-5 h-5 transition-transform group-open:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div className="pb-4 space-y-3 text-gray-600">
+                  <div className="flex justify-between">
+                    <span className="font-medium">Delivery time:</span>
+                    <span>2-4 business days</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Shipping cost:</span>
+                    <span>Free shipping over $50</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Payment methods:</span>
+                    <span>Card, PayPal</span>
+                  </div>
+                </div>
+              </details>
+            </div>
           </div>
         </div>
       </div>
