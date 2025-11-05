@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   View,
   Text,
@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { useCart } from "../context/CartContext";
+import {useCart} from "../context/CartContext";
 
 export default function CartPage() {
-  const { total, items, removeItem } = useCart();
+  const {total, items, removeItem, increaseItem, decreaseItem} = useCart();
   const [promoCode, setPromoCode] = useState("");
   const [bonusCard, setBonusCard] = useState("");
 
@@ -18,9 +18,14 @@ export default function CartPage() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const tax = 50;
-  const shipping = 29;
+  const tax = 8;
+  const shipping = 6;
   const finalTotal = subtotal + tax + shipping;
+
+  function fixedPrice(a: number, b: number) {
+    let x = a * b;
+    return x.toFixed(2);
+  }
 
   return (
     <ScrollView className="flex-1 bg-gray-50">
@@ -42,19 +47,22 @@ export default function CartPage() {
                 <Image
                   className="w-20 h-20 rounded-lg"
                   resizeMode="contain"
-                  source={{ uri: `http://localhost:1337${item.image}` }}
+                  source={{uri: `http://localhost:1337${item.image}`}}
                 />
 
                 <View className="flex-1 ml-4">
                   <View className="flex-row justify-between items-start">
-                    <View className="flex-1">
+                    <View className="flex-1 justify-between gap-2 ">
                       <Text className="font-semibold text-base">
-                        {item.name}
+                        {item.name}{" "}
+                        <Text className="text-gray-500 text-xs">
+                          #{item.id}
+                        </Text>
                       </Text>
-                      <Text className="text-gray-500 text-xs mt-1">
-                        #{item.id}
-                      </Text>
+
+                      <Text className="text-xs"> {item.price} </Text>
                     </View>
+
                     <TouchableOpacity onPress={() => removeItem(item.id)}>
                       <Text className="text-gray-400 text-xl">×</Text>
                     </TouchableOpacity>
@@ -62,16 +70,24 @@ export default function CartPage() {
 
                   <View className="flex-row justify-between items-center mt-3">
                     <View className="flex-row items-center bg-gray-100 rounded">
-                      <TouchableOpacity className="px-3 py-1">
+                      <TouchableOpacity
+                        onPress={() => decreaseItem(item.id)}
+                        className="px-3 py-1"
+                      >
                         <Text className="text-gray-600">−</Text>
                       </TouchableOpacity>
                       <Text className="px-3">{item.quantity}</Text>
-                      <TouchableOpacity className="px-3 py-1">
+                      <TouchableOpacity
+                        onPress={() => increaseItem(item.id)}
+                        className="px-3 py-1"
+                      >
                         <Text className="text-gray-600">+</Text>
                       </TouchableOpacity>
                     </View>
 
-                    <Text className="font-bold text-lg">${item.price}</Text>
+                    <Text className="font-bold text-lg">
+                      ${fixedPrice(item.price, item.quantity)}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -112,7 +128,7 @@ export default function CartPage() {
               <View className="border-t border-gray-200 pt-4">
                 <View className="flex-row justify-between mb-3">
                   <Text className="text-gray-600">Subtotal</Text>
-                  <Text className="font-semibold">${subtotal}</Text>
+                  <Text className="font-semibold">${Math.floor(subtotal)}</Text>
                 </View>
                 <View className="flex-row justify-between mb-3">
                   <Text className="text-gray-600">Estimated Tax</Text>
@@ -126,7 +142,9 @@ export default function CartPage() {
                 </View>
                 <View className="flex-row justify-between border-t border-gray-200 pt-4">
                   <Text className="font-bold text-lg">Total</Text>
-                  <Text className="font-bold text-lg">${finalTotal}</Text>
+                  <Text className="font-bold text-lg">
+                    ${Math.floor(finalTotal)}
+                  </Text>
                 </View>
               </View>
 

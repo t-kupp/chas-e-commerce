@@ -1,8 +1,13 @@
 import React from "react";
 import {Tabs} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
+import {useCart} from "../context/CartContext";
 
 export default function RootLayout() {
+  const {items = []} = useCart();
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const badge = itemCount > 0 ? itemCount : undefined;
+
   return (
     <Tabs
       screenOptions={{
@@ -28,6 +33,7 @@ export default function RootLayout() {
           tabBarIcon: ({color, size}) => (
             <Ionicons name="cart-outline" size={size} color={color} />
           ),
+          tabBarBadge: badge, // <-- visar antal på ikonen
         }}
       />
 
