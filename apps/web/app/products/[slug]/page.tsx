@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import QuantitySelector from "../../components/QuantitySelector";
+import WishlistButton from "../../components/WishlistButton";
 
 interface Pokemon {
   id: number;
@@ -233,9 +234,11 @@ export default async function ProductPage({
             {/* Stock Status */}
             <div className="flex items-center space-x-2">
               <div
-                className={`w-2 h-2 rounded-full ${pokemon.stock > 0 ? "bg-green-500" : "bg-red-500"}`}></div>
+                className={`w-2 h-2 rounded-full ${pokemon.stock > 0 ? "bg-green-500" : "bg-red-500"}`}
+              ></div>
               <span
-                className={`text-sm font-medium ${pokemon.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+                className={`text-sm font-medium ${pokemon.stock > 0 ? "text-green-600" : "text-red-600"}`}
+              >
                 {pokemon.stock}{" "}
                 {pokemon.stock > 0 ? "In stock" : "Out of stock"}
               </span>
@@ -244,32 +247,40 @@ export default async function ProductPage({
             {/* Quantity Selector */}
             {pokemon.stock > 0 && <QuantitySelector maxStock={pokemon.stock} />}
 
-            {/* Add to Cart Button */}
-            <button
-              className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
-                pokemon.stock > 0
-                  ? "bg-yellow-500 hover:bg-yellow-600"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
-              disabled={pokemon.stock === 0}>
-              <span className="flex items-center justify-center space-x-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5 6m0 0h8"
-                  />
-                </svg>
-                <span>
-                  {pokemon.stock > 0 ? "Add to cart" : "Out of Stock"}
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              {/* Add to Cart Button */}
+              <button
+                className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
+                  pokemon.stock > 0
+                    ? "bg-yellow-500 hover:bg-yellow-600"
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+                disabled={pokemon.stock === 0}
+              >
+                <span className="flex items-center justify-center space-x-2">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5 6m0 0h8"
+                    />
+                  </svg>
+                  <span>
+                    {pokemon.stock > 0 ? "Add to cart" : "Out of Stock"}
+                  </span>
                 </span>
-              </span>
-            </button>
+              </button>
+
+              {/* Wishlist Button */}
+              <WishlistButton pokemon={pokemon} className="w-full" />
+            </div>
 
             {/* Product Details Accordions */}
             <div className="pt-6">
@@ -281,7 +292,8 @@ export default async function ProductPage({
                     className="w-5 h-5 transition-transform group-open:rotate-180"
                     fill="none"
                     stroke="currentColor"
-                    viewBox="0 0 24 24">
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -324,7 +336,8 @@ export default async function ProductPage({
                     className="w-5 h-5 transition-transform group-open:rotate-180"
                     fill="none"
                     stroke="currentColor"
-                    viewBox="0 0 24 24">
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -357,7 +370,8 @@ export default async function ProductPage({
                     className="w-5 h-5 transition-transform group-open:rotate-180"
                     fill="none"
                     stroke="currentColor"
-                    viewBox="0 0 24 24">
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"

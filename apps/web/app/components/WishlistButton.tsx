@@ -48,7 +48,7 @@ export default function WishlistButton({
   return (
     <button
       onClick={toggleWishlist}
-      className={`flex items-center gap-2 px-6 py-3 rounded-lg border-2 transition ${
+      className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg border-2 transition ${
         inWishlist
           ? "bg-red-50 border-red-500 text-red-600 hover:bg-red-100"
           : "bg-white border-gray-300 text-gray-700 hover:border-red-500 hover:text-red-600"
