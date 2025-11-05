@@ -4,11 +4,19 @@ import Link from "next/link";
 import { Layers } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { TypeCard } from "../components/TypeCard";
+import SortDropdown from "../components/SortDropdown";
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 type SortOption = "name-asc" | "name-desc" | "cards-most" | "cards-least";
+
+const SORT_OPTIONS = [
+  { value: "cards-most", label: "Most Cards" },
+  { value: "cards-least", label: "Least Cards" },
+  { value: "name-asc", label: "Name (A-Z)" },
+  { value: "name-desc", label: "Name (Z-A)" },
+];
 
 function EmptyState() {
   return (
@@ -85,10 +93,6 @@ export default function TypesPage() {
     setFilteredTypes(sorted);
   }, [sortBy, types]);
 
-  function handleSortChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSortBy(e.target.value as SortOption);
-  }
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -125,22 +129,11 @@ export default function TypesPage() {
           <>
             {/* sort dropdown */}
             <div className="mb-8 flex justify-end">
-              <div className="flex items-center gap-3">
-                <label htmlFor="sort" className="text-sm font-medium">
-                  Sort by:
-                </label>
-                <select
-                  id="sort"
-                  value={sortBy}
-                  onChange={handleSortChange}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                >
-                  <option value="cards-most">Most Cards</option>
-                  <option value="cards-least">Least Cards</option>
-                  <option value="name-asc">Name (A-Z)</option>
-                  <option value="name-desc">Name (Z-A)</option>
-                </select>
-              </div>
+              <SortDropdown
+                value={sortBy}
+                onChange={(value) => setSortBy(value as SortOption)}
+                options={SORT_OPTIONS}
+              />
             </div>
 
             {/* types grid */}

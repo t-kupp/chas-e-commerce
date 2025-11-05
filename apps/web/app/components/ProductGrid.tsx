@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
 import ProductCard from "./ProductCard";
+import SortDropdown from "./SortDropdown";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
@@ -12,6 +13,15 @@ type SortOption =
   | "name-desc"
   | "price-asc"
   | "price-desc";
+
+const SORT_OPTIONS = [
+  { value: "date-newest", label: "Date Added (Newest First)" },
+  { value: "date-oldest", label: "Date Added (Oldest First)" },
+  { value: "name-asc", label: "Name (A-Z)" },
+  { value: "name-desc", label: "Name (Z-A)" },
+  { value: "price-asc", label: "Price (Low to High)" },
+  { value: "price-desc", label: "Price (High to Low)" },
+];
 
 export default function ProductGrid() {
   const [data, setData] = useState<Pokemon[] | null>(null);
@@ -70,10 +80,6 @@ export default function ProductGrid() {
     setFilteredData(sorted);
   }, [sortBy, data]);
 
-  function handleSortChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSortBy(e.target.value as SortOption);
-  }
-
   function handleAddToCart(card: Pokemon) {
     console.log("Added to cart: " + card.name);
   }
@@ -84,24 +90,11 @@ export default function ProductGrid() {
   return (
     <section id="products-section" className="max-w-7xl mx-auto px-4 mb-12">
       <div className="mb-6 mt-6 flex justify-end">
-        <div className="flex items-center gap-3">
-          <label htmlFor="sort" className="text-sm font-medium">
-            Sort by:
-          </label>
-          <select
-            id="sort"
-            value={sortBy}
-            onChange={handleSortChange}
-            className="px-4 py-2 border border-foreground/10 rounded  text-sm"
-          >
-            <option value="date-newest">Date Added (Newest First)</option>
-            <option value="date-oldest">Date Added (Oldest First)</option>
-            <option value="name-asc">Name (A-Z)</option>
-            <option value="name-desc">Name (Z-A)</option>
-            <option value="price-asc">Price (Low to High)</option>
-            <option value="price-desc">Price (High to Low)</option>
-          </select>
-        </div>
+        <SortDropdown
+          value={sortBy}
+          onChange={(value) => setSortBy(value as SortOption)}
+          options={SORT_OPTIONS}
+        />
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
         {filteredData.map((card) => (
