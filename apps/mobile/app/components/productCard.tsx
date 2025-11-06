@@ -1,94 +1,110 @@
-import React, {useState, useEffect} from "react";
+// ...existing code...
+import React from "react";
 import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
 import {Link} from "expo-router";
+import {SortOption} from "../../../shared/types/pokemon";
+import {useCart} from "../context/CartContext";
+import {usePokemons} from "@/hooks/usePokemonApi";
 
-interface Pokemon {
-  id: number;
-  name: string;
-  price: number;
-  stock: number | null;
-  documentId: string;
-  image?: {
-    url: string;
-  };
+interface ProductCardProps {
+  sortBy?: SortOption;
 }
 
-export default function ProductCard() {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function ProductCard({sortBy}: ProductCardProps) {
+  const {addItem} = useCart();
+  const {pokemons = [], loading} = usePokemons();
+  const STRAPI_URL =
+    process.env.EXPO_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 
-  async function loadPokemons() {
-    const res = await fetch(
-      "http://localhost:1337/api/pokemons?populate[0]=image"
-    );
-    const data = await res.json();
-    setPokemons(Array.isArray(data.data) ? data.data : []);
-    setLoading(false);
+  function sortedPokemons() {
+    const arr = [...pokemons]; // kopiera så vi inte muterar original
+
+    switch (sortBy) {
+      case "name-asc":
+        return arr.sort((a, b) => a.name.localeCompare(b.name));
+      case "name-desc":
+        return arr.sort((a, b) => b.name.localeCompare(a.name));
+      case "price-asc":
+        return arr.sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return arr.sort((a, b) => b.price - a.price);
+      default:
+        return arr;
+    }
   }
-
-  useEffect(() => {
-    loadPokemons();
-  }, []);
+  const sorted = sortedPokemons();
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center p-4">
         <Text>Loading...</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{paddingVertical: 8}}>
       <View className="flex-row flex-wrap justify-center p-2">
-        {pokemons.map((pokemon) => (
+        {sorted.map((pokemon) => (
           <View
             key={pokemon.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 m-2 w-44 items-center"
+            className="bg-white rounded-xl shadow-md border border-gray-200 p-3 m-2 w-44"
           >
             {/* Bild */}
             {pokemon.image?.url ? (
               <Image
                 source={{uri: `http://localhost:1337${pokemon.image.url}`}}
-                className="w-full h-56 rounded-md mb-3"
+                className="w-full h-52 rounded-lg mb-3"
                 resizeMode="cover"
               />
             ) : (
-              <View className="w-full h-32 bg-gray-200 rounded-md mb-3 items-center justify-center">
-                <Text className="text-gray-500 text-xs">No Image</Text>
+              <View className="w-full h-36 bg-gray-100 rounded-lg mb-3 items-center justify-center">
+                <Text className="text-gray-400 text-xs">No Image</Text>
               </View>
             )}
 
-            <Text className="text-lg font-bold text-gray-900 mb-1">
-              {pokemon.name}
-            </Text>
-
-            <Text className="text-xs text-gray-500 mb-2">
-              {pokemon.stock ? `Stock: ${pokemon.stock}` : "Out of Stock"}
-            </Text>
-
-            <Text className="text-xl font-bold text-blue-600 mb-3">
-              ${pokemon.price}
-            </Text>
-
-            {/* View Details länk */}
-            <Link href={`/productCardDetailPage/${pokemon.documentId}`}>
-              <Text className="text-blue-600 underline mb-3 text-center">
-                View Details
+            <View className="w-full">
+              <Text
+                className="text-base font-semibold text-gray-900"
+                numberOfLines={2}
+              >
+                {pokemon.name}
               </Text>
-            </Link>
 
-            <TouchableOpacity
-              className="bg-blue-500 py-2 px-4 rounded-md"
-              onPress={() => console.log(`Buy ${pokemon.name}`)}
-            >
-              <Text className="text-white font-medium text-center">
-                Buy Now
+              <Text className="text-xs text-gray-500 mt-1">
+                {pokemon.stock ? `Stock: ${pokemon.stock}` : "Out of Stock"}
               </Text>
-            </TouchableOpacity>
+
+              <Text className="text-lg font-bold text-black mt-2">
+                ${Number(pokemon.price).toFixed(2)}
+              </Text>
+
+              <Link href={`/productCardDetailPage/${pokemon.documentId}`}>
+                <Text className="text-sm text-blue-600 underline mt-2">
+                  View details
+                </Text>
+              </Link>
+
+              <TouchableOpacity
+                className="bg-black py-2 rounded-md mt-3"
+                onPress={() =>
+                  addItem({
+                    id: pokemon.id,
+                    name: pokemon.name,
+                    price: pokemon.price,
+                    image: pokemon.image?.url,
+                    quantity: 1,
+                  })
+                }
+                accessibilityLabel={`Add ${pokemon.name} to cart`}
+              >
+                <Text className="text-white text-center font-medium">Buy</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         ))}
       </View>
     </ScrollView>
   );
 }
+// ...existing code...
