@@ -105,26 +105,78 @@ export default function CheckoutPage() {
             {cart.map((item) => (
               <div
                 key={item.pokemonId}
-                className="flex items-center gap-4 border-b pb-4 last:border-b-0"
+                className="flex flex-col sm:flex-row sm:items-center gap-4 border-b pb-4 last:border-b-0"
               >
-                {/* Product Image */}
-                <div className="relative w-20 h-20 shrink-0">
-                  <Image
-                    src={STRAPI_URL + item.imageUrl}
-                    alt={item.name}
-                    fill
-                    className="object-contain rounded"
-                  />
+                <div className="flex items-start gap-4 grow">
+                  {/* Product Image */}
+                  <div className="relative w-20 h-20 shrink-0">
+                    <Image
+                      src={STRAPI_URL + item.imageUrl}
+                      alt={item.name}
+                      fill
+                      className="object-contain rounded"
+                    />
+                  </div>
+
+                  {/* Product Details and Quantity */}
+                  <div className="grow flex flex-col gap-2">
+                    <div>
+                      <h3 className="font-semibold">{item.name}</h3>
+                      <p className="text-sm opacity-60">${item.price.toFixed(2)}</p>
+                    </div>
+
+                    {/* Quantity Controls - Mobile */}
+                    <div className="flex items-center gap-2 sm:hidden">
+                      <button
+                        onClick={() => handleDecrement(item.pokemonId, item.quantity)}
+                        className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={item.quantity <= 1}
+                        aria-label="Decrease quantity"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(item.pokemonId, parseInt(e.target.value) || 1)
+                        }
+                        className="w-14 text-center border rounded px-2 py-1 text-sm bg-background"
+                        min="1"
+                      />
+                      <button
+                        onClick={() => handleIncrement(item.pokemonId, item.quantity)}
+                        className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors"
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remove Button - Mobile */}
+                  <button
+                    onClick={() => removeFromCart(item.pokemonId)}
+                    className="text-red-600 hover:text-red-800 hover:bg-red-600/10 p-2 rounded transition-colors sm:hidden self-start"
+                    aria-label={`Remove ${item.name} from cart`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
                 </div>
 
-                {/* Product Details */}
-                <div className="grow">
-                  <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-sm opacity-60">${item.price.toFixed(2)}</p>
-                </div>
-
-                {/* Quantity Controls */}
-                <div className="flex items-center gap-2">
+                {/* Quantity Controls - Desktop */}
+                <div className="hidden sm:flex items-center gap-2">
                   <button
                     onClick={() => handleDecrement(item.pokemonId, item.quantity)}
                     className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -152,14 +204,14 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Item Total */}
-                <div className="text-right min-w-16">
+                <div className="text-right min-w-16 self-start sm:self-center">
                   <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
 
-                {/* Remove Button */}
+                {/* Remove Button - Desktop */}
                 <button
                   onClick={() => removeFromCart(item.pokemonId)}
-                  className="text-red-600 hover:text-red-800 hover:bg-red-600/10 p-2 rounded transition-colors"
+                  className="hidden sm:block text-red-600 hover:text-red-800 hover:bg-red-600/10 p-2 rounded transition-colors"
                   aria-label={`Remove ${item.name} from cart`}
                 >
                   <svg
@@ -231,7 +283,7 @@ export default function CheckoutPage() {
                 value={addressData.fullName}
                 onChange={(e) => handleAddressChange("fullName", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="John Doe"
+                placeholder="Anna Andersson"
                 required
               />
             </div>
@@ -247,7 +299,7 @@ export default function CheckoutPage() {
                 value={addressData.email}
                 onChange={(e) => handleAddressChange("email", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="john@example.com"
+                placeholder="anna.andersson@example.se"
                 required
               />
             </div>
@@ -263,7 +315,7 @@ export default function CheckoutPage() {
                 value={addressData.phone}
                 onChange={(e) => handleAddressChange("phone", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="+1 (555) 000-0000"
+                placeholder="070-123 45 67"
                 required
               />
             </div>
@@ -279,7 +331,7 @@ export default function CheckoutPage() {
                 value={addressData.address}
                 onChange={(e) => handleAddressChange("address", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="123 Main Street"
+                placeholder="Drottninggatan 123"
                 required
               />
             </div>
@@ -295,7 +347,7 @@ export default function CheckoutPage() {
                 value={addressData.city}
                 onChange={(e) => handleAddressChange("city", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="New York"
+                placeholder="Stockholm"
                 required
               />
             </div>
@@ -311,7 +363,7 @@ export default function CheckoutPage() {
                 value={addressData.postalCode}
                 onChange={(e) => handleAddressChange("postalCode", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="10001"
+                placeholder="111 21"
                 required
               />
             </div>
@@ -327,7 +379,7 @@ export default function CheckoutPage() {
                 value={addressData.country}
                 onChange={(e) => handleAddressChange("country", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
-                placeholder="United States"
+                placeholder="Sweden"
                 required
               />
             </div>
