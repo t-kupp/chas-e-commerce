@@ -156,15 +156,14 @@ export default function CheckoutPage() {
                 <span className="text-gray-600">Shipping:</span>
                 <span className="font-medium">Free</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tax:</span>
-                <span className="font-medium">${(getTotalPrice() * 0.1).toFixed(2)}</span>
-              </div>
               <div className="border-t pt-3 mt-3">
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total:</span>
-                  <span>${(getTotalPrice() * 1.1).toFixed(2)}</span>
+                  <span>${getTotalPrice().toFixed(2)}</span>
                 </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Including {(getTotalPrice() * 0.2).toFixed(2)} kr in taxes
+                </p>
               </div>
             </div>
 
