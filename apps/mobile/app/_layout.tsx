@@ -15,6 +15,13 @@ export default function RootLayout() {
             headerBackTitle: "Back",
           }}
         />
+        <Stack.Screen
+          name="components/checkout"
+          options={{
+            title: "Checkout",
+            headerBackTitle: "back",
+          }}
+        />
       </Stack>
     </CartProvider>
   );

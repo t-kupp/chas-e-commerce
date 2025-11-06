@@ -75,7 +75,7 @@ export interface Pokemon {
   updatedAt: string;
   publishedAt: string;
   slug: string;
-  stock: number | null;
+  stock: number;
   image: Image;
   type: Type;
   condition: Condition;
@@ -88,6 +88,7 @@ export type CartItem = {
   price: number;
   quantity: number;
   image?: string;
+  stock: number;
 };
 
 export type CartContextType = {

@@ -11,7 +11,8 @@ import {useCart} from "../context/CartContext";
 import {Link} from "expo-router";
 
 export default function CartPage() {
-  const {total, items, removeItem, increaseItem, decreaseItem} = useCart();
+  const {total, items, removeItem, increaseItem, decreaseItem, clearCart} =
+    useCart();
   const [promoCode, setPromoCode] = useState("");
   const [bonusCard, setBonusCard] = useState("");
 
@@ -60,7 +61,10 @@ export default function CartPage() {
                           #{item.id}
                         </Text>
                       </Text>
-
+                      <Text className="text-gray-500 text-xs">
+                        {" "}
+                        Stock:({item.stock}){" "}
+                      </Text>
                       <Text className="text-xs"> {item.price} </Text>
                     </View>
 
@@ -93,6 +97,17 @@ export default function CartPage() {
                 </View>
               </View>
             ))}
+            <View className="flex-row">
+              <TouchableOpacity
+                className="ml-2 border border-gray-300 rounded-lg px-4 py-3"
+                onPress={clearCart}
+                accessibilityLabel="Clear cart"
+              >
+                <Text className="text-black text-sm font-medium">
+                  Clear cart
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             {/* Order Summary */}
             <View className="bg-white rounded-lg p-6 mt-4">
@@ -139,7 +154,7 @@ export default function CartPage() {
                   <Text className="text-gray-600">
                     Estimated shipping & Handling
                   </Text>
-                  <Text className="font-semibold">${shipping}</Text>
+                  <Text className="font-semibold text-green-400">FREE</Text>
                 </View>
                 <View className="flex-row justify-between border-t border-gray-200 pt-4">
                   <Text className="font-bold text-lg">Total</Text>
@@ -152,7 +167,7 @@ export default function CartPage() {
               {/* Checkout Button */}
               <TouchableOpacity className="bg-black rounded-lg py-4 mt-6">
                 <Link
-                  href="../components/checkout.tsx"
+                  href="../components/checkout"
                   className="text-white text-center font-semibold text-base"
                 >
                   Checkout

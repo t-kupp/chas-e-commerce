@@ -94,14 +94,18 @@ export default function ProductCard({sortBy}: ProductCardProps) {
 
               <TouchableOpacity
                 className="bg-yellow-500 text-white py-2 flex justify-center items-center gap-2 rounded-md mt-3"
+                // disabled={!pokemon.stock || pokemon.stock <= 0} - framtids problem
                 onPress={() =>
-                  addItem({
-                    id: pokemon.id,
-                    name: pokemon.name,
-                    price: pokemon.price,
-                    image: pokemon.image?.url,
-                    quantity: 1,
-                  })
+                  pokemon.stock > 0
+                    ? addItem({
+                        id: pokemon.id,
+                        name: pokemon.name,
+                        price: pokemon.price,
+                        image: pokemon.image?.url,
+                        stock: pokemon.stock,
+                        quantity: 1,
+                      })
+                    : ""
                 }
                 accessibilityLabel={`Add ${pokemon.name} to cart`}
               >
@@ -116,4 +120,3 @@ export default function ProductCard({sortBy}: ProductCardProps) {
     </ScrollView>
   );
 }
-// ...existing code...

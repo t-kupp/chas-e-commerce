@@ -89,17 +89,21 @@ export default function ProductDetail() {
           </View>
 
           <TouchableOpacity
+            // disabled={!pokemon.stock || pokemon.stock <= 0}
             onPress={() =>
-              addItem({
-                id: pokemon.id,
-                name: pokemon.name,
-                price: pokemon.price,
-                image:
-                  (pokemon.image as any)?.url ??
-                  (pokemon.image as any) ??
-                  undefined,
-                quantity: 1,
-              })
+              pokemon.stock > 0
+                ? addItem({
+                    id: pokemon.id,
+                    name: pokemon.name,
+                    price: pokemon.price,
+                    image:
+                      (pokemon.image as any)?.url ??
+                      (pokemon.image as any) ??
+                      undefined,
+                    quantity: 1,
+                    stock: pokemon.stock,
+                  })
+                : null
             }
             className="bg-black py-4 rounded-lg w-10/12 self-center mb-8"
           >
