@@ -11,8 +11,8 @@ export default function RootLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
-        tabBarActiveTintColor: "blue",
+        headerShown: false,
+        tabBarActiveTintColor: "bg-gray-800",
         tabBarInactiveTintColor: "gray",
       }}
     >
@@ -50,7 +50,7 @@ export default function RootLayout() {
       <Tabs.Screen
         name="login"
         options={{
-          title: "Login",
+          title: "Sign in",
           tabBarIcon: ({color, size}) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

@@ -5,6 +5,7 @@ import {Link} from "expo-router";
 import {SortOption} from "../../../shared/types/pokemon";
 import {useCart} from "../context/CartContext";
 import {usePokemons} from "@/hooks/usePokemonApi";
+import {ShoppingCart, Dot} from "lucide-react-native";
 
 interface ProductCardProps {
   sortBy?: SortOption;
@@ -13,8 +14,8 @@ interface ProductCardProps {
 export default function ProductCard({sortBy}: ProductCardProps) {
   const {addItem} = useCart();
   const {pokemons = [], loading} = usePokemons();
-  const STRAPI_URL =
-    process.env.EXPO_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
+  // const STRAPI_URL =
+  //   process.env.EXPO_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 
   function sortedPokemons() {
     const arr = [...pokemons]; // kopiera så vi inte muterar original
@@ -71,7 +72,13 @@ export default function ProductCard({sortBy}: ProductCardProps) {
                 {pokemon.name}
               </Text>
 
-              <Text className="text-xs text-gray-500 mt-1">
+              <Text
+                className={
+                  pokemon.stock
+                    ? "text-xs text-green-600 mt-1"
+                    : "text-xs text-red-600 mt-1"
+                }
+              >
                 {pokemon.stock ? `Stock: ${pokemon.stock}` : "Out of Stock"}
               </Text>
 
@@ -86,7 +93,7 @@ export default function ProductCard({sortBy}: ProductCardProps) {
               </Link>
 
               <TouchableOpacity
-                className="bg-black py-2 rounded-md mt-3"
+                className="bg-yellow-500 text-white py-2 flex justify-center items-center gap-2 rounded-md mt-3"
                 onPress={() =>
                   addItem({
                     id: pokemon.id,
@@ -98,7 +105,9 @@ export default function ProductCard({sortBy}: ProductCardProps) {
                 }
                 accessibilityLabel={`Add ${pokemon.name} to cart`}
               >
-                <Text className="text-white text-center font-medium">Buy</Text>
+                <Text className="text-white text-center font-medium">
+                  <ShoppingCart size={12} color={"white"} /> Add to cart
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

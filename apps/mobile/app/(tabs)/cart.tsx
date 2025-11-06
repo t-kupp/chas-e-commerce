@@ -8,6 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import {useCart} from "../context/CartContext";
+import {Link} from "expo-router";
 
 export default function CartPage() {
   const {total, items, removeItem, increaseItem, decreaseItem} = useCart();
@@ -29,7 +30,7 @@ export default function CartPage() {
 
   return (
     <ScrollView className="flex-1 bg-gray-50">
-      <View className="p-6">
+      <View className="p-6 pt-20">
         <Text className="text-2xl font-bold mb-6">Shopping Cart</Text>
 
         {items.length < 1 ? (
@@ -150,9 +151,12 @@ export default function CartPage() {
 
               {/* Checkout Button */}
               <TouchableOpacity className="bg-black rounded-lg py-4 mt-6">
-                <Text className="text-white text-center font-semibold text-base">
+                <Link
+                  href="../components/checkout.tsx"
+                  className="text-white text-center font-semibold text-base"
+                >
                   Checkout
-                </Text>
+                </Link>
               </TouchableOpacity>
             </View>
           </View>
