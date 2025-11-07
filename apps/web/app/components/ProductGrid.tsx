@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
+import { useCart } from "../context/cart";
 import ProductCard from "./ProductCard";
 import SortDropdown from "./SortDropdown";
 
@@ -28,6 +29,8 @@ export default function ProductGrid() {
   const [filteredData, setFilteredData] = useState<Pokemon[] | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("date-newest");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { addToCart } = useCart();
 
   // Fetch data on page load
   useEffect(() => {
@@ -65,13 +68,9 @@ export default function ProductGrid() {
         case "price-desc":
           return b.price - a.price;
         case "date-newest":
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         case "date-oldest":
-          return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         default:
           return 0;
       }
@@ -81,11 +80,10 @@ export default function ProductGrid() {
   }, [sortBy, data]);
 
   function handleAddToCart(card: Pokemon) {
-    console.log("Added to cart: " + card.name);
+    addToCart(card);
   }
 
-  if (!filteredData)
-    return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
+  if (!filteredData) return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
 
   return (
     <section id="products-section" className="max-w-7xl mx-auto px-4 mb-12">
@@ -98,11 +96,7 @@ export default function ProductGrid() {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
         {filteredData.map((card) => (
-          <ProductCard
-            key={card.id}
-            pokemon={card}
-            onAddToCart={handleAddToCart}
-          />
+          <ProductCard key={card.id} pokemon={card} onAddToCart={handleAddToCart} />
         ))}
       </div>
     </section>
