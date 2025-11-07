@@ -21,7 +21,7 @@ export default function CartPage() {
     0
   );
   const tax = 8;
-  const shipping = 6;
+
   const finalTotal = subtotal + tax;
 
   function fixedPrice(a: number, b: number) {
@@ -35,9 +35,11 @@ export default function CartPage() {
         <Text className="text-2xl font-bold mb-6">Shopping Cart</Text>
 
         {items.length < 1 ? (
-          <Text className="text-center text-gray-500 py-8">
-            Your cart is empty
-          </Text>
+          <View className="h-64 items-center justify-center">
+            <Text className="text-center text-gray-500">
+              Your cart is empty
+            </Text>
+          </View>
         ) : (
           <View>
             {/* Cart Items */}
