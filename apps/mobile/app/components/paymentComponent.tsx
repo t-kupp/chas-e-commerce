@@ -10,6 +10,11 @@ export default function PaymentComponent({
   paymentMethod,
   setPaymentMethod,
 }: Props) {
+  const images: Record<string, any> = {
+    "Credit Card": require("../assets/images/nordea_kort.png"),
+    PayPal: require("../assets/images/PayPal.svg.png"),
+  };
+
   return (
     <View className="flex-1 p-6">
       <Text className="text-xl font-bold mb-4">Payment</Text>
@@ -34,41 +39,51 @@ export default function PaymentComponent({
         ))}
       </View>
 
-      {/* Credit Card Visual */}
+      {/* Om PayPal är valt */}
+      {paymentMethod === "PayPal" ? (
+        <View className="h-full justify-center items-center mb-6">
+          <Image
+            source={images["PayPal"]}
+            className="w-full h-40 rounded-lg mb-3"
+            resizeMode="contain"
+          />
+        </View>
+      ) : (
+        /*  Nordea-bild när Credit Card är valt */
+        <>
+          <Image
+            source={images["Credit Card"]}
+            className="w-full h-56 rounded-lg mb-6"
+            resizeMode="cover"
+          />
 
-      <Image
-        source={require("../assets/images/nordea_kort.png")}
-        className="w-full h-56 rounded-lg mb-6"
-        resizeMode="cover"
-      />
+          {/* Form Fields */}
+          <TextInput
+            placeholder="Cardholder Name"
+            className="bg-white border border-gray-300 rounded-xl px-4 py-4 mb-4 text-base"
+            placeholderTextColor="#9CA3AF"
+          />
 
-      {/* Form Fields */}
-      <TextInput
-        placeholder="Cardholder Name"
-        className="bg-white border border-gray-300 rounded-xl px-4 py-4 mb-4 text-base"
-        placeholderTextColor="#9CA3AF"
-      />
+          <TextInput
+            placeholder="Card Number"
+            className="bg-white border border-gray-300 rounded-xl px-4 py-4 mb-4 text-base"
+            placeholderTextColor="#9CA3AF"
+          />
 
-      <TextInput
-        placeholder="Card Number"
-        className="bg-white border border-gray-300 rounded-xl px-4 py-4 mb-4 text-base"
-        placeholderTextColor="#9CA3AF"
-        keyboardType="number-pad"
-      />
-
-      <View className="flex-row mb-4">
-        <TextInput
-          placeholder="Exp.Date"
-          className="bg-white border border-gray-300 rounded-xl px-4 py-4 flex-1 mr-2 text-base"
-          placeholderTextColor="#9CA3AF"
-        />
-        <TextInput
-          placeholder="CVV"
-          className="bg-white border border-gray-300 rounded-xl px-4 py-4 flex-1 ml-2 text-base"
-          placeholderTextColor="#9CA3AF"
-          keyboardType="number-pad"
-        />
-      </View>
+          <View className="flex-row mb-4">
+            <TextInput
+              placeholder="Exp.Date"
+              className="bg-white border border-gray-300 rounded-xl px-4 py-4 flex-1 mr-2 text-base"
+              placeholderTextColor="#9CA3AF"
+            />
+            <TextInput
+              placeholder="CVV"
+              className="bg-white border border-gray-300 rounded-xl px-4 py-4 flex-1 ml-2 text-base"
+              placeholderTextColor="#9CA3AF"
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 }

@@ -12,8 +12,9 @@ export default function RootLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "bg-gray-800",
+        tabBarActiveTintColor: "#fbbf24",
         tabBarInactiveTintColor: "gray",
+        tabBarStyle: {backgroundColor: "#1F2937"},
       }}
     >
       <Tabs.Screen

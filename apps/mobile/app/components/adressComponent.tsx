@@ -13,7 +13,7 @@ import {PlusCircle} from "lucide-react-native";
 
 export type Address = {
   id: string;
-  label: string;
+  fullName: string;
   tag?: string;
   street: string;
   city?: string;
@@ -38,7 +38,7 @@ export default function RenderAddressStep({
   const [showForm, setShowForm] = useState<boolean>(addresses.length === 0);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const [label, setLabel] = useState("");
+  const [fullName, setFullName] = useState("");
   const [tag, setTag] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
@@ -53,7 +53,7 @@ export default function RenderAddressStep({
 
   function openAddForm() {
     setEditingId(null);
-    setLabel("");
+    setFullName("");
     setTag("");
     setStreet("");
     setCity("");
@@ -65,7 +65,7 @@ export default function RenderAddressStep({
 
   function openEditForm(a: Address) {
     setEditingId(a.id);
-    setLabel(a.label);
+    setFullName(a.fullName);
     setTag(a.tag ?? "");
     setStreet(a.street);
     setCity(a.city ?? "");
@@ -76,9 +76,20 @@ export default function RenderAddressStep({
   }
 
   function saveAddress() {
-    const trimmedLabel = label.trim();
-    if (!trimmedLabel || !street.trim()) {
-      Alert.alert("Validation", "Please provide at least label and street.");
+    // REQUIRED: all fields except tag must be filled
+    const missing: string[] = [];
+    if (!fullName.trim()) missing.push("Full Name");
+    if (!street.trim()) missing.push("Street");
+    if (!city.trim()) missing.push("City");
+    if (!stateField.trim()) missing.push("State");
+    if (!zip.trim()) missing.push("ZIP");
+    if (!phone.trim()) missing.push("Phone");
+
+    if (missing.length > 0) {
+      Alert.alert(
+        "Validation",
+        `Please fill the following fields: ${missing.join(", ")}`
+      );
       return;
     }
 
@@ -88,13 +99,13 @@ export default function RenderAddressStep({
           p.id === editingId
             ? {
                 ...p,
-                label: trimmedLabel,
+                fullName: fullName.trim(),
                 tag: tag.trim() || undefined,
                 street: street.trim(),
-                city: city.trim() || undefined,
-                state: stateField.trim() || undefined,
-                zip: zip.trim() || undefined,
-                phone: phone.trim() || undefined,
+                city: city.trim(),
+                state: stateField.trim(),
+                zip: zip.trim(),
+                phone: phone.trim(),
               }
             : p
         )
@@ -104,13 +115,13 @@ export default function RenderAddressStep({
     } else {
       const newAddress: Address = {
         id: Date.now().toString(),
-        label: trimmedLabel,
+        fullName: fullName.trim(),
         tag: tag.trim() || undefined,
         street: street.trim(),
-        city: city.trim() || undefined,
-        state: stateField.trim() || undefined,
-        zip: zip.trim() || undefined,
-        phone: phone.trim() || undefined,
+        city: city.trim(),
+        state: stateField.trim(),
+        zip: zip.trim(),
+        phone: phone.trim(),
       };
       setAddresses((prev) => [newAddress, ...prev]);
       setSelectedAddress(newAddress.id);
@@ -123,7 +134,7 @@ export default function RenderAddressStep({
       "Delete address",
       "Are you sure you want to delete this address?",
       [
-        {text: "Cancel", style: "cancel"},
+        {text: "Cancel"},
         {
           text: "Delete",
           style: "destructive",
@@ -177,7 +188,7 @@ export default function RenderAddressStep({
                   <View className="flex-1">
                     <View className="flex-row items-center mb-2">
                       <Text className="text-base font-semibold mr-2">
-                        {address.label}
+                        {address.fullName}
                       </Text>
                       {address.tag ? (
                         <View className="bg-black px-2 py-1 rounded">
@@ -240,52 +251,88 @@ export default function RenderAddressStep({
               {editingId ? "Edit Address" : "New Address"}
             </Text>
 
+            {/* Mini title + required star for Full Name */}
+            <Text className="text-xs text-gray-500 mb-1">
+              Full Name <Text className="text-red-500">*</Text>
+            </Text>
             <TextInput
-              value={label}
-              onChangeText={setLabel}
-              placeholder="Label (e.g. Home)"
+              value={fullName}
+              onChangeText={setFullName}
+              placeholder="Anna Andersson"
               className="border border-gray-200 rounded-lg px-3 py-2 mb-3"
             />
+
+            {/* Mini title for Tag (optional) */}
+            <Text className="text-xs text-gray-500 mb-1">Tag (optional)</Text>
             <TextInput
               value={tag}
               onChangeText={setTag}
-              placeholder="Tag (optional, e.g. HOME)"
+              placeholder="optional, e.g. HOME, WORK"
               className="border border-gray-200 rounded-lg px-3 py-2 mb-3"
             />
+
+            {/* Mini title + required star for Street */}
+            <Text className="text-xs text-gray-500 mb-1">
+              Street <Text className="text-red-500">*</Text>
+            </Text>
             <TextInput
               value={street}
               onChangeText={setStreet}
-              placeholder="Street"
+              placeholder="Drottninggatan 123"
               className="border border-gray-200 rounded-lg px-3 py-2 mb-3"
             />
+
             <View className="flex-row mb-3">
-              <TextInput
-                value={city}
-                onChangeText={setCity}
-                placeholder="City"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 mr-2"
-              />
-              <TextInput
-                value={stateField}
-                onChangeText={setStateField}
-                placeholder="State"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 ml-2"
-              />
+              <View style={{flex: 1}}>
+                <Text className="text-xs text-gray-500 mb-1">
+                  City <Text className="text-red-500">*</Text>
+                </Text>
+                <TextInput
+                  value={city}
+                  onChangeText={setCity}
+                  placeholder="Stockholm"
+                  className="border border-gray-200 rounded-lg px-3 py-2 mr-2"
+                />
+              </View>
+
+              <View style={{flex: 1, marginLeft: 8}}>
+                <Text className="text-xs text-gray-500 mb-1">
+                  State <Text className="text-red-500">*</Text>
+                </Text>
+                <TextInput
+                  value={stateField}
+                  onChangeText={setStateField}
+                  placeholder="Järfälla"
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+              </View>
             </View>
+
             <View className="flex-row mb-3">
-              <TextInput
-                value={zip}
-                onChangeText={setZip}
-                placeholder="ZIP"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 mr-2"
-              />
-              <TextInput
-                value={phone}
-                onChangeText={setPhone}
-                placeholder="Phone"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 ml-2"
-                keyboardType="phone-pad"
-              />
+              <View style={{flex: 1}}>
+                <Text className="text-xs text-gray-500 mb-1">
+                  ZIP <Text className="text-red-500">*</Text>
+                </Text>
+                <TextInput
+                  value={zip}
+                  onChangeText={setZip}
+                  placeholder="175 43"
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                />
+              </View>
+
+              <View style={{flex: 1, marginLeft: 8}}>
+                <Text className="text-xs text-gray-500 mb-1">
+                  Phone <Text className="text-red-500">*</Text>
+                </Text>
+                <TextInput
+                  value={phone}
+                  onChangeText={setPhone}
+                  placeholder="070-123 11 11"
+                  className="border border-gray-200 rounded-lg px-3 py-2"
+                  keyboardType="phone-pad"
+                />
+              </View>
             </View>
 
             <View className="flex-row justify-end">

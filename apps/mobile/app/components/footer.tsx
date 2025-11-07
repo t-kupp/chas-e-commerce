@@ -16,10 +16,10 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <View className="pt-2 items-center">
-        <Text className="text-yellow-100 text-xs mb-1">
+        <Text className="text-yellow-400 text-xs mb-1">
           Gotta Catch Em All!
         </Text>
-        <Text className="text-red-200 text-xs">
+        <Text className="text-yellow-400 text-xs">
           © 2025 Pokémon. All rights reserved.
         </Text>
       </View>
