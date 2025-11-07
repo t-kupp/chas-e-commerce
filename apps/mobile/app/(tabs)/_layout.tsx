@@ -26,7 +26,6 @@ export default function RootLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="cart"
         options={{
@@ -37,7 +36,6 @@ export default function RootLayout() {
           tabBarBadge: badge,
         }}
       />
-
       <Tabs.Screen
         name="wishlist"
         options={{
@@ -47,7 +45,6 @@ export default function RootLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="login"
         options={{
@@ -55,6 +52,13 @@ export default function RootLayout() {
           tabBarIcon: ({color, size}) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
+        }}
+      />{" "}
+      <Tabs.Screen
+        name="productCardDetailPage/[slug]"
+        options={{
+          tabBarItemStyle: {display: "none"},
+          headerShown: false,
         }}
       />
     </Tabs>

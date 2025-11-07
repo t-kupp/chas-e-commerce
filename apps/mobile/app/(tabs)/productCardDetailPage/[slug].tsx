@@ -1,7 +1,7 @@
 import React from "react";
 import {View, Text, Image, TouchableOpacity, ScrollView} from "react-native";
 import {useLocalSearchParams} from "expo-router";
-import {useCart} from "../context/CartContext";
+import {useCart} from "../../context/CartContext";
 import {usePokemon} from "@/hooks/usePokemonApiSlug";
 
 export default function ProductDetail() {
@@ -30,7 +30,7 @@ export default function ProductDetail() {
   }
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-white pt-10">
       <ScrollView contentContainerStyle={{padding: 16, alignItems: "center"}}>
         {pokemon.image?.url && (
           <Image
