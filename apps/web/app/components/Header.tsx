@@ -14,6 +14,7 @@ import {
   User,
   LogOut,
 } from "lucide-react";
+import { getTypeData } from "../../../shared/types/type";
 
 //====== ADD BACK LATER WHEN CART IS WORKING =====
 // import { useCart } from "@/context/cart";
@@ -260,25 +261,28 @@ export default function Header() {
                             Types
                           </div>
                           <ul role="group" aria-label="Type suggestions">
-                            {suggestions.types.map((type) => (
-                              <li key={`type-${type.id}`} role="option">
-                                <button
-                                  type="button"
-                                  onClick={() => handleTypeClick(type.slug)}
-                                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 focus:bg-gray-100 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400 rounded"
-                                >
-                                  <div
-                                    className="w-12 h-12 rounded bg-linear-to-br from-blue-800 to-yellow-400 flex items-center justify-center text-white font-bold"
-                                    aria-hidden="true"
+                            {suggestions.types.map((type) => {
+                              const typeData = getTypeData(type.title);
+                              return (
+                                <li key={`type-${type.id}`} role="option">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleTypeClick(type.slug)}
+                                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 focus:bg-gray-100 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400 rounded"
                                   >
-                                    {type.title.charAt(0)}
-                                  </div>
-                                  <span className="text-gray-800 font-medium">
-                                    {type.title}
-                                  </span>
-                                </button>
-                              </li>
-                            ))}
+                                    <img
+                                      src={typeData.image}
+                                      alt=""
+                                      className="w-12 h-12 object-cover rounded"
+                                      aria-hidden="true"
+                                    />
+                                    <span className="text-gray-800 font-medium">
+                                      {type.title}
+                                    </span>
+                                  </button>
+                                </li>
+                              );
+                            })}
                           </ul>
                         </div>
                       )}
@@ -579,28 +583,31 @@ export default function Header() {
                               Types
                             </div>
                             <ul role="group" aria-label="Type suggestions">
-                              {suggestions.types.map((type) => (
-                                <li
-                                  key={`mobile-type-${type.id}`}
-                                  role="option"
-                                >
-                                  <button
-                                    type="button"
-                                    onClick={() => handleTypeClick(type.slug)}
-                                    className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 focus:bg-blue-100 transition-colors text-left border-b border-gray-100 last:border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400"
+                              {suggestions.types.map((type) => {
+                                const typeData = getTypeData(type.title);
+                                return (
+                                  <li
+                                    key={`mobile-type-${type.id}`}
+                                    role="option"
                                   >
-                                    <div
-                                      className="w-10 h-10 rounded bg-linear-to-br from-gray-700 to-yellow-400 flex items-center justify-center text-white font-bold text-lg"
-                                      aria-hidden="true"
+                                    <button
+                                      type="button"
+                                      onClick={() => handleTypeClick(type.slug)}
+                                      className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 focus:bg-blue-100 transition-colors text-left border-b border-gray-100 last:border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400"
                                     >
-                                      {type.title.charAt(0)}
-                                    </div>
-                                    <span className="text-gray-800 font-medium text-sm">
-                                      {type.title}
-                                    </span>
-                                  </button>
-                                </li>
-                              ))}
+                                      <img
+                                        src={typeData.image}
+                                        alt=""
+                                        className="w-10 h-10 object-cover rounded"
+                                        aria-hidden="true"
+                                      />
+                                      <span className="text-gray-800 font-medium text-sm">
+                                        {type.title}
+                                      </span>
+                                    </button>
+                                  </li>
+                                );
+                              })}
                             </ul>
                           </div>
                         )}
