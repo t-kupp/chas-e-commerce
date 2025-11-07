@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/auth";
 import { WishlistProvider } from "./context/wishlist";
 import { generateOrganizationSchema, generateWebsiteSchema } from "./lib/seo";
 
+import PaypalWrapper from "./components/PaypalWrapper";
 import CartProvider from "./context/cart";
 import "./globals.css";
 
@@ -103,15 +104,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col pt-18!`}
       >
-        <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </WishlistProvider>
-          </CartProvider>
-        </AuthProvider>
+        <PaypalWrapper>
+          <AuthProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </WishlistProvider>
+            </CartProvider>
+          </AuthProvider>
+        </PaypalWrapper>
       </body>
       <GoogleAnalytics gaId="G-8EJ2LZQSRB" />
     </html>

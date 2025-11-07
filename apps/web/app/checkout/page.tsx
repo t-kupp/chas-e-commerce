@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PaypalCheckout from "../components/PaypalCheckout";
 import { useCart } from "../context/cart";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
@@ -19,7 +20,6 @@ interface AddressFormData {
 
 export default function CheckoutPage() {
   const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
-
   const [addressData, setAddressData] = useState<AddressFormData>({
     fullName: "",
     email: "",
@@ -29,6 +29,26 @@ export default function CheckoutPage() {
     postalCode: "",
     country: "",
   });
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    function validateForm() {
+      const requiredFields: (keyof AddressFormData)[] = [
+        "fullName",
+        "email",
+        "phone",
+        "address",
+        "city",
+        "postalCode",
+        "country",
+      ];
+
+      const missingFields = requiredFields.filter((field) => !addressData[field].trim());
+
+      setIsFormValid(missingFields.length === 0);
+    }
+    validateForm();
+  }, [addressData]);
 
   const handleQuantityChange = (pokemonId: number, newQuantity: number) => {
     if (newQuantity > 0) {
@@ -48,30 +68,6 @@ export default function CheckoutPage() {
 
   const handleAddressChange = (field: keyof AddressFormData, value: string) => {
     setAddressData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleCheckout = () => {
-    // Validate address form
-    const requiredFields: (keyof AddressFormData)[] = [
-      "fullName",
-      "email",
-      "phone",
-      "address",
-      "city",
-      "postalCode",
-      "country",
-    ];
-
-    const missingFields = requiredFields.filter((field) => !addressData[field].trim());
-
-    if (missingFields.length > 0) {
-      alert("Please fill in all address fields");
-      return;
-    }
-
-    // TODO: Implement payment processing
-    console.log("Proceeding to payment with:", { cart, addressData });
-    alert("Payment processing not yet implemented");
   };
 
   if (cart.length === 0) {
@@ -254,15 +250,14 @@ export default function CheckoutPage() {
               <span className="opacity-60">Shipping:</span>
               <span className="font-medium text-green-600">Free</span>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="opacity-60">Tax (20%):</span>
-              <span className="font-medium">${(getTotalPrice() * 0.2).toFixed(2)}</span>
-            </div>
             <div className="border-t pt-2 mt-2">
               <div className="flex justify-between text-lg font-bold">
                 <span>Total:</span>
-                <span>${(getTotalPrice() * 1.2).toFixed(2)}</span>
+                <span>${getTotalPrice().toFixed(2)}</span>
               </div>
+              <p className="text-foreground/50 text-xs">
+                Including ${(getTotalPrice() * 0.2).toFixed(2)} in taxes
+              </p>
             </div>
           </div>
         </div>
@@ -384,15 +379,8 @@ export default function CheckoutPage() {
               />
             </div>
 
-            {/* Proceed to Payment Button */}
-            <button
-              type="button"
-              onClick={handleCheckout}
-              className="w-full bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600 transition-colors font-semibold mt-6"
-            >
-              Proceed to Payment
-            </button>
-
+            {/* Payment Button */}
+            <PaypalCheckout isFormValid={isFormValid} />
             <p className="text-xs opacity-50 text-center mt-4">* All fields are required</p>
           </form>
         </div>
