@@ -22,7 +22,7 @@ export default function CartPage() {
   );
   const tax = 8;
   const shipping = 6;
-  const finalTotal = subtotal + tax + shipping;
+  const finalTotal = subtotal + tax;
 
   function fixedPrice(a: number, b: number) {
     let x = a * b;

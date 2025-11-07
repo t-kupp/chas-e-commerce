@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {Text, View} from "react-native";
 
 export default function Footer() {
   return (
-    <View className="bg-red-600 py-3 px-4 w-full">
+    <View className="bg-gray-800 py-3 px-4 w-full">
       {/* Pokeball divider */}
       <View className="items-center mb-2">
         <View className="w-8 h-8 relative">
