@@ -391,17 +391,54 @@ export default function Header() {
               </button>
             </>
           ) : (
-            <Link
-              href="/auth"
-              className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg font-medium transition"
-            >
-              Sign In
-            </Link>
+            <>
+              <Link
+                href="/cart"
+                aria-label="Cart"
+                className="p-2 rounded hover:bg-yellow-400/20 relative"
+              >
+                <ShoppingCart
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+
+                {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
+                {/* {cartCount > 0 && (
+                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
+                    {cartCount}
+                  </span>
+              )} */}
+              </Link>
+              <Link
+                href="/auth"
+                className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg font-medium transition"
+              >
+                Sign In
+              </Link>
+            </>
           )}
         </div>
 
         {/* mobile icons and menu button */}
         <div className="flex md:hidden items-center gap-2">
+          <Link
+            href="/cart"
+            aria-label="Cart"
+            className="p-2 rounded hover:bg-yellow-400/20 relative"
+          >
+            <ShoppingCart
+              className="text-white hover:text-yellow-400"
+              size={20}
+              aria-hidden="true"
+            />
+
+            {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
+            {/* {cartCount > 0 && (
+                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                    {cartCount}
+                  </span>
+              )} */}
+          </Link>
           {user ? (
             <>
               <Link
@@ -419,24 +456,6 @@ export default function Header() {
                     {wishlistCount}
                   </span>
                 )}
-              </Link>
-              <Link
-                href="/cart"
-                aria-label="Cart"
-                className="p-2 rounded hover:bg-yellow-400/20 relative"
-              >
-                <ShoppingCart
-                  className="text-white hover:text-yellow-400"
-                  size={20}
-                  aria-hidden="true"
-                />
-
-                {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
-                {/* {cartCount > 0 && (
-                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
-                    {cartCount}
-                  </span>
-              )} */}
               </Link>
               <button
                 onClick={logout}
