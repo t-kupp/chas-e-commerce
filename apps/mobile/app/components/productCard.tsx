@@ -1,6 +1,13 @@
 // ...existing code...
 import React from "react";
-import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+} from "react-native";
 import {Link} from "expo-router";
 import {SortOption} from "../../../shared/types/pokemon";
 import {useCart} from "../context/CartContext";
@@ -14,8 +21,6 @@ interface ProductCardProps {
 export default function ProductCard({sortBy}: ProductCardProps) {
   const {addItem} = useCart();
   const {pokemons = [], loading} = usePokemons();
-  // const STRAPI_URL =
-  //   process.env.EXPO_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 
   function sortedPokemons() {
     const arr = [...pokemons]; // kopiera så vi inte muterar original
@@ -94,7 +99,6 @@ export default function ProductCard({sortBy}: ProductCardProps) {
 
               <TouchableOpacity
                 className="bg-yellow-500 text-white py-2 flex justify-center items-center gap-2 rounded-md mt-3"
-                // disabled={!pokemon.stock || pokemon.stock <= 0} - framtids problem
                 onPress={() =>
                   pokemon.stock > 0
                     ? addItem({
