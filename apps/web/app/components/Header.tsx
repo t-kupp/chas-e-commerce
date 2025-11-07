@@ -7,9 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { getTypeData } from "../../../shared/types/type";
 import { useAuth } from "../../app/context/auth";
 import { useWishlist } from "../../app/context/wishlist";
-
-//====== ADD BACK LATER WHEN CART IS WORKING =====
-// import { useCart } from "@/context/cart";
+import { useCart } from "../../app/context/cart";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -37,6 +35,8 @@ export default function Header() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { wishlistCount } = useWishlist();
+  const { getTotalItems } = useCart();
+  const cartCount = getTotalItems();
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestions>({
@@ -47,11 +47,6 @@ export default function Header() {
   const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
-
-  //====== ADD BACK LATER WHEN CART IS WORKING =====
-  // const { items } = useCart();
-  // const cartCount =
-  //   items?.reduce((sum, it) => sum + (it.quantity ?? 1), 0) ?? 0;
 
   // close suggestions when clicking outside
   useEffect(() => {
@@ -318,13 +313,11 @@ export default function Header() {
                 className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
                 <ShoppingCart className="text-white hover:text-yellow-400" aria-hidden="true" />
-
-                {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
-                {/* {cartCount > 0 && (
-                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
+                {cartCount > 0 && (
+                  <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
                     {cartCount}
                   </span>
-              )} */}
+                )}
               </Link>
               <span className="text-gray-400">|</span>
 
@@ -347,13 +340,11 @@ export default function Header() {
                 className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
                 <ShoppingCart className="text-white hover:text-yellow-400" aria-hidden="true" />
-
-                {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
-                {/* {cartCount > 0 && (
-                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
+                {cartCount > 0 && (
+                  <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
                     {cartCount}
                   </span>
-              )} */}
+                )}
               </Link>
               <Link
                 href="/auth"
@@ -377,13 +368,11 @@ export default function Header() {
               size={20}
               aria-hidden="true"
             />
-
-            {/* ====== ADD BACK LATER WHEN CART IS WORKING ===== */}
-            {/* {cartCount > 0 && (
-                <span className="cartAmount absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
-                    {cartCount}
-                  </span>
-              )} */}
+            {cartCount > 0 && (
+              <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
+                {cartCount}
+              </span>
+            )}
           </Link>
           {user ? (
             <>
