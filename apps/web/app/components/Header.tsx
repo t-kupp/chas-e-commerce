@@ -1,6 +1,14 @@
 "use client";
 
-import { Heart, LogOut, Menu, Search, ShoppingCart, User, X } from "lucide-react";
+import {
+  Heart,
+  LogOut,
+  Menu,
+  Search,
+  ShoppingCart,
+  User,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +17,8 @@ import { useAuth } from "../../app/context/auth";
 import { useWishlist } from "../../app/context/wishlist";
 import { useCart } from "../../app/context/cart";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 interface Pokemon {
   id: number;
@@ -45,8 +54,14 @@ export default function Header() {
   });
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
+
+  // Add hydration guard
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // close suggestions when clicking outside
   useEffect(() => {
@@ -85,7 +100,10 @@ export default function Header() {
           ),
         ]);
 
-        const [pokemonData, typesData] = await Promise.all([pokemonRes.json(), typesRes.json()]);
+        const [pokemonData, typesData] = await Promise.all([
+          pokemonRes.json(),
+          typesRes.json(),
+        ]);
 
         setSuggestions({
           pokemon: pokemonData.data || [],
@@ -157,7 +175,9 @@ export default function Header() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => query.trim().length >= 2 && setShowSuggestions(true)}
+                onFocus={() =>
+                  query.trim().length >= 2 && setShowSuggestions(true)
+                }
                 placeholder="Search Pokemon"
                 aria-autocomplete="list"
                 aria-controls="search-suggestions"
@@ -186,8 +206,11 @@ export default function Header() {
                   className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 p-2"
                 >
                   {isLoading ? (
-                    <div className="p-4 text-center text-gray-500">Loading...</div>
-                  ) : suggestions.pokemon.length > 0 || suggestions.types.length > 0 ? (
+                    <div className="p-4 text-center text-gray-500">
+                      Loading...
+                    </div>
+                  ) : suggestions.pokemon.length > 0 ||
+                    suggestions.types.length > 0 ? (
                     <div>
                       {/* pokemon suggestions */}
                       {suggestions.pokemon.length > 0 && (
@@ -207,7 +230,9 @@ export default function Header() {
                                 <li key={`pokemon-${pokemon.id}`} role="option">
                                   <button
                                     type="button"
-                                    onClick={() => handleSuggestionClick(pokemon.slug)}
+                                    onClick={() =>
+                                      handleSuggestionClick(pokemon.slug)
+                                    }
                                     className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 focus:bg-gray-100 transition-colors text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400 rounded"
                                   >
                                     <img
@@ -252,7 +277,9 @@ export default function Header() {
                                       className="w-12 h-12 object-cover rounded"
                                       aria-hidden="true"
                                     />
-                                    <span className="text-gray-800 font-medium">{type.title}</span>
+                                    <span className="text-gray-800 font-medium">
+                                      {type.title}
+                                    </span>
                                   </button>
                                 </li>
                               );
@@ -262,24 +289,41 @@ export default function Header() {
                       )}
                     </div>
                   ) : (
-                    <div className="p-4 text-center text-gray-500">No results found</div>
+                    <div className="p-4 text-center text-gray-500">
+                      No results found
+                    </div>
                   )}
                 </div>
               )}
             </div>
           </form>
         </div>
-        <nav className="hidden md:flex items-center gap-6 ml-6" aria-label="Main navigation">
-          <Link href="/products" className="hover:text-yellow-400 hover:underline px-2 py-1">
+        <nav
+          className="hidden md:flex items-center gap-6 ml-6"
+          aria-label="Main navigation"
+        >
+          <Link
+            href="/products"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
             Products
           </Link>
-          <Link href="/types" className="hover:text-yellow-400 hover:underline px-2 py-1">
+          <Link
+            href="/types"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
             Types
           </Link>
-          <Link href="/about" className="hover:text-yellow-400 hover:underline px-2 py-1">
+          <Link
+            href="/about"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
             About us
           </Link>
-          <Link href="/contact" className="hover:text-yellow-400 hover:underline px-2 py-1">
+          <Link
+            href="/contact"
+            className="hover:text-yellow-400 hover:underline px-2 py-1"
+          >
             Contact
           </Link>
         </nav>
@@ -293,8 +337,11 @@ export default function Header() {
                 aria-label="Wishlist"
                 className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
-                <Heart className="text-white hover:text-yellow-400" aria-hidden="true" />
-                {wishlistCount > 0 && (
+                <Heart
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+                {isMounted && wishlistCount > 0 && (
                   <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
                     {wishlistCount}
                   </span>
@@ -305,15 +352,21 @@ export default function Header() {
                 aria-label="Account"
                 className="p-2 rounded hover:bg-yellow-400/20"
               >
-                <User className="text-white hover:text-yellow-400" aria-hidden="true" />
+                <User
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
               </Link>
               <Link
                 href="/checkout"
                 aria-label="Checkout"
                 className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
-                <ShoppingCart className="text-white hover:text-yellow-400" aria-hidden="true" />
-                {cartCount > 0 && (
+                <ShoppingCart
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+                {isMounted && cartCount > 0 && (
                   <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
                     {cartCount}
                   </span>
@@ -329,7 +382,11 @@ export default function Header() {
                 aria-label="Logout"
                 className="p-2 rounded hover:bg-red-600/20 transition"
               >
-                <LogOut className="text-white hover:text-red-400" size={20} aria-hidden="true" />
+                <LogOut
+                  className="text-white hover:text-red-400"
+                  size={20}
+                  aria-hidden="true"
+                />
               </button>
             </>
           ) : (
@@ -339,8 +396,11 @@ export default function Header() {
                 aria-label="Checkout"
                 className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
-                <ShoppingCart className="text-white hover:text-yellow-400" aria-hidden="true" />
-                {cartCount > 0 && (
+                <ShoppingCart
+                  className="text-white hover:text-yellow-400"
+                  aria-hidden="true"
+                />
+                {isMounted && cartCount > 0 && (
                   <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-5 h-5 rounded-full">
                     {cartCount}
                   </span>
@@ -368,7 +428,7 @@ export default function Header() {
               size={20}
               aria-hidden="true"
             />
-            {cartCount > 0 && (
+            {isMounted && cartCount > 0 && (
               <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
                 {cartCount}
               </span>
@@ -381,8 +441,12 @@ export default function Header() {
                 aria-label="Wishlist"
                 className="p-2 rounded hover:bg-yellow-400/20 relative"
               >
-                <Heart className="text-white hover:text-yellow-400" size={20} aria-hidden="true" />
-                {wishlistCount > 0 && (
+                <Heart
+                  className="text-white hover:text-yellow-400"
+                  size={20}
+                  aria-hidden="true"
+                />
+                {isMounted && wishlistCount > 0 && (
                   <span className="absolute -right-1 top-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-500 w-4 h-4 rounded-full">
                     {wishlistCount}
                   </span>
@@ -393,7 +457,11 @@ export default function Header() {
                 aria-label="Logout"
                 className="p-2 rounded hover:bg-red-600/20 transition"
               >
-                <LogOut className="text-white hover:text-red-400" size={20} aria-hidden="true" />
+                <LogOut
+                  className="text-white hover:text-red-400"
+                  size={20}
+                  aria-hidden="true"
+                />
               </button>
             </>
           ) : (
@@ -439,7 +507,9 @@ export default function Header() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  onFocus={() => query.trim().length >= 2 && setShowSuggestions(true)}
+                  onFocus={() =>
+                    query.trim().length >= 2 && setShowSuggestions(true)
+                  }
                   placeholder="Search Pokemon or Types..."
                   aria-autocomplete="list"
                   aria-controls="mobile-search-suggestions"
@@ -468,8 +538,11 @@ export default function Header() {
                     className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl max-h-80 overflow-y-auto z-50"
                   >
                     {isLoading ? (
-                      <div className="p-4 text-center text-gray-500">Loading...</div>
-                    ) : suggestions.pokemon.length > 0 || suggestions.types.length > 0 ? (
+                      <div className="p-4 text-center text-gray-500">
+                        Loading...
+                      </div>
+                    ) : suggestions.pokemon.length > 0 ||
+                      suggestions.types.length > 0 ? (
                       <div>
                         {/* pokemon suggestions */}
                         {suggestions.pokemon.length > 0 && (
@@ -486,10 +559,15 @@ export default function Header() {
                                   ? `${STRAPI_URL}${pokemon.image.url}`
                                   : "/placeholder-card.png";
                                 return (
-                                  <li key={`mobile-pokemon-${pokemon.id}`} role="option">
+                                  <li
+                                    key={`mobile-pokemon-${pokemon.id}`}
+                                    role="option"
+                                  >
                                     <button
                                       type="button"
-                                      onClick={() => handleSuggestionClick(pokemon.slug)}
+                                      onClick={() =>
+                                        handleSuggestionClick(pokemon.slug)
+                                      }
                                       className="w-full flex items-center gap-3 p-3 hover:bg-blue-50 focus:bg-blue-100 transition-colors text-left border-b border-gray-100 last:border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-400"
                                     >
                                       <img
@@ -522,7 +600,10 @@ export default function Header() {
                               {suggestions.types.map((type) => {
                                 const typeData = getTypeData(type.title);
                                 return (
-                                  <li key={`mobile-type-${type.id}`} role="option">
+                                  <li
+                                    key={`mobile-type-${type.id}`}
+                                    role="option"
+                                  >
                                     <button
                                       type="button"
                                       onClick={() => handleTypeClick(type.slug)}
@@ -546,7 +627,9 @@ export default function Header() {
                         )}
                       </div>
                     ) : (
-                      <div className="p-4 text-center text-gray-500 text-sm">No results found</div>
+                      <div className="p-4 text-center text-gray-500 text-sm">
+                        No results found
+                      </div>
                     )}
                   </div>
                 )}
@@ -554,7 +637,10 @@ export default function Header() {
             </form>
 
             {/* mobile navigation Links */}
-            <nav className="flex flex-col gap-1 border-t pt-3" aria-label="Mobile navigation">
+            <nav
+              className="flex flex-col gap-1 border-t pt-3"
+              aria-label="Mobile navigation"
+            >
               <Link
                 href="/products"
                 onClick={() => setMobileOpen(false)}
