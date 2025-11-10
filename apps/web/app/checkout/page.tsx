@@ -19,7 +19,9 @@ interface AddressFormData {
 }
 
 export default function CheckoutPage() {
-  const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } =
+    useCart();
+  const [isMounted, setIsMounted] = useState(false);
   const [addressData, setAddressData] = useState<AddressFormData>({
     fullName: "",
     email: "",
@@ -30,6 +32,10 @@ export default function CheckoutPage() {
     country: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     function validateForm() {
@@ -43,7 +49,9 @@ export default function CheckoutPage() {
         "country",
       ];
 
-      const missingFields = requiredFields.filter((field) => !addressData[field].trim());
+      const missingFields = requiredFields.filter(
+        (field) => !addressData[field].trim()
+      );
 
       setIsFormValid(missingFields.length === 0);
     }
@@ -70,12 +78,26 @@ export default function CheckoutPage() {
     setAddressData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Prevent hydration mismatch by not rendering cart-dependent content until mounted
+  if (!isMounted) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+        <div className="text-center py-8">
+          <p className="opacity-60">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (cart.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
-          <p className="opacity-60 mb-8">Add some Pokemon cards to get started!</p>
+          <p className="opacity-60 mb-8">
+            Add some Pokemon cards to get started!
+          </p>
           <Link
             href="/products"
             className="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-colors font-medium"
@@ -118,13 +140,17 @@ export default function CheckoutPage() {
                   <div className="grow flex flex-col gap-2">
                     <div>
                       <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm opacity-60">${item.price.toFixed(2)}</p>
+                      <p className="text-sm opacity-60">
+                        ${item.price.toFixed(2)}
+                      </p>
                     </div>
 
                     {/* Quantity Controls - Mobile */}
                     <div className="flex items-center gap-2 sm:hidden">
                       <button
-                        onClick={() => handleDecrement(item.pokemonId, item.quantity)}
+                        onClick={() =>
+                          handleDecrement(item.pokemonId, item.quantity)
+                        }
                         className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={item.quantity <= 1}
                         aria-label="Decrease quantity"
@@ -135,13 +161,18 @@ export default function CheckoutPage() {
                         type="number"
                         value={item.quantity}
                         onChange={(e) =>
-                          handleQuantityChange(item.pokemonId, parseInt(e.target.value) || 1)
+                          handleQuantityChange(
+                            item.pokemonId,
+                            parseInt(e.target.value) || 1
+                          )
                         }
                         className="w-14 text-center border rounded px-2 py-1 text-sm bg-background"
                         min="1"
                       />
                       <button
-                        onClick={() => handleIncrement(item.pokemonId, item.quantity)}
+                        onClick={() =>
+                          handleIncrement(item.pokemonId, item.quantity)
+                        }
                         className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors"
                         aria-label="Increase quantity"
                       >
@@ -174,7 +205,9 @@ export default function CheckoutPage() {
                 {/* Quantity Controls - Desktop */}
                 <div className="hidden sm:flex items-center gap-2">
                   <button
-                    onClick={() => handleDecrement(item.pokemonId, item.quantity)}
+                    onClick={() =>
+                      handleDecrement(item.pokemonId, item.quantity)
+                    }
                     className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={item.quantity <= 1}
                     aria-label="Decrease quantity"
@@ -185,13 +218,18 @@ export default function CheckoutPage() {
                     type="number"
                     value={item.quantity}
                     onChange={(e) =>
-                      handleQuantityChange(item.pokemonId, parseInt(e.target.value) || 1)
+                      handleQuantityChange(
+                        item.pokemonId,
+                        parseInt(e.target.value) || 1
+                      )
                     }
                     className="w-14 text-center border rounded px-2 py-1 text-sm bg-background"
                     min="1"
                   />
                   <button
-                    onClick={() => handleIncrement(item.pokemonId, item.quantity)}
+                    onClick={() =>
+                      handleIncrement(item.pokemonId, item.quantity)
+                    }
                     className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors"
                     aria-label="Increase quantity"
                   >
@@ -201,7 +239,9 @@ export default function CheckoutPage() {
 
                 {/* Item Total */}
                 <div className="text-right min-w-16 self-start sm:self-center">
-                  <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-semibold">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </p>
                 </div>
 
                 {/* Remove Button - Desktop */}
@@ -269,14 +309,19 @@ export default function CheckoutPage() {
           <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Full Name *
               </label>
               <input
                 type="text"
                 id="fullName"
                 value={addressData.fullName}
-                onChange={(e) => handleAddressChange("fullName", e.target.value)}
+                onChange={(e) =>
+                  handleAddressChange("fullName", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="Anna Andersson"
                 required
@@ -285,7 +330,10 @@ export default function CheckoutPage() {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Email *
               </label>
               <input
@@ -301,7 +349,10 @@ export default function CheckoutPage() {
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Phone *
               </label>
               <input
@@ -317,7 +368,10 @@ export default function CheckoutPage() {
 
             {/* Address */}
             <div>
-              <label htmlFor="address" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Street Address *
               </label>
               <input
@@ -333,7 +387,10 @@ export default function CheckoutPage() {
 
             {/* City */}
             <div>
-              <label htmlFor="city" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 City *
               </label>
               <input
@@ -349,14 +406,19 @@ export default function CheckoutPage() {
 
             {/* Postal Code */}
             <div>
-              <label htmlFor="postalCode" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="postalCode"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Postal Code *
               </label>
               <input
                 type="text"
                 id="postalCode"
                 value={addressData.postalCode}
-                onChange={(e) => handleAddressChange("postalCode", e.target.value)}
+                onChange={(e) =>
+                  handleAddressChange("postalCode", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="111 21"
                 required
@@ -365,7 +427,10 @@ export default function CheckoutPage() {
 
             {/* Country */}
             <div>
-              <label htmlFor="country" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Country *
               </label>
               <input
@@ -381,7 +446,9 @@ export default function CheckoutPage() {
 
             {/* Payment Button */}
             <PaypalCheckout isFormValid={isFormValid} />
-            <p className="text-xs opacity-50 text-center mt-4">* All fields are required</p>
+            <p className="text-xs opacity-50 text-center mt-4">
+              * All fields are required
+            </p>
           </form>
         </div>
       </div>

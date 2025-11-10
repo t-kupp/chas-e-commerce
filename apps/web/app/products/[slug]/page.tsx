@@ -1,10 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import QuantitySelector from "../../components/QuantitySelector";
-import WishlistButton from "../../components/WishlistButton";
 import Breadcrumb from "../../components/Breadcrumb";
-import AddToCartButton from "../../components/AddToCartButton";
+import ProductActions from "../../components/ProductActions";
 import { Pokemon } from "../../../../shared/types/pokemon";
 
 // fetch Pokemon data from Strapi
@@ -227,22 +225,8 @@ export default async function ProductPage({
               </span>
             </div>
 
-            {/* Quantity Selector */}
-            {(pokemon.stock ?? 0) > 0 && (
-              <QuantitySelector maxStock={pokemon.stock ?? 0} />
-            )}
-
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              {/* Add to Cart Button */}
-              <AddToCartButton
-                pokemon={pokemon}
-                disabled={(pokemon.stock ?? 0) === 0}
-              />
-
-              {/* Wishlist Button */}
-              <WishlistButton pokemon={pokemon} className="w-full" />
-            </div>
+            {/* Quantity Selector and Action Buttons */}
+            <ProductActions pokemon={pokemon} />
 
             {/* Product Details Accordions */}
             <div className="pt-6">

@@ -5,7 +5,7 @@ import { Pokemon } from "../../../shared/types/pokemon";
 
 interface CartContextType {
   cart: CartItem[];
-  addToCart: (pokemon: Pokemon) => void;
+  addToCart: (pokemon: Pokemon, quantity?: number) => void;
   removeFromCart: (pokemonId: number) => void;
   updateQuantity: (pokemonId: number, quantity: number) => void;
   getTotalItems: () => number;
@@ -25,7 +25,11 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const CART_STORAGE_KEY = "pokemon-cart";
 
-export default function CartProvider({ children }: { children: React.ReactNode }) {
+export default function CartProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [cart, setCart] = useState<CartItem[]>(() => {
     // Initialize cart from localStorage on mount
     if (typeof window !== "undefined") {
@@ -51,19 +55,21 @@ export default function CartProvider({ children }: { children: React.ReactNode }
     }
   }, [cart]);
 
-  function addToCart(pokemon: Pokemon) {
+  function addToCart(pokemon: Pokemon, quantity: number = 1) {
     // Check if item in cart exists
     const existingItem = cart.find((item) => item.pokemonId === pokemon.id);
 
-    // If yes, increase quantity by 1
+    // If yes, increase quantity by the specified amount
     if (existingItem) {
       setCart(
         cart.map((item) =>
-          item.pokemonId === pokemon.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.pokemonId === pokemon.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         )
       );
     } else {
-      // Add new item with cached data
+      // Add new item with the specified quantity
       setCart([
         ...cart,
         {
@@ -71,7 +77,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
           name: pokemon.name,
           price: pokemon.price,
           imageUrl: pokemon.image.formats.thumbnail?.url || pokemon.image.url,
-          quantity: 1,
+          quantity: quantity,
         },
       ]);
     }
@@ -85,7 +91,11 @@ export default function CartProvider({ children }: { children: React.ReactNode }
     const existingItem = cart.find((item) => item.pokemonId === pokemonId);
     if (!existingItem || quantity <= 0) return;
 
-    setCart(cart.map((item) => (item.pokemonId === pokemonId ? { ...item, quantity } : item)));
+    setCart(
+      cart.map((item) =>
+        item.pokemonId === pokemonId ? { ...item, quantity } : item
+      )
+    );
   }
 
   function getTotalItems() {

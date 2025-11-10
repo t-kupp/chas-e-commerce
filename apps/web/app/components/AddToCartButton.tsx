@@ -7,12 +7,14 @@ import { Pokemon } from "../../../shared/types/pokemon";
 
 interface AddToCartButtonProps {
   pokemon: Pokemon;
+  quantity?: number;
   disabled?: boolean;
   className?: string;
 }
 
 export default function AddToCartButton({
   pokemon,
+  quantity = 1,
   disabled = false,
   className = "",
 }: AddToCartButtonProps) {
@@ -20,11 +22,10 @@ export default function AddToCartButton({
   const [isAdded, setIsAdded] = useState(false);
 
   function handleAddToCart() {
-    addToCart(pokemon);
+    addToCart(pokemon, quantity);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   }
-
   return (
     <button
       onClick={handleAddToCart}
@@ -41,7 +42,9 @@ export default function AddToCartButton({
         {isAdded ? (
           <>
             <Check className="w-5 h-5" />
-            <span>Added to Cart!</span>
+            <span>
+              {quantity > 1 ? `${quantity} items added!` : "Added to Cart!"}
+            </span>
           </>
         ) : (
           <>
