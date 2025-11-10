@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import PaypalCheckout from "../components/PaypalCheckout";
+import QuantityInput from "../components/QuantityInput";
 import { useCart } from "../context/cart";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
@@ -61,16 +62,6 @@ export default function CheckoutPage() {
   const handleQuantityChange = (pokemonId: number, newQuantity: number) => {
     if (newQuantity > 0) {
       updateQuantity(pokemonId, newQuantity);
-    }
-  };
-
-  const handleIncrement = (pokemonId: number, currentQuantity: number) => {
-    updateQuantity(pokemonId, currentQuantity + 1);
-  };
-
-  const handleDecrement = (pokemonId: number, currentQuantity: number) => {
-    if (currentQuantity > 1) {
-      updateQuantity(pokemonId, currentQuantity - 1);
     }
   };
 
@@ -146,38 +137,14 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Quantity Controls - Mobile */}
-                    <div className="flex items-center gap-2 sm:hidden">
-                      <button
-                        onClick={() =>
-                          handleDecrement(item.pokemonId, item.quantity)
+                    <div className="sm:hidden">
+                      <QuantityInput
+                        quantity={item.quantity}
+                        onQuantityChange={(newQuantity) =>
+                          handleQuantityChange(item.pokemonId, newQuantity)
                         }
-                        className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={item.quantity <= 1}
-                        aria-label="Decrease quantity"
-                      >
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          handleQuantityChange(
-                            item.pokemonId,
-                            parseInt(e.target.value) || 1
-                          )
-                        }
-                        className="w-14 text-center border rounded px-2 py-1 text-sm bg-background"
-                        min="1"
+                        size="sm"
                       />
-                      <button
-                        onClick={() =>
-                          handleIncrement(item.pokemonId, item.quantity)
-                        }
-                        className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors"
-                        aria-label="Increase quantity"
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
 
@@ -203,38 +170,14 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Quantity Controls - Desktop */}
-                <div className="hidden sm:flex items-center gap-2">
-                  <button
-                    onClick={() =>
-                      handleDecrement(item.pokemonId, item.quantity)
+                <div className="hidden sm:block">
+                  <QuantityInput
+                    quantity={item.quantity}
+                    onQuantityChange={(newQuantity) =>
+                      handleQuantityChange(item.pokemonId, newQuantity)
                     }
-                    className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={item.quantity <= 1}
-                    aria-label="Decrease quantity"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      handleQuantityChange(
-                        item.pokemonId,
-                        parseInt(e.target.value) || 1
-                      )
-                    }
-                    className="w-14 text-center border rounded px-2 py-1 text-sm bg-background"
-                    min="1"
+                    size="sm"
                   />
-                  <button
-                    onClick={() =>
-                      handleIncrement(item.pokemonId, item.quantity)
-                    }
-                    className="w-7 h-7 flex items-center justify-center bg-foreground/10 hover:bg-foreground/20 rounded transition-colors"
-                    aria-label="Increase quantity"
-                  >
-                    +
-                  </button>
                 </div>
 
                 {/* Item Total */}
