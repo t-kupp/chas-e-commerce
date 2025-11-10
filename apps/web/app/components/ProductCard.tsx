@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShoppingCart, Trash2 } from "lucide-react";
+import { Heart, ShoppingCart, Check } from "lucide-react";
+import { useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
 import { useWishlist } from "../context/wishlist";
 
@@ -10,17 +11,16 @@ const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 interface ProductCardProps {
   pokemon: Pokemon;
-  variant?: "default" | "wishlist";
   onAddToCart?: (pokemon: Pokemon) => void;
 }
 
 export default function ProductCard({
   pokemon,
-  variant = "default",
   onAddToCart,
 }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const inWishlist = isInWishlist(pokemon.id);
+  const [isAdded, setIsAdded] = useState(false);
 
   function toggleWishlist(e: React.MouseEvent) {
     e.preventDefault();
@@ -34,6 +34,8 @@ export default function ProductCard({
   function handleAddToCart() {
     if (onAddToCart) {
       onAddToCart(pokemon);
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 2000);
     } else {
       console.log("Added to cart:", pokemon.name);
     }
@@ -115,10 +117,23 @@ export default function ProductCard({
           <button
             onClick={handleAddToCart}
             disabled={(pokemon.stock ?? 0) === 0}
-            className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold px-4 py-2 rounded-lg transition"
+            className={`flex-1 flex items-center justify-center gap-2 font-semibold px-4 py-2 rounded-lg transition ${
+              isAdded
+                ? "bg-green-500 text-white"
+                : "bg-yellow-500 hover:bg-yellow-600 text-white"
+            } disabled:bg-gray-300 disabled:cursor-not-allowed`}
           >
-            <ShoppingCart size={18} />
-            <span className="hidden sm:inline">Add to Cart</span>
+            {isAdded ? (
+              <>
+                <Check size={18} />
+                <span className="hidden sm:inline">Added!</span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart size={18} />
+                <span className="hidden sm:inline">Add to Cart</span>
+              </>
+            )}
           </button>
         </div>
       </div>

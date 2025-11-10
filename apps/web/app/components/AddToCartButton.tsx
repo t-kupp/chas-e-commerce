@@ -1,0 +1,55 @@
+"use client";
+
+import { useState } from "react";
+import { ShoppingCart, Check } from "lucide-react";
+import { useCart } from "../context/cart";
+import { Pokemon } from "../../../shared/types/pokemon";
+
+interface AddToCartButtonProps {
+  pokemon: Pokemon;
+  disabled?: boolean;
+  className?: string;
+}
+
+export default function AddToCartButton({
+  pokemon,
+  disabled = false,
+  className = "",
+}: AddToCartButtonProps) {
+  const { addToCart } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
+
+  function handleAddToCart() {
+    addToCart(pokemon);
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
+  }
+
+  return (
+    <button
+      onClick={handleAddToCart}
+      disabled={disabled}
+      className={`${className} w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
+        isAdded
+          ? "bg-green-500 hover:bg-green-600"
+          : disabled
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-yellow-500 hover:bg-yellow-600"
+      }`}
+    >
+      <span className="flex items-center justify-center space-x-2">
+        {isAdded ? (
+          <>
+            <Check className="w-5 h-5" />
+            <span>Added to Cart!</span>
+          </>
+        ) : (
+          <>
+            <ShoppingCart className="w-5 h-5" />
+            <span>{disabled ? "Out of Stock" : "Add to cart"}</span>
+          </>
+        )}
+      </span>
+    </button>
+  );
+}
