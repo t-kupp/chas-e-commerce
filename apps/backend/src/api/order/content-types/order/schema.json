@@ -33,6 +33,11 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
+    },
+    "userAddress": {
+      "type": "component",
+      "component": "address.user-address",
+      "repeatable": false
     }
   }
 }

@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../../app/context/auth";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,6 +15,8 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { login, register } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,14 +39,10 @@ export default function AuthPage() {
         }
         await register(username, email, password);
       }
-      router.push("/");
+      router.push(redirect);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : isLogin
-            ? "Login failed"
-            : "Registration failed"
+        err instanceof Error ? err.message : isLogin ? "Login failed" : "Registration failed"
       );
     } finally {
       setIsLoading(false);
@@ -64,11 +62,7 @@ export default function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl w-full bg-gray-800 rounded-lg shadow-2xl overflow-hidden flex border border-yellow-500/30">
         {/* left side - form */}
-        <main
-          className="w-full lg:w-1/2 p-8 lg:p-12"
-          role="main"
-          aria-labelledby="auth-heading"
-        >
+        <main className="w-full lg:w-1/2 p-8 lg:p-12" role="main" aria-labelledby="auth-heading">
           <div className="mb-8">
             <Link
               href="/"
@@ -81,16 +75,11 @@ export default function AuthPage() {
           </div>
 
           <div>
-            <h1
-              id="auth-heading"
-              className="text-4xl font-extrabold text-gray-100 mb-2"
-            >
+            <h1 id="auth-heading" className="text-4xl font-extrabold text-gray-100 mb-2">
               {isLogin ? "Welcome back, Trainer" : "Start your journey"}
             </h1>
             <p className="text-gray-400 mb-8">
-              {isLogin
-                ? "Sign in to catch 'em all."
-                : "Register now to access exclusive cards."}
+              {isLogin ? "Sign in to catch 'em all." : "Register now to access exclusive cards."}
             </p>
           </div>
 
@@ -112,10 +101,7 @@ export default function AuthPage() {
             )}{" "}
             {!isLogin && (
               <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
+                <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                   Username
                 </label>
                 <input
@@ -133,10 +119,7 @@ export default function AuthPage() {
               </div>
             )}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-300 mb-2"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                 Email
               </label>
               <input
@@ -154,10 +137,7 @@ export default function AuthPage() {
               />
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-300 mb-2"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                 Password
               </label>
               <input
@@ -173,15 +153,10 @@ export default function AuthPage() {
                 aria-invalid={error ? "true" : "false"}
                 autoComplete={isLogin ? "current-password" : "new-password"}
                 minLength={6}
-                aria-describedby={
-                  !isLogin ? "password-requirements" : undefined
-                }
+                aria-describedby={!isLogin ? "password-requirements" : undefined}
               />
               {!isLogin && (
-                <p
-                  id="password-requirements"
-                  className="text-xs text-gray-400 mt-1"
-                >
+                <p id="password-requirements" className="text-xs text-gray-400 mt-1">
                   Password must be at least 6 characters
                 </p>
               )}
@@ -204,9 +179,7 @@ export default function AuthPage() {
                   className="appearance-none block w-full px-4 py-3 border border-gray-600 rounded-lg placeholder-gray-500 text-gray-100 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
                   placeholder="••••••••"
                   aria-required="true"
-                  aria-invalid={
-                    error && error.includes("match") ? "true" : "false"
-                  }
+                  aria-invalid={error && error.includes("match") ? "true" : "false"}
                   autoComplete="new-password"
                   aria-describedby="confirm-password-description"
                 />
@@ -225,10 +198,7 @@ export default function AuthPage() {
                     className="h-4 w-4 text-yellow-400 focus:ring-yellow-400 border-gray-600 rounded bg-gray-700"
                     aria-label="Remember me for future logins"
                   />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-300"
-                  >
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
                     Remember me
                   </label>
                 </div>
@@ -246,9 +216,7 @@ export default function AuthPage() {
                 type="submit"
                 disabled={isLoading}
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-bold text-gray-900 bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                aria-label={
-                  isLogin ? "Sign in to your account" : "Create new account"
-                }
+                aria-label={isLogin ? "Sign in to your account" : "Create new account"}
                 aria-busy={isLoading}
               >
                 {isLoading
@@ -273,11 +241,7 @@ export default function AuthPage() {
                   type="button"
                   onClick={switchMode}
                   className="font-bold text-yellow-400 hover:text-yellow-300"
-                  aria-label={
-                    isLogin
-                      ? "Switch to registration form"
-                      : "Switch to sign in form"
-                  }
+                  aria-label={isLogin ? "Switch to registration form" : "Switch to sign in form"}
                 >
                   {isLogin ? "Create an account" : "Sign in"}
                 </button>
@@ -297,10 +261,7 @@ export default function AuthPage() {
             role="presentation"
             aria-hidden="true"
           ></div>
-          <div
-            className="absolute inset-0 bg-black opacity-60"
-            aria-hidden="true"
-          ></div>
+          <div className="absolute inset-0 bg-black opacity-60" aria-hidden="true"></div>
 
           <div className="relative h-full flex items-center justify-center p-12">
             <div className="text-center text-white">
@@ -310,11 +271,7 @@ export default function AuthPage() {
               <p className="text-lg opacity-90 mb-8 text-gray-300">
                 The ultimate collection awaits. Start building your deck today!
               </p>
-              <div
-                className="flex justify-center gap-4"
-                role="list"
-                aria-label="Store statistics"
-              >
+              <div className="flex justify-center gap-4" role="list" aria-label="Store statistics">
                 <div
                   className="bg-gray-700 bg-opacity-50 backdrop-blur-sm rounded-lg p-6 border-l-4 border-yellow-400"
                   role="listitem"
