@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PaymentComponent from "./paymentComponent";
 import {
   View,
@@ -8,7 +8,7 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
-import RenderAddressStep, {Address} from "./adressComponent";
+import RenderAddressStep, { Address } from "./adressComponent";
 
 type Step = 1 | 2;
 
@@ -84,7 +84,6 @@ const checkOut = () => {
       )}
 
       <TouchableOpacity
-        disabled={paymentMethod === "Credit Card"}
         onPress={() => {
           if (currentStep < 3 && addresses.length > 0) {
             setPaymentMethod("Credit Card");
