@@ -1,11 +1,19 @@
-import React from "react";
-import {View, Text, ScrollView, TouchableOpacity, Image} from "react-native";
-import {Heart, Trash2, ShoppingCart} from "lucide-react-native";
-import {useWishlist} from "../context/WishListContext";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Modal,
+} from "react-native";
+import { Heart, Trash2, ShoppingCart, X } from "lucide-react-native";
+import { useWishlist } from "../context/WishListContext";
 
 export default function Wishlist() {
-  const {wishlistItems, clearWishlist, removeFromWishlist, wishlistCount} =
+  const { wishlistItems, clearWishlist, removeFromWishlist, wishlistCount } =
     useWishlist();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   if (wishlistItems.length === 0) {
     return (
@@ -48,49 +56,91 @@ export default function Wishlist() {
         {wishlistItems.map((item) => (
           <View
             key={item.id}
-            className="bg-white rounded-2xl mb-4 overflow-hidden shadow-sm"
+            className="bg-white rounded-xl mb-3 overflow-hidden shadow-sm border border-gray-100"
           >
             {/* Card Content */}
-            <View className="flex-row p-4">
+            <View className="flex-row p-3">
               {/* Product Image */}
-              <View className="w-36 h-36 bg-gray-100 rounded-xl mr-4 items-center justify-center">
+              <TouchableOpacity
+                onPress={() =>
+                  item.image &&
+                  setSelectedImage(`http://localhost:1337${item.image.url}`)
+                }
+                className="w-28 h-40 bg-gray-100 rounded-lg mr-3 items-center justify-center"
+              >
                 {item.image ? (
                   <Image
-                    source={{uri: `http://localhost:1337${item.image.url}`}}
-                    className="w-full h-full rounded-xl"
+                    source={{ uri: `http://localhost:1337${item.image.url}` }}
+                    className="w-full h-full rounded-lg"
                     resizeMode="cover"
                   />
                 ) : (
-                  <ShoppingCart size={32} color="#9CA3AF" />
+                  <ShoppingCart size={24} color="#9CA3AF" />
                 )}
-              </View>
+              </TouchableOpacity>
 
               {/* Product Details */}
-              <View className="flex-1 justify-center">
+              <View className="flex-1 pr-8">
                 <Text
-                  className="text-lg font-bold text-gray-800 pr-8"
+                  className="text-base font-semibold text-gray-900 mb-1"
                   numberOfLines={2}
                 >
                   {item.name}
                 </Text>
                 {item.price && (
-                  <Text className="text-xl font-bold text-gray-800 mt-2">
-                    ${item.price}
+                  <Text className="text-lg font-bold text-gray-800">
+                    ${Number(item.price).toFixed(2)}
+                  </Text>
+                )}
+                {item.stock !== undefined && (
+                  <Text
+                    className={`text-xs mt-1 ${item.stock > 0 ? "text-green-600" : "text-red-600"}`}
+                  >
+                    {item.stock > 0
+                      ? `In Stock: ${item.stock}`
+                      : "Out of Stock"}
                   </Text>
                 )}
               </View>
 
-              {/* Heart Icon */}
+              {/* Remove Icon */}
               <TouchableOpacity
                 onPress={() => removeFromWishlist(item.id)}
-                className="absolute top-3 right-3 bg-red-50 p-2.5 rounded-full"
+                className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-sm border border-gray-200"
               >
-                <Heart size={20} color="#EF4444" fill="#EF4444" />
+                <Trash2 size={16} color="#EF4444" />
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </ScrollView>
+
+      {/* Image Modal */}
+      <Modal
+        visible={selectedImage !== null}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setSelectedImage(null)}
+      >
+        <View className="flex-1 bg-black/90 items-center justify-center">
+          {/* Close Button */}
+          <TouchableOpacity
+            onPress={() => setSelectedImage(null)}
+            className="absolute top-12 right-6 bg-white/20 p-3 rounded-full z-10"
+          >
+            <X size={28} color="#FFFFFF" />
+          </TouchableOpacity>
+
+          {/* Large Image */}
+          {selectedImage && (
+            <Image
+              source={{ uri: selectedImage }}
+              className="w-11/12 h-3/4 rounded-2xl"
+              resizeMode="contain"
+            />
+          )}
+        </View>
+      </Modal>
     </View>
   );
 }

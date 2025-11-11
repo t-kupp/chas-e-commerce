@@ -39,9 +39,7 @@ export default function PaymentComponent({ cartTotal }: Props) {
         { text: "Cancel", style: "cancel" },
         {
           text: "Go to Login",
-          onPress: () => {
-            // User can navigate to login tab manually
-          },
+          onPress: () => {},
         },
       ]);
       return;
@@ -49,7 +47,6 @@ export default function PaymentComponent({ cartTotal }: Props) {
 
     setLoading(true);
     try {
-      // 1. Fetch payment intent from backend
       const response = await fetch(
         "http://localhost:1337/api/stripe/payment-intent",
         {
@@ -82,7 +79,6 @@ export default function PaymentComponent({ cartTotal }: Props) {
         return;
       }
 
-      // 2. Initialize payment sheet
       const { error: initError } = await initPaymentSheet({
         paymentIntentClientSecret: clientSecret,
         merchantDisplayName: "Pokémon Store",
