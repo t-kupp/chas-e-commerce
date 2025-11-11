@@ -14,7 +14,9 @@ interface CartContextType {
 }
 
 export interface CartItem {
+  documentId: string;
   pokemonId: number;
+  slug: string;
   name: string;
   price: number;
   imageUrl: string;
@@ -67,7 +69,9 @@ export default function CartProvider({ children }: { children: React.ReactNode }
       setCart([
         ...cart,
         {
+          documentId: pokemon.documentId,
           pokemonId: pokemon.id,
+          slug: pokemon.slug,
           name: pokemon.name,
           price: pokemon.price,
           imageUrl: pokemon.image.formats.thumbnail?.url || pokemon.image.url,

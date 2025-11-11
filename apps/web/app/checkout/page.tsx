@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import PaypalCheckout from "../components/PaypalCheckout";
+import { useAuth } from "../context/auth";
 import { useCart } from "../context/cart";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
@@ -19,6 +20,7 @@ interface AddressFormData {
 }
 
 export default function CheckoutPage() {
+  const { user, isLoading } = useAuth();
   const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
   const [addressData, setAddressData] = useState<AddressFormData>({
     fullName: "",
@@ -70,6 +72,17 @@ export default function CheckoutPage() {
     setAddressData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center">
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (cart.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16">
@@ -82,6 +95,91 @@ export default function CheckoutPage() {
           >
             Browse Products
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login gate if user is not logged in
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Shopping Cart Preview */}
+          <div className="bg-background rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-semibold mb-6">Shopping Cart</h2>
+            <div className="space-y-4 mb-6">
+              {cart.map((item) => (
+                <div
+                  key={item.pokemonId}
+                  className="flex items-center gap-4 border-b pb-4 last:border-b-0"
+                >
+                  <div className="relative w-16 h-16 shrink-0">
+                    <Image
+                      src={STRAPI_URL + item.imageUrl}
+                      alt={item.name}
+                      fill
+                      className="object-contain rounded"
+                    />
+                  </div>
+                  <div className="grow">
+                    <h3 className="font-semibold">{item.name}</h3>
+                    <p className="text-sm opacity-60">
+                      ${item.price.toFixed(2)} × {item.quantity}
+                    </p>
+                  </div>
+                  <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                </div>
+              ))}
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex justify-between text-lg font-bold">
+                <span>Total:</span>
+                <span>${getTotalPrice().toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Login CTA */}
+          <div className="bg-background rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-20 w-20 text-yellow-500 mb-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+            <h2 className="text-2xl font-bold mb-4">Login Required</h2>
+            <p className="text-gray-600 mb-6 max-w-md">
+              Please log in or create an account to complete your order. This allows you to track
+              your orders and manage your purchases.
+            </p>
+            <div className="space-y-3 w-full max-w-sm">
+              <Link
+                href="/auth?redirect=/checkout"
+                className="block w-full bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-colors font-medium text-center"
+              >
+                Log In
+              </Link>
+              <p className="text-sm text-gray-600">
+                Don&apos;t have an account? You can register on the login page.
+              </p>
+            </div>
+            <p className="text-sm text-gray-500 mt-6">
+              Why do I need an account?
+              <br />
+              <span className="text-xs">Track orders • View history • Faster checkout</span>
+            </p>
+          </div>
         </div>
       </div>
     );
