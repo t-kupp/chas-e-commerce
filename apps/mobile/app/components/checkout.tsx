@@ -5,14 +5,15 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  TextInput,
   SafeAreaView,
 } from "react-native";
 import RenderAddressStep, { Address } from "./adressComponent";
+import { useCart } from "../context/CartContext";
 
 type Step = 1 | 2;
 
 const checkOut = () => {
+  const { total } = useCart();
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -69,6 +70,7 @@ const checkOut = () => {
     <PaymentComponent
       paymentMethod={paymentMethod}
       setPaymentMethod={setPaymentMethod}
+      cartTotal={total}
     />
   );
 
@@ -83,22 +85,24 @@ const checkOut = () => {
         </TouchableOpacity>
       )}
 
-      <TouchableOpacity
-        onPress={() => {
-          if (currentStep < 3 && addresses.length > 0) {
-            setPaymentMethod("Credit Card");
-            setCurrentStep((currentStep + 1) as Step);
-          } else {
-            // Handle payment
-            console.log("Addresses are empty");
-          }
-        }}
-        className="flex-1 py-4 bg-black rounded-xl ml-2"
-      >
-        <Text className="text-center text-white text-base font-semibold">
-          {currentStep === 2 ? "Pay" : "Next"}
-        </Text>
-      </TouchableOpacity>
+      {currentStep < 2 && (
+        <TouchableOpacity
+          onPress={() => {
+            if (currentStep < 3 && addresses.length > 0) {
+              setPaymentMethod("Credit Card");
+              setCurrentStep((currentStep + 1) as Step);
+            } else {
+              // Handle payment
+              console.log("Addresses are empty");
+            }
+          }}
+          className="flex-1 py-4 bg-black rounded-xl ml-2"
+        >
+          <Text className="text-center text-white text-base font-semibold">
+            Next
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 
