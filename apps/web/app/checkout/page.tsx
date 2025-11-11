@@ -9,11 +9,11 @@ import { useCart } from "../context/cart";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-interface AddressFormData {
+export interface AddressFormData {
   fullName: string;
   email: string;
   phone: string;
-  address: string;
+  street: string;
   city: string;
   postalCode: string;
   country: string;
@@ -26,7 +26,7 @@ export default function CheckoutPage() {
     fullName: "",
     email: "",
     phone: "",
-    address: "",
+    street: "",
     city: "",
     postalCode: "",
     country: "",
@@ -39,7 +39,7 @@ export default function CheckoutPage() {
         "fullName",
         "email",
         "phone",
-        "address",
+        "street",
         "city",
         "postalCode",
         "country",
@@ -421,8 +421,8 @@ export default function CheckoutPage() {
               <input
                 type="text"
                 id="address"
-                value={addressData.address}
-                onChange={(e) => handleAddressChange("address", e.target.value)}
+                value={addressData.street}
+                onChange={(e) => handleAddressChange("street", e.target.value)}
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="Drottninggatan 123"
                 required
@@ -478,7 +478,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Payment Button */}
-            <PaypalCheckout isFormValid={isFormValid} />
+            <PaypalCheckout isFormValid={isFormValid} addressData={addressData} />
             <p className="text-xs opacity-50 text-center mt-4">* All fields are required</p>
           </form>
         </div>

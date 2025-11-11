@@ -1,5 +1,22 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface AddressUserAddress extends Struct.ComponentSchema {
+  collectionName: 'components_address_user_addresses';
+  info: {
+    displayName: 'User Address';
+    icon: 'house';
+  };
+  attributes: {
+    city: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    email: Schema.Attribute.String;
+    fullName: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+    postalCode: Schema.Attribute.String;
+    street: Schema.Attribute.String;
+  };
+}
+
 export interface OrderOrderItem extends Struct.ComponentSchema {
   collectionName: 'components_order_order_items';
   info: {
@@ -77,6 +94,7 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'address.user-address': AddressUserAddress;
       'order.order-item': OrderOrderItem;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;

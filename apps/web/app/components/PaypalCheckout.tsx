@@ -1,14 +1,16 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AddressFormData } from "../checkout/page";
 import { useAuth } from "../context/auth";
 import { useCart } from "../context/cart";
 
 interface PaypalCheckoutProps {
   isFormValid: boolean;
+  addressData: AddressFormData;
 }
 
-export default function PaypalCheckout({ isFormValid }: PaypalCheckoutProps) {
+export default function PaypalCheckout({ isFormValid, addressData }: PaypalCheckoutProps) {
   const { cart, getTotalPrice, clearCart } = useCart();
   const { user } = useAuth();
   const router = useRouter();
@@ -75,6 +77,7 @@ export default function PaypalCheckout({ isFormValid }: PaypalCheckoutProps) {
           total: getTotalPrice(),
           orderStatus: "pending",
           users_permissions_user: user.id,
+          userAddress: addressData,
         },
       };
 

@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_address_user_addresses",
+  "info": {
+    "displayName": "User Address",
+    "icon": "house"
+  },
+  "options": {},
+  "attributes": {
+    "fullName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
