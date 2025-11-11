@@ -20,20 +20,37 @@ function FilterSection({
   defaultOpen = true,
 }: FilterSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const sectionId = `filter-${title.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
     <div className="border-b border-gray-200 py-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between text-left">
+        className="flex w-full items-center justify-between text-left"
+        aria-expanded={isOpen}
+        aria-controls={sectionId}
+        aria-label={`${isOpen ? "Collapse" : "Expand"} ${title} filter section`}
+      >
         <h3 className="text-sm font-medium text-gray-900">{title}</h3>
         {isOpen ? (
-          <ChevronUpIcon className="h-5 w-5 text-gray-400" />
+          <ChevronUpIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         ) : (
-          <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+          <ChevronDownIcon
+            className="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
         )}
       </button>
-      {isOpen && <div className="mt-4">{children}</div>}
+      {isOpen && (
+        <div
+          id={sectionId}
+          className="mt-4"
+          role="region"
+          aria-labelledby={sectionId}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -158,16 +175,22 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
 
   const FilterContent = () => (
     <div className="mb-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+      <h2
+        id="filters-heading"
+        className="text-lg font-semibold text-gray-900 mb-4"
+      >
+        Filters
+      </h2>
 
       {/* Search by Name */}
       <FilterSection title="Search">
         <input
-          type="text"
+          type="search"
           placeholder="Search by name..."
           value={filters.name}
           onChange={(e) => updateFilters({ name: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Search products by name"
         />
       </FilterSection>
 
@@ -175,9 +198,16 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
       <FilterSection title="Price">
         <div className="space-y-4">
           {/* Price Input Fields */}
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2"
+            role="group"
+            aria-labelledby="price-range-label"
+          >
+            <span id="price-range-label" className="sr-only">
+              Price range
+            </span>
             <input
-              type="text"
+              type="number"
               placeholder="Min price"
               value={filters.priceRange.min}
               onChange={(e) =>
@@ -192,10 +222,15 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
                 })
               }
               className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Minimum price"
+              min={filterOptions.priceRange.min}
+              max={filterOptions.priceRange.max}
             />
-            <span className="text-gray-500 text-sm">to</span>
+            <span className="text-gray-500 text-sm" aria-hidden="true">
+              to
+            </span>
             <input
-              type="text"
+              type="number"
               placeholder="Max price"
               value={filters.priceRange.max}
               onChange={(e) =>
@@ -210,6 +245,9 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
                 })
               }
               className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Maximum price"
+              min={filterOptions.priceRange.min}
+              max={filterOptions.priceRange.max}
             />
           </div>
         </div>
@@ -217,7 +255,8 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
 
       {/* Pokemon Type */}
       <FilterSection title="Pokemon Type">
-        <div className="space-y-2 max-h-40 overflow-y-auto">
+        <fieldset className="space-y-2 max-h-40 overflow-y-auto">
+          <legend className="sr-only">Filter by Pokemon type</legend>
           {filterOptions.types.map((type) => (
             <label key={type.id} className="flex items-center space-x-2">
               <input
@@ -225,16 +264,18 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
                 checked={filters.types.includes(type.title)}
                 onChange={() => handleCheckboxChange("types", type.title)}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                aria-label={`Filter by ${type.title} type`}
               />
               <span className="text-sm text-gray-700">{type.title}</span>
             </label>
           ))}
-        </div>
+        </fieldset>
       </FilterSection>
 
       {/* Rarity */}
       <FilterSection title="Rarity">
-        <div className="space-y-2 max-h-40 overflow-y-auto">
+        <fieldset className="space-y-2 max-h-40 overflow-y-auto">
+          <legend className="sr-only">Filter by rarity</legend>
           {filterOptions.rarities.map((rarity) => (
             <label key={rarity.id} className="flex items-center space-x-2">
               <input
@@ -242,16 +283,18 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
                 checked={filters.rarities.includes(rarity.title)}
                 onChange={() => handleCheckboxChange("rarities", rarity.title)}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                aria-label={`Filter by ${rarity.title} rarity`}
               />
               <span className="text-sm text-gray-700">{rarity.title}</span>
             </label>
           ))}
-        </div>
+        </fieldset>
       </FilterSection>
 
       {/* Condition */}
       <FilterSection title="Condition">
-        <div className="space-y-2">
+        <fieldset className="space-y-2">
+          <legend className="sr-only">Filter by condition</legend>
           {filterOptions.conditions.map((condition) => (
             <label key={condition.id} className="flex items-center space-x-2">
               <input
@@ -261,16 +304,18 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
                   handleCheckboxChange("conditions", condition.title)
                 }
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                aria-label={`Filter by ${condition.title} condition`}
               />
               <span className="text-sm text-gray-700">{condition.title}</span>
             </label>
           ))}
-        </div>
+        </fieldset>
       </FilterSection>
 
       {/* In Stock */}
       <FilterSection title="Availability">
-        <div className="space-y-2">
+        <fieldset className="space-y-2">
+          <legend className="sr-only">Filter by availability</legend>
           <label className="flex items-center space-x-2">
             <input
               type="radio"
@@ -278,6 +323,7 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
               checked={filters.inStock === null}
               onChange={() => updateFilters({ inStock: null })}
               className="text-blue-600 focus:ring-blue-500"
+              aria-label="Show all items"
             />
             <span className="text-sm text-gray-700">All items</span>
           </label>
@@ -288,6 +334,7 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
               checked={filters.inStock === true}
               onChange={() => updateFilters({ inStock: true })}
               className="text-blue-600 focus:ring-blue-500"
+              aria-label="Show only in stock items"
             />
             <span className="text-sm text-gray-700">In stock only</span>
           </label>
@@ -298,10 +345,11 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
               checked={filters.inStock === false}
               onChange={() => updateFilters({ inStock: false })}
               className="text-blue-600 focus:ring-blue-500"
+              aria-label="Show only out of stock items"
             />
             <span className="text-sm text-gray-700">Out of stock</span>
           </label>
-        </div>
+        </fieldset>
       </FilterSection>
 
       {/* Clear Filters Button */}
@@ -319,7 +367,9 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
             setFilters(resetFilters);
             onFiltersChange(resetFilters);
           }}
-          className="w-full px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          className="w-full px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Clear all applied filters"
+        >
           Clear All Filters
         </button>
       </div>
@@ -359,8 +409,12 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
         <button
           id="mobile-filter-button"
           onClick={() => setIsMobileFilterOpen(true)}
-          className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <Filter className="h-4 w-4" />
+          className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Open filters menu"
+          aria-expanded={isMobileFilterOpen}
+          aria-controls="mobile-filter-drawer"
+        >
+          <Filter className="h-4 w-4" aria-hidden="true" />
           <span>Filters</span>
           {/* Show active filter count */}
           {(filters.types.length > 0 ||
@@ -370,7 +424,20 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
             filters.inStock !== null ||
             filters.priceRange.min !== filterOptions.priceRange.min ||
             filters.priceRange.max !== filterOptions.priceRange.max) && (
-            <span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            <span
+              className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              aria-label={`${
+                filters.types.length +
+                filters.rarities.length +
+                filters.conditions.length +
+                (filters.name ? 1 : 0) +
+                (filters.inStock !== null ? 1 : 0) +
+                (filters.priceRange.min !== filterOptions.priceRange.min ||
+                filters.priceRange.max !== filterOptions.priceRange.max
+                  ? 1
+                  : 0)
+              } active filters`}
+            >
               {filters.types.length +
                 filters.rarities.length +
                 filters.conditions.length +
@@ -387,19 +454,35 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
 
       {/* Mobile Filter Drawer Overlay */}
       {isMobileFilterOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 " />
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="mobile-filters-heading"
+        >
+          <div
+            className="absolute inset-0 bg-black bg-opacity-50"
+            aria-hidden="true"
+          />
           <div
             id="mobile-filter-drawer"
-            className="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-lg transform transition-transform duration-300 ease-in-out overflow-y-auto">
+            className="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-lg transform transition-transform duration-300 ease-in-out overflow-y-auto"
+          >
             <div className="p-6">
               {/* Mobile Header */}
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+                <h2
+                  id="mobile-filters-heading"
+                  className="text-lg font-semibold text-gray-900"
+                >
+                  Filters
+                </h2>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
-                  className="p-2 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <X className="h-5 w-5" />
+                  className="p-2 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Close filters menu"
+                >
+                  <X className="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>
 
@@ -409,7 +492,9 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
-                  className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Apply filters and close menu"
+                >
                   Apply Filters
                 </button>
               </div>
@@ -419,9 +504,13 @@ export default function ProductFilters({ onFiltersChange }: FilterProps) {
       )}
 
       {/* Desktop Filter Sidebar */}
-      <div className="hidden md:block w-64 bg-white p-6 border-r border-gray-200">
+      <aside
+        className="hidden md:block w-64 bg-white p-6 border-r border-gray-200"
+        role="complementary"
+        aria-labelledby="filters-heading"
+      >
         <FilterContent />
-      </div>
+      </aside>
     </>
   );
 }

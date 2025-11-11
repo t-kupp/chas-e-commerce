@@ -30,6 +30,15 @@ export default function AddToCartButton({
     <button
       onClick={handleAddToCart}
       disabled={disabled}
+      aria-label={
+        disabled
+          ? `${pokemon.name} is out of stock`
+          : isAdded
+            ? `${pokemon.name} added to cart`
+            : `Add ${pokemon.name} to cart`
+      }
+      aria-live="polite"
+      aria-atomic="true"
       className={`${className} w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
         isAdded
           ? "bg-green-500 hover:bg-green-600"
@@ -41,14 +50,14 @@ export default function AddToCartButton({
       <span className="flex items-center justify-center space-x-2">
         {isAdded ? (
           <>
-            <Check className="w-5 h-5" />
+            <Check className="w-5 h-5" aria-hidden="true" />
             <span>
               {quantity > 1 ? `${quantity} items added!` : "Added to Cart!"}
             </span>
           </>
         ) : (
           <>
-            <ShoppingCart className="w-5 h-5" />
+            <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             <span>{disabled ? "Out of Stock" : "Add to cart"}</span>
           </>
         )}

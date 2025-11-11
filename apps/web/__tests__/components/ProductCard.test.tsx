@@ -152,7 +152,7 @@ describe("ProductCard", () => {
       </Wrapper>
     );
 
-    const image = screen.getByAltText("Pikachu");
+    const image = screen.getByAltText(/Pikachu.*card/i);
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute(
       "src",
@@ -189,7 +189,8 @@ describe("ProductCard", () => {
       </Wrapper>
     );
 
-    expect(screen.getByText("Electric")).toBeInTheDocument();
+    // Look for "Type: Electric" in the badge
+    expect(screen.getByText(/Type:.*Electric/i)).toBeInTheDocument();
   });
 
   it("should render rarity badge", () => {
@@ -199,7 +200,7 @@ describe("ProductCard", () => {
       </Wrapper>
     );
 
-    expect(screen.getByText("Rare")).toBeInTheDocument();
+    expect(screen.getByText(/Rare/i)).toBeInTheDocument();
   });
 
   it("should render condition badge", () => {
@@ -209,7 +210,7 @@ describe("ProductCard", () => {
       </Wrapper>
     );
 
-    expect(screen.getByText("Mint")).toBeInTheDocument();
+    expect(screen.getByText(/Mint/i)).toBeInTheDocument();
   });
 
   it("should have link to product detail page", () => {

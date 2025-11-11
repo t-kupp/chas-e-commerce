@@ -42,12 +42,16 @@ export default function ProductCard({
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col relative">
+    <article
+      className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col relative"
+      aria-labelledby={`product-${pokemon.id}-name`}
+    >
       {/* wishlist heart button */}
       <button
         onClick={toggleWishlist}
         className="absolute top-2 right-2 p-2 rounded-full bg-white/80 hover:bg-white shadow-md transition z-10"
         aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+        aria-pressed={inWishlist}
       >
         <Heart
           size={20}
@@ -56,16 +60,18 @@ export default function ProductCard({
               ? "fill-red-500 text-red-500"
               : "text-gray-600 hover:text-red-500"
           }
+          aria-hidden="true"
         />
       </button>
       {/* image */}
       <Link
         href={`/products/${pokemon.slug}`}
         className="block relative aspect-square bg-gray-50"
+        aria-label={`View ${pokemon.name} details`}
       >
         <Image
           src={`${STRAPI_URL}${pokemon.image.url}`}
-          alt={pokemon.name}
+          alt={`${pokemon.name} Pokemon card`}
           fill
           className="object-contain p-4"
         />
@@ -73,26 +79,38 @@ export default function ProductCard({
       {/* content */}
       <div className="p-4 flex flex-col flex-1">
         <Link href={`/products/${pokemon.slug}`}>
-          <h3 className="font-semibold text-lg mb-2 hover:text-yellow-600 transition">
+          <h3
+            id={`product-${pokemon.id}-name`}
+            className="font-semibold text-lg mb-2 hover:text-yellow-600 transition"
+          >
             {pokemon.name}
           </h3>
         </Link>
 
         {/* type and info */}
-        <div className="flex flex-wrap gap-2 mb-3 text-xs min-h-12">
+        <div className="flex flex-wrap gap-2 mb-3 text-xs min-h-12" role="list">
           {pokemon.type && (
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded h-fit">
-              {pokemon.type.title}
+            <span
+              className="px-2 py-1 bg-blue-100 text-blue-800 rounded h-fit"
+              role="listitem"
+            >
+              Type: {pokemon.type.title}
             </span>
           )}
           {pokemon.rarity && (
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded h-fit">
-              {pokemon.rarity.title}
+            <span
+              className="px-2 py-1 bg-purple-100 text-purple-800 rounded h-fit"
+              role="listitem"
+            >
+              Rarity: {pokemon.rarity.title}
             </span>
           )}
           {pokemon.condition && (
-            <span className="px-2 py-1 bg-green-100 text-green-800 rounded h-fit">
-              {pokemon.condition.title}
+            <span
+              className="px-2 py-1 bg-green-100 text-green-800 rounded h-fit"
+              role="listitem"
+            >
+              Condition: {pokemon.condition.title}
             </span>
           )}
         </div>
@@ -105,7 +123,10 @@ export default function ProductCard({
         )}
 
         {/* price */}
-        <p className="text-2xl font-bold text-gray-900 mb-4">
+        <p
+          className="text-2xl font-bold text-gray-900 mb-4"
+          aria-label={`Price: $${pokemon.price.toFixed(2)}`}
+        >
           ${pokemon.price.toFixed(2)}
         </p>
 
@@ -114,6 +135,7 @@ export default function ProductCard({
           className={`text-sm mb-4 ${
             (pokemon.stock ?? 0) > 0 ? "text-green-600" : "text-red-600"
           }`}
+          aria-live="polite"
         >
           {(pokemon.stock ?? 0) > 0
             ? `${pokemon.stock} in stock`
@@ -124,6 +146,13 @@ export default function ProductCard({
           <button
             onClick={handleAddToCart}
             disabled={(pokemon.stock ?? 0) === 0}
+            aria-label={
+              (pokemon.stock ?? 0) === 0
+                ? `${pokemon.name} is out of stock`
+                : isAdded
+                  ? `${pokemon.name} added to cart`
+                  : `Add ${pokemon.name} to cart`
+            }
             className={`flex-1 flex items-center justify-center gap-2 font-semibold px-4 py-2 rounded-lg transition ${
               isAdded
                 ? "bg-green-500 text-white"
@@ -132,18 +161,18 @@ export default function ProductCard({
           >
             {isAdded ? (
               <>
-                <Check size={18} />
+                <Check size={18} aria-hidden="true" />
                 <span className="hidden sm:inline">Added!</span>
               </>
             ) : (
               <>
-                <ShoppingCart size={18} />
+                <ShoppingCart size={18} aria-hidden="true" />
                 <span className="hidden sm:inline">Add to Cart</span>
               </>
             )}
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
