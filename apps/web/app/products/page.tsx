@@ -1,7 +1,6 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import ProductGrid from "../components/ProductGrid";
 import PageHeader from "../components/PageHeader";
+import ProductsPageClient from "./ProductsPageClient";
 
 export const metadata: Metadata = {
   title: "All Pokemon Cards",
@@ -25,9 +24,7 @@ export default function ProductsPage() {
         title="All Pokemon Cards"
         description="Browse our complete collection of authentic Pokemon trading cards."
       />
-      <div className="container mx-auto px-4 py-8">
-        <ProductGrid />
-      </div>
+      <ProductsPageClient />
     </div>
   );
 }

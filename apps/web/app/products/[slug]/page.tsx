@@ -1,53 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import QuantitySelector from "../../components/QuantitySelector";
-import WishlistButton from "../../components/WishlistButton";
 import Breadcrumb from "../../components/Breadcrumb";
-
-interface Pokemon {
-  id: number;
-  name: string;
-  slug: string;
-  price: number;
-  stock: number;
-  image: {
-    url: string;
-    alternativeText?: string;
-    width?: number;
-    height?: number;
-    formats?: {
-      medium?: {
-        width?: number;
-        height?: number;
-        url?: string;
-      };
-      thumbnail?: {
-        width?: number;
-        height?: number;
-        url?: string;
-      };
-      // add other formats if needed
-      [key: string]:
-        | {
-            width?: number;
-            height?: number;
-            url?: string;
-          }
-        | undefined;
-    };
-  };
-  type?: {
-    title: string;
-    slug: string;
-  };
-  rarity?: {
-    title: string;
-  };
-  condition?: {
-    title: string;
-  };
-}
+import ProductActions from "../../components/ProductActions";
+import { Pokemon } from "../../../../shared/types/pokemon";
 
 // fetch Pokemon data from Strapi
 async function getPokemon(slug: string): Promise<Pokemon | null> {
@@ -92,7 +48,7 @@ export async function generateMetadata({
     : "/placeholder-card.jpg";
 
   const title = `${pokemon.name} - ${pokemon.rarity?.title || "Pokemon Card"}`;
-  const description = `Buy ${pokemon.name} Pokemon card. ${pokemon.condition?.title || "Excellent"} condition, ${pokemon.rarity?.title || "Rare"}. Only $${pokemon.price}. ${pokemon.stock} in stock.`;
+  const description = `Buy ${pokemon.name} Pokemon card. ${pokemon.condition?.title || "Excellent"} condition, ${pokemon.rarity?.title || "Rare"}. Only $${pokemon.price}. ${pokemon.stock ?? 0} in stock.`;
 
   return {
     title,
@@ -137,7 +93,8 @@ export async function generateMetadata({
     other: {
       "product:price:amount": pokemon.price.toString(),
       "product:price:currency": "EUR",
-      "product:availability": pokemon.stock > 0 ? "in stock" : "out of stock",
+      "product:availability":
+        (pokemon.stock ?? 0) > 0 ? "in stock" : "out of stock",
     },
   };
 }
@@ -192,7 +149,7 @@ export default async function ProductPage({
       priceCurrency: "EUR",
       price: pokemon.price,
       availability:
-        pokemon.stock > 0
+        (pokemon.stock ?? 0) > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
@@ -212,7 +169,7 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="h-[85vh] container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb with Schema.org markup */}
         <Breadcrumb
           items={[
@@ -258,53 +215,18 @@ export default async function ProductPage({
             {/* Stock Status */}
             <div className="flex items-center space-x-2">
               <div
-                className={`w-2 h-2 rounded-full ${pokemon.stock > 0 ? "bg-green-500" : "bg-red-500"}`}
+                className={`w-2 h-2 rounded-full ${(pokemon.stock ?? 0) > 0 ? "bg-green-500" : "bg-red-500"}`}
               ></div>
               <span
-                className={`text-sm font-medium ${pokemon.stock > 0 ? "text-green-600" : "text-red-600"}`}
+                className={`text-sm font-medium ${(pokemon.stock ?? 0) > 0 ? "text-green-600" : "text-red-600"}`}
               >
-                {pokemon.stock}{" "}
-                {pokemon.stock > 0 ? "In stock" : "Out of stock"}
+                {pokemon.stock ?? 0}{" "}
+                {(pokemon.stock ?? 0) > 0 ? "In stock" : "Out of stock"}
               </span>
             </div>
 
-            {/* Quantity Selector */}
-            {pokemon.stock > 0 && <QuantitySelector maxStock={pokemon.stock} />}
-
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              {/* Add to Cart Button */}
-              <button
-                className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
-                  pokemon.stock > 0
-                    ? "bg-yellow-500 hover:bg-yellow-600"
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
-                disabled={pokemon.stock === 0}
-              >
-                <span className="flex items-center justify-center space-x-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5 6m0 0h8"
-                    />
-                  </svg>
-                  <span>
-                    {pokemon.stock > 0 ? "Add to cart" : "Out of Stock"}
-                  </span>
-                </span>
-              </button>
-
-              {/* Wishlist Button */}
-              <WishlistButton pokemon={pokemon} className="w-full" />
-            </div>
+            {/* Quantity Selector and Action Buttons */}
+            <ProductActions pokemon={pokemon} />
 
             {/* Product Details Accordions */}
             <div className="pt-6">

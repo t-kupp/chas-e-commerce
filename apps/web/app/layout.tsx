@@ -7,6 +7,8 @@ import { AuthProvider } from "./context/auth";
 import { WishlistProvider } from "./context/wishlist";
 import { generateOrganizationSchema, generateWebsiteSchema } from "./lib/seo";
 
+import PaypalWrapper from "./components/PaypalWrapper";
+import CartProvider from "./context/cart";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -19,9 +21,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
     default: "Pokemon Cards Store - Rare & Collectible Trading Cards",
     template: "%s | Pokemon Cards Store", // %s does so pages will show "Page Name | Pokemon Cards Store"
@@ -104,13 +104,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col pt-18!`}
       >
-        <AuthProvider>
-          <WishlistProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </WishlistProvider>
-        </AuthProvider>
+        <PaypalWrapper>
+          <AuthProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </WishlistProvider>
+            </CartProvider>
+          </AuthProvider>
+        </PaypalWrapper>
       </body>
       <GoogleAnalytics gaId="G-8EJ2LZQSRB" />
     </html>
