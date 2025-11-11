@@ -48,7 +48,9 @@ export async function generateMetadata({
     : "/placeholder-card.jpg";
 
   const title = `${pokemon.name} - ${pokemon.rarity?.title || "Pokemon Card"}`;
-  const description = `Buy ${pokemon.name} Pokemon card. ${pokemon.condition?.title || "Excellent"} condition, ${pokemon.rarity?.title || "Rare"}. Only $${pokemon.price}. ${pokemon.stock ?? 0} in stock.`;
+  const description = pokemon.description
+    ? `${pokemon.description} ${pokemon.condition?.title || "Excellent"} condition. Only $${pokemon.price}. ${pokemon.stock ?? 0} in stock.`
+    : `Buy ${pokemon.name} Pokemon card. ${pokemon.condition?.title || "Excellent"} condition, ${pokemon.rarity?.title || "Rare"}. Only $${pokemon.price}. ${pokemon.stock ?? 0} in stock.`;
 
   return {
     title,
@@ -138,7 +140,9 @@ export default async function ProductPage({
     "@type": "Product",
     name: pokemon.name,
     image: imageUrl,
-    description: `${pokemon.name} Pokemon trading card in ${pokemon.condition?.title || "excellent"} condition`,
+    description:
+      pokemon.description ||
+      `${pokemon.name} Pokemon trading card in ${pokemon.condition?.title || "excellent"} condition`,
     brand: {
       "@type": "Brand",
       name: "Pokemon",
@@ -224,6 +228,15 @@ export default async function ProductPage({
                 {(pokemon.stock ?? 0) > 0 ? "In stock" : "Out of stock"}
               </span>
             </div>
+
+            {/* Description */}
+            {pokemon.description && (
+              <div className="prose prose-gray max-w-none">
+                <p className="text-gray-700 leading-relaxed">
+                  {pokemon.description}
+                </p>
+              </div>
+            )}
 
             {/* Quantity Selector and Action Buttons */}
             <ProductActions pokemon={pokemon} />

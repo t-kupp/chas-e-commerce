@@ -76,6 +76,7 @@ export interface Pokemon {
   publishedAt: string;
   slug: string;
   stock: number | null;
+  description?: string;
   image: Image;
   type: Type;
   condition: Condition;

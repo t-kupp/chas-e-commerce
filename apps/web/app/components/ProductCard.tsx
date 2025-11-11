@@ -97,6 +97,13 @@ export default function ProductCard({
           )}
         </div>
 
+        {/* description */}
+        {pokemon.description && (
+          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+            {pokemon.description}
+          </p>
+        )}
+
         {/* price */}
         <p className="text-2xl font-bold text-gray-900 mb-4">
           ${pokemon.price.toFixed(2)}

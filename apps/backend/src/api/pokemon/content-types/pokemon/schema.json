@@ -21,10 +21,7 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "images",
-        "files"
-      ]
+      "allowedTypes": ["images", "files"]
     },
     "slug": {
       "type": "uid",
@@ -51,6 +48,9 @@
     "stock": {
       "type": "integer",
       "default": 0
+    },
+    "description": {
+      "type": "text"
     }
   }
 }
