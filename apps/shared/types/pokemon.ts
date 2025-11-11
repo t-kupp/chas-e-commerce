@@ -107,3 +107,19 @@ export type SortOption =
   | "price-asc"
   | "price-desc"
   | null;
+
+export interface FilterState {
+  priceRange: { min: number; max: number };
+  types: string[];
+  rarities: string[];
+  conditions: string[];
+  inStock: boolean | null;
+  name: string;
+}
+
+export interface FilterOptions {
+  types: Array<{ id: number; title: string }>;
+  rarities: Array<{ id: number; title: string }>;
+  conditions: Array<{ id: number; title: string }>;
+  priceRange: { min: number; max: number };
+}

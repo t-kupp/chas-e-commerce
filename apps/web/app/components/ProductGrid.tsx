@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Pokemon } from "../../../shared/types/pokemon";
+import { Pokemon, FilterState } from "../../../shared/types/pokemon";
 import { useCart } from "../context/cart";
 import ProductCard from "./ProductCard";
 import SortDropdown from "./SortDropdown";
@@ -24,7 +24,11 @@ const SORT_OPTIONS = [
   { value: "price-desc", label: "Price (High to Low)" },
 ];
 
-export default function ProductGrid() {
+interface ProductGridProps {
+  filters?: FilterState;
+}
+
+export default function ProductGrid({ filters }: ProductGridProps) {
   const [data, setData] = useState<Pokemon[] | null>(null);
   const [filteredData, setFilteredData] = useState<Pokemon[] | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("date-newest");
@@ -53,52 +57,128 @@ export default function ProductGrid() {
     fetchData();
   }, []);
 
-  // Apply sorting whenever sortBy or data changes
+  // Apply filters and sorting whenever they change
   useEffect(() => {
     if (!data) return;
 
-    const sorted = [...data].sort((a, b) => {
+    let filtered = [...data];
+
+    // Only apply filters if they are provided
+    if (filters) {
+      // Apply name filter
+      if (filters.name) {
+        filtered = filtered.filter((pokemon) =>
+          pokemon?.name?.toLowerCase().includes(filters.name.toLowerCase())
+        );
+      }
+
+      // Apply price range filter
+      if (filters.priceRange) {
+        filtered = filtered.filter(
+          (pokemon) =>
+            pokemon?.price >= filters.priceRange.min &&
+            pokemon?.price <= filters.priceRange.max
+        );
+      }
+
+      // Apply type filter
+      if (filters.types && filters.types.length > 0) {
+        filtered = filtered.filter((pokemon) =>
+          filters.types.includes(pokemon?.type?.title || "")
+        );
+      }
+
+      // Apply rarity filter
+      if (filters.rarities && filters.rarities.length > 0) {
+        filtered = filtered.filter((pokemon) =>
+          filters.rarities.includes(pokemon?.rarity?.title || "")
+        );
+      }
+
+      // Apply condition filter
+      if (filters.conditions && filters.conditions.length > 0) {
+        filtered = filtered.filter((pokemon) =>
+          filters.conditions.includes(pokemon?.condition?.title || "")
+        );
+      }
+
+      // Apply stock filter
+      if (filters.inStock !== null && filters.inStock !== undefined) {
+        if (filters.inStock) {
+          filtered = filtered.filter((pokemon) => (pokemon?.stock ?? 0) > 0);
+        } else {
+          filtered = filtered.filter((pokemon) => (pokemon?.stock ?? 0) === 0);
+        }
+      }
+    }
+
+    // Apply sorting
+    const sorted = filtered.sort((a, b) => {
       switch (sortBy) {
         case "name-asc":
-          return a.name.localeCompare(b.name);
+          return (a?.name || "").localeCompare(b?.name || "");
         case "name-desc":
-          return b.name.localeCompare(a.name);
+          return (b?.name || "").localeCompare(a?.name || "");
         case "price-asc":
-          return a.price - b.price;
+          return (a?.price || 0) - (b?.price || 0);
         case "price-desc":
-          return b.price - a.price;
+          return (b?.price || 0) - (a?.price || 0);
         case "date-newest":
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return (
+            new Date(b?.createdAt || 0).getTime() -
+            new Date(a?.createdAt || 0).getTime()
+          );
         case "date-oldest":
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          return (
+            new Date(a?.createdAt || 0).getTime() -
+            new Date(b?.createdAt || 0).getTime()
+          );
         default:
           return 0;
       }
     });
 
     setFilteredData(sorted);
-  }, [sortBy, data]);
+  }, [sortBy, data, filters]);
 
   function handleAddToCart(card: Pokemon) {
     addToCart(card);
   }
 
-  if (!filteredData) return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
+  if (!filteredData)
+    return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
 
   return (
-    <section id="products-section" className="max-w-7xl mx-auto px-4 mb-12">
-      <div className="mb-6 mt-6 flex justify-end">
+    <section id="products-section" className="w-full">
+      <div className="mx-auto mb-6 mt-6 flex justify-between items-center">
+        <p className="text-sm text-gray-600 ">
+          {filteredData.length} products found
+        </p>
         <SortDropdown
           value={sortBy}
           onChange={(value) => setSortBy(value as SortOption)}
           options={SORT_OPTIONS}
         />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
         {filteredData.map((card) => (
-          <ProductCard key={card.id} pokemon={card} onAddToCart={handleAddToCart} />
+          <ProductCard
+            key={card.id}
+            pokemon={card}
+            onAddToCart={handleAddToCart}
+          />
         ))}
       </div>
+      {filteredData.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-gray-500 text-lg">
+            No products match your current filters.
+          </p>
+          <p className="text-gray-400 text-sm mt-2">
+            Try adjusting your search criteria.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
