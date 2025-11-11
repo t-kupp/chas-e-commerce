@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PaypalCheckout from "../components/PaypalCheckout";
 import QuantityInput from "../components/QuantityInput";
 import { useAuth } from "../context/auth";
 import { useCart } from "../context/cart";
+import { trackBeginCheckout } from "../lib/analytics";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
@@ -22,6 +23,7 @@ export interface AddressFormData {
 
 export default function CheckoutPage() {
   const [isMounted, setIsMounted] = useState(false);
+  const hasTrackedCheckout = useRef(false);
   const { user } = useAuth();
   const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
   const [addressData, setAddressData] = useState<AddressFormData>({
@@ -38,6 +40,14 @@ export default function CheckoutPage() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // Track begin_checkout when user is authenticated and has items in cart
+  useEffect(() => {
+    if (isMounted && user && cart.length > 0 && !hasTrackedCheckout.current) {
+      trackBeginCheckout(cart, getTotalPrice());
+      hasTrackedCheckout.current = true;
+    }
+  }, [isMounted, user, cart, getTotalPrice]);
 
   useEffect(() => {
     function validateForm() {

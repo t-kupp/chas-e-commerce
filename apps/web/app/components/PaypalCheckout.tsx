@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AddressFormData } from "../checkout/page";
 import { useAuth } from "../context/auth";
 import { useCart } from "../context/cart";
+import { trackAddPaymentInfo, trackPurchase } from "../lib/analytics";
 
 interface PaypalCheckoutProps {
   isFormValid: boolean;
@@ -18,6 +19,9 @@ export default function PaypalCheckout({ isFormValid, addressData }: PaypalCheck
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function createOrder(data: any, actions: any) {
+    // Track that user is adding payment info
+    trackAddPaymentInfo("PayPal", cart, getTotalPrice());
+
     return actions.order.create({
       purchase_units: [
         {
@@ -100,6 +104,18 @@ export default function PaypalCheckout({ isFormValid, addressData }: PaypalCheck
 
       const createdOrder = await response.json();
       console.log("Order created successfully:", createdOrder);
+
+      // Track purchase completion with order ID
+      const orderId = createdOrder.data.id || createdOrder.data.documentId || details.id;
+      const tax = getTotalPrice() * 0.2; // 20% tax as shown in your UI
+
+      trackPurchase(
+        orderId.toString(),
+        cart,
+        getTotalPrice(),
+        tax,
+        0 // Free shipping
+      );
 
       // Clear cart after successful order
       clearCart();

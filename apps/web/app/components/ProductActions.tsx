@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
-import QuantitySelector from "./QuantitySelector";
+import { trackProductView } from "../lib/analytics";
 import AddToCartButton from "./AddToCartButton";
+import QuantitySelector from "./QuantitySelector";
 import WishlistButton from "./WishlistButton";
 
 interface ProductActionsProps {
@@ -13,14 +14,16 @@ interface ProductActionsProps {
 export default function ProductActions({ pokemon }: ProductActionsProps) {
   const [quantity, setQuantity] = useState(1);
 
+  // Track product view when component mounts
+  useEffect(() => {
+    trackProductView(pokemon);
+  }, [pokemon]);
+
   return (
     <>
       {/* Quantity Selector */}
       {(pokemon.stock ?? 0) > 0 && (
-        <QuantitySelector
-          maxStock={pokemon.stock ?? 0}
-          onQuantityChange={setQuantity}
-        />
+        <QuantitySelector maxStock={pokemon.stock ?? 0} onQuantityChange={setQuantity} />
       )}
 
       {/* Action Buttons */}

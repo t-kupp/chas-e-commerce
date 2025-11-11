@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { Pokemon } from "../../../shared/types/pokemon";
+import { trackAddToCart, trackRemoveFromCart } from "../lib/analytics";
 
 interface CartContextType {
   cart: CartItem[];
@@ -27,11 +28,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const CART_STORAGE_KEY = "pokemon-cart";
 
-export default function CartProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(() => {
     // Initialize cart from localStorage on mount
     if (typeof window !== "undefined") {
@@ -65,9 +62,7 @@ export default function CartProvider({
     if (existingItem) {
       setCart(
         cart.map((item) =>
-          item.pokemonId === pokemon.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+          item.pokemonId === pokemon.id ? { ...item, quantity: item.quantity + quantity } : item
         )
       );
     } else {
@@ -85,9 +80,20 @@ export default function CartProvider({
         },
       ]);
     }
+
+    // Track add to cart event
+    trackAddToCart(pokemon, quantity);
   }
 
   function removeFromCart(pokemonId: number) {
+    // Find the item before removing to get full data for tracking
+    const itemToRemove = cart.find((item) => item.pokemonId === pokemonId);
+
+    if (itemToRemove) {
+      // Track removal
+      trackRemoveFromCart(itemToRemove);
+    }
+
     setCart(cart.filter((item) => item.pokemonId !== pokemonId));
   }
 
@@ -95,11 +101,7 @@ export default function CartProvider({
     const existingItem = cart.find((item) => item.pokemonId === pokemonId);
     if (!existingItem || quantity <= 0) return;
 
-    setCart(
-      cart.map((item) =>
-        item.pokemonId === pokemonId ? { ...item, quantity } : item
-      )
-    );
+    setCart(cart.map((item) => (item.pokemonId === pokemonId ? { ...item, quantity } : item)));
   }
 
   function getTotalItems() {
