@@ -1,21 +1,84 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
+import { useAuth } from "../context/auth"; // Adjust the import path as needed
 
 export default function AuthScreen() {
+  const { login, register, user, logout } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
-    console.log(isLogin ? "Login" : "Sign up", {email, password});
+  const handleLogout = async () => {
+    try {
+      await logout();
+      Alert.alert("Success", "You've been logged out");
+    } catch (error) {
+      Alert.alert("Error", "Failed to logout");
+    }
   };
+
+  const handleSubmit = async () => {
+    // Validation
+    if (!email || !password) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (!isLogin && !username) {
+      Alert.alert("Error", "Please enter a username");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      if (isLogin) {
+        await login(email, password);
+        Alert.alert("Success", "Welcome back, Trainer!");
+      } else {
+        await register(username, email, password);
+        Alert.alert("Success", "Account created successfully!");
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error instanceof Error ? error.message : "Authentication failed"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // If user is logged in, show simple message
+  if (user) {
+    return (
+      <View className="flex-1 bg-gray-800 items-center justify-center px-8">
+        <Text className="text-white text-4xl font-bold mb-4">
+          POKÉMON <Text className="text-[#fbbf24]">STORE</Text>
+        </Text>
+        <Text className="text-white text-2xl font-bold mb-8">Logged in</Text>
+        <TouchableOpacity
+          className="bg-[#fbbf24] py-4 px-8 rounded-lg"
+          onPress={handleLogout}
+        >
+          <Text className="text-center text-black text-lg font-bold">
+            Logout
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <ScrollView className="flex-1 bg-gray-800">
@@ -42,6 +105,23 @@ export default function AuthScreen() {
 
         {/* Form */}
         <View className="mb-6">
+          {/* Username Input (only for sign up) */}
+          {!isLogin && (
+            <View className="mb-5">
+              <Text className="text-white text-base font-medium mb-2">
+                Username
+              </Text>
+              <TextInput
+                className="bg-gray-700 text-white px-4 py-4 rounded-lg text-base"
+                placeholder="Choose a username"
+                placeholderTextColor="#64748b"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="none"
+              />
+            </View>
+          )}
+
           {/* Email Input */}
           <View className="mb-5">
             <Text className="text-white text-base font-medium mb-2">Email</Text>
@@ -97,10 +177,15 @@ export default function AuthScreen() {
         <TouchableOpacity
           className="bg-[#fbbf24] py-4 rounded-lg mb-8"
           onPress={handleSubmit}
+          disabled={isLoading}
         >
-          <Text className="text-center text-black text-lg font-bold">
-            {isLogin ? "Sign in" : "Create account"}
-          </Text>
+          {isLoading ? (
+            <ActivityIndicator color="#000" />
+          ) : (
+            <Text className="text-center text-black text-lg font-bold">
+              {isLogin ? "Sign in" : "Create account"}
+            </Text>
+          )}
         </TouchableOpacity>
 
         {/* Toggle Auth Mode */}

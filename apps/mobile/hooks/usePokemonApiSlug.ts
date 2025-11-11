@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import type {Pokemon} from "../../shared/types/pokemon";
+import { useEffect, useState } from "react";
+import type { Pokemon } from "../../shared/types/pokemon";
 
 export function usePokemon(slug?: string) {
   const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL;
@@ -18,5 +18,5 @@ export function usePokemon(slug?: string) {
     if (slug) loadPokemon();
   }, [slug]);
 
-  return {pokemon, loading};
+  return { pokemon, loading };
 }

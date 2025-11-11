@@ -5,7 +5,7 @@
 - [x] _Login PAGE_
 - [] _Login KOPPLAD MED STRAPI/USERS_
 - [] _Wishlist Page + hjärt knapp i cardsen slug och productcard_
-- [] _Wishlist context med loaclStorage_
+- [] _Wishlist context med locallStorage_
 - []
 - []
 - []
