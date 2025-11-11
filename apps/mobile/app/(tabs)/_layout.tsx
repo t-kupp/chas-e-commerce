@@ -17,8 +17,7 @@ export default function RootLayout() {
         tabBarActiveTintColor: "#fbbf24",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: { backgroundColor: "#1F2937" },
-      }}
-    >
+      }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -47,15 +46,27 @@ export default function RootLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="login"
-        options={{
-          title: user ? "Account" : "Sign in",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
-          ),
-        }}
-      />{" "}
+      {user ? (
+        <Tabs.Screen
+          name="account"
+          options={{
+            title: "Account",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="person-outline" size={size} color={color} />
+            ),
+          }}
+        />
+      ) : (
+        <Tabs.Screen
+          name="login"
+          options={{
+            title: "Sign in",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="log-in-outline" size={size} color={color} />
+            ),
+          }}
+        />
+      )}
       <Tabs.Screen
         name="productCardDetailPage/[slug]"
         options={{
