@@ -169,7 +169,7 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="h-[85vh] container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb with Schema.org markup */}
         <Breadcrumb
           items={[
