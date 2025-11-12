@@ -94,7 +94,6 @@ export default function ProductCard({sortBy}: ProductCardProps) {
                       {pokemon.name}
                     </Text>
                   </View>
-                  <View></View>
                 </View>
 
                 <Text
