@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Pokemon } from "../../../shared/types/pokemon";
+import { Pokemon, CartItem } from "../../../shared/types/pokemon";
 
 interface CartContextType {
   cart: CartItem[];
@@ -11,16 +11,6 @@ interface CartContextType {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   clearCart: () => void;
-}
-
-export interface CartItem {
-  documentId: string;
-  pokemonId: number;
-  slug: string;
-  name: string;
-  price: number;
-  imageUrl: string;
-  quantity: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -126,8 +116,7 @@ export default function CartProvider({
         getTotalItems,
         getTotalPrice,
         clearCart,
-      }}
-    >
+      }}>
       {children}
     </CartContext.Provider>
   );

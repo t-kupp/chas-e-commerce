@@ -116,7 +116,7 @@ export interface FilterState {
   types: string[];
   rarities: string[];
   conditions: string[];
-  inStock: boolean | null;
+  inStock: boolean;
   name: string;
 }
 

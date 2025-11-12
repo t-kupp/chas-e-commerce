@@ -9,39 +9,22 @@ import {
   SafeAreaView,
   RefreshControl,
 } from "react-native";
-import { useAuth } from "../context/auth";
+import { useAuth } from "../../context/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useWishlist } from "../context/WishListContext";
+import { useWishlist } from "../../context/WishListContext";
+import { Order, UserStats } from "../../../../shared/types/order.ts";
 
 const STRAPI_URL =
   process.env.EXPO_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-interface Order {
-  id: number;
-  documentId: string;
-  total: number;
-  orderStatus: string;
-  createdAt: string;
-  orderItems?: {
-    id: number;
-    Quantity: number;
-    pokemon?: {
-      name: string;
-      price: number;
-    };
-  }[];
+interface AccountComponentProps {
+  onLogout?: () => void;
 }
 
-interface UserStats {
-  totalOrders: number;
-  totalSpent: number;
-  favoriteCount: number;
-}
-
-export default function AccountScreen() {
-  const { user, logout, isLoading } = useAuth();
+export default function AccountComponent({ onLogout }: AccountComponentProps) {
+  const { user, logout } = useAuth();
   const { wishlistCount } = useWishlist();
 
   // Account data states
@@ -53,13 +36,6 @@ export default function AccountScreen() {
   });
   const [dataLoading, setDataLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace("/(tabs)/login");
-    }
-  }, [user, isLoading]);
 
   const fetchUserData = async () => {
     if (!user) return;
@@ -139,7 +115,7 @@ export default function AccountScreen() {
         onPress: async () => {
           try {
             await logout();
-            router.replace("/(tabs)/login");
+            onLogout?.();
           } catch (error) {
             Alert.alert("Error", "Failed to logout");
           }
@@ -148,24 +124,17 @@ export default function AccountScreen() {
     ]);
   };
 
-  if (isLoading || !user) {
-    return (
-      <SafeAreaView className="flex-1 bg-gray-50 justify-center items-center">
-        <ActivityIndicator size="large" color="#fbbf24" />
-        <Text className="text-gray-600 mt-4 text-lg">Loading...</Text>
-      </SafeAreaView>
-    );
+  if (!user) {
+    return null;
   }
 
-  // If user is logged in, show account dashboard
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <ScrollView
         className="flex-1"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+        }>
         <View className="p-4">
           {/* Header */}
           <View className="bg-white rounded-xl p-6 mb-6 border-l-4 border-gray-800">
@@ -192,8 +161,7 @@ export default function AccountScreen() {
 
               <TouchableOpacity
                 onPress={handleLogout}
-                className="bg-gray-100 p-3 rounded-lg border border-gray-200"
-              >
+                className="bg-gray-100 p-3 rounded-lg border border-gray-200">
                 <Ionicons name="log-out-outline" size={20} color="#374151" />
               </TouchableOpacity>
             </View>
@@ -282,8 +250,7 @@ export default function AccountScreen() {
 
               <TouchableOpacity
                 className="flex-row items-center p-4 bg-gray-50 rounded-lg mb-3"
-                onPress={() => router.push("/(tabs)/wishlist")}
-              >
+                onPress={() => router.push("/(tabs)/wishlist")}>
                 <View className="w-10 h-10 bg-red-100 rounded-lg items-center justify-center mr-3">
                   <Ionicons name="heart" size={20} color="#dc2626" />
                 </View>
@@ -303,8 +270,7 @@ export default function AccountScreen() {
                     pathname: "/(tabs)",
                     params: { scrollToProducts: "true" },
                   })
-                }
-              >
+                }>
                 <View className="w-10 h-10 bg-green-100 rounded-lg items-center justify-center mr-3">
                   <Ionicons name="storefront" size={20} color="#059669" />
                 </View>
@@ -345,8 +311,7 @@ export default function AccountScreen() {
                       pathname: "/(tabs)",
                       params: { scrollToProducts: "true" },
                     })
-                  }
-                >
+                  }>
                   <Ionicons name="storefront" size={18} color="#000" />
                   <Text className="text-black font-bold ml-2">
                     Start Collecting Cards
@@ -358,8 +323,7 @@ export default function AccountScreen() {
                 {orders.slice(0, 5).map((order) => (
                   <View
                     key={order.id}
-                    className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
-                  >
+                    className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                     {/* Order Header */}
                     <View className="flex-row justify-between items-start mb-3">
                       <View className="flex-1">
@@ -381,8 +345,7 @@ export default function AccountScreen() {
                               : order.orderStatus === "pending"
                                 ? "bg-yellow-100"
                                 : "bg-gray-100"
-                          }`}
-                        >
+                          }`}>
                           <Text
                             className={`text-xs font-semibold ${
                               order.orderStatus === "completed"
@@ -390,8 +353,7 @@ export default function AccountScreen() {
                                 : order.orderStatus === "pending"
                                   ? "text-yellow-800"
                                   : "text-gray-800"
-                            }`}
-                          >
+                            }`}>
                             {order.orderStatus.charAt(0).toUpperCase() +
                               order.orderStatus.slice(1)}
                           </Text>
@@ -408,8 +370,7 @@ export default function AccountScreen() {
                         {order.orderItems.slice(0, 2).map((item) => (
                           <Text
                             key={item.id}
-                            className="text-sm text-gray-700 mb-1"
-                          >
+                            className="text-sm text-gray-700 mb-1">
                             • {item.Quantity}x {item.pokemon?.name || "Unknown"}
                           </Text>
                         ))}

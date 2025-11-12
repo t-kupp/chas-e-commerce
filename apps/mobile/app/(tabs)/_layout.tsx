@@ -46,27 +46,33 @@ export default function RootLayout() {
           ),
         }}
       />
-      {user ? (
-        <Tabs.Screen
-          name="account"
-          options={{
-            title: "Account",
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="person-outline" size={size} color={color} />
-            ),
-          }}
-        />
-      ) : (
-        <Tabs.Screen
-          name="login"
-          options={{
-            title: "Sign in",
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="log-in-outline" size={size} color={color} />
-            ),
-          }}
-        />
-      )}
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: user ? "Account" : "Sign in",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons
+              name={user ? "person-outline" : "log-in-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="account"
+        options={{
+          tabBarItemStyle: { display: "none" },
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="login"
+        options={{
+          tabBarItemStyle: { display: "none" },
+          headerShown: false,
+        }}
+      />
       <Tabs.Screen
         name="productCardDetailPage/[slug]"
         options={{
