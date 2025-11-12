@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import { useCart } from "../../context/CartContext";
 import { usePokemon } from "@/hooks/usePokemonApiSlug";
+import { ChevronLeft } from "lucide-react-native";
 
 export default function ProductDetail() {
   const { slug } = useLocalSearchParams();
@@ -31,7 +32,22 @@ export default function ProductDetail() {
 
   return (
     <View className="flex-1 bg-white pt-10">
-      <ScrollView contentContainerStyle={{ padding: 16, alignItems: "center" }}>
+      {/* Back Button */}
+      <TouchableOpacity
+        onPress={() => router.back()}
+        className="absolute top-12 left-4 z-10 bg-white rounded-full p-2 shadow-lg"
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}
+      >
+        <ChevronLeft size={28} color="#000" />
+      </TouchableOpacity>
+
+      <ScrollView contentContainerStyle={{ padding: 20, alignItems: "center" }}>
         {pokemon.image?.url && (
           <Image
             source={{ uri: `${STRAPI_URL}${pokemon.image.url}` }}
