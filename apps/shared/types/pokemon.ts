@@ -75,7 +75,7 @@ export interface Pokemon {
   updatedAt: string;
   publishedAt: string;
   slug: string;
-  stock: number | null;
+  stock: number;
   description?: string;
   image: Image;
   type: Type;
@@ -111,7 +111,7 @@ export type SortOption =
   | null;
 
 export interface FilterState {
-  priceRange: { min: number; max: number };
+  priceRange: {min: number; max: number};
   types: string[];
   rarities: string[];
   conditions: string[];
@@ -120,8 +120,8 @@ export interface FilterState {
 }
 
 export interface FilterOptions {
-  types: Array<{ id: number; title: string }>;
-  rarities: Array<{ id: number; title: string }>;
-  conditions: Array<{ id: number; title: string }>;
-  priceRange: { min: number; max: number };
+  types: Array<{id: number; title: string}>;
+  rarities: Array<{id: number; title: string}>;
+  conditions: Array<{id: number; title: string}>;
+  priceRange: {min: number; max: number};
 }
