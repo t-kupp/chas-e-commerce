@@ -75,7 +75,7 @@ export interface Pokemon {
   updatedAt: string;
   publishedAt: string;
   slug: string;
-  stock: number | null;
+  stock: number;
   description?: string;
   image: Image;
   type: Type;
@@ -85,10 +85,12 @@ export interface Pokemon {
 
 export type CartItem = {
   id: number;
+  documentId?: string;
   name: string;
   price: number;
   quantity: number;
   image?: string;
+  stock: number;
 };
 
 export type CartContextType = {
@@ -114,7 +116,7 @@ export interface FilterState {
   types: string[];
   rarities: string[];
   conditions: string[];
-  inStock: boolean | null;
+  inStock: boolean;
   name: string;
 }
 

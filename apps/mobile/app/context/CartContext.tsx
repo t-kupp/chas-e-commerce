@@ -6,7 +6,6 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({children}: {children: React.ReactNode}) {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  // Add item to cart
   const addItem = (item: CartItem) => {
     setItems((prev) => {
       const existing = prev.find((p) => p.id === item.id);
@@ -15,10 +14,16 @@ export function CartProvider({children}: {children: React.ReactNode}) {
       if (existing) {
         return prev.map((prevItem) =>
           prevItem.id === item.id
-            ? {...prevItem, quantity: prevItem.quantity + item.quantity}
+            ? prevItem.quantity < prevItem.stock
+              ? {
+                  ...prevItem,
+                  quantity: prevItem.quantity + item.quantity,
+                }
+              : prevItem
             : prevItem
         );
       }
+
       return [...prev, item];
     });
   };
@@ -31,11 +36,13 @@ export function CartProvider({children}: {children: React.ReactNode}) {
   // Clear cart
   const clearCart = () => setItems([]);
 
-  // Increase item quantity
+  // Increaseitem
   const increaseItem = (id: number) => {
     setItems((prev) =>
       prev.map((p) =>
-        p.id === id ? {...p, quantity: (p.quantity || 1) + 1} : p
+        p.id === id
+          ? {...p, quantity: Math.min(p.stock, (p.quantity || 1) + 1)}
+          : p
       )
     );
   };

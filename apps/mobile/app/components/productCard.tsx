@@ -1,20 +1,22 @@
 // ...existing code...
 import React from "react";
-import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Link} from "expo-router";
-import {SortOption} from "../../../shared/types/pokemon";
-import {useCart} from "../context/CartContext";
-import {usePokemons} from "@/hooks/usePokemonApi";
+import { useState } from "react";
+import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Link } from "expo-router";
+import { SortOption } from "../../../shared/types/pokemon";
+import { useCart } from "../context/CartContext";
+import { usePokemons } from "@/hooks/usePokemonApi";
+import { ShoppingCart, ScanEye, Heart } from "lucide-react-native";
+import { useWishlist } from "../context/WishListContext";
 
 interface ProductCardProps {
   sortBy?: SortOption;
 }
 
-export default function ProductCard({sortBy}: ProductCardProps) {
-  const {addItem} = useCart();
-  const {pokemons = [], loading} = usePokemons();
-  const STRAPI_URL =
-    process.env.EXPO_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
+export default function ProductCard({ sortBy }: ProductCardProps) {
+  const { addItem } = useCart();
+  const { pokemons = [], loading } = usePokemons();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   function sortedPokemons() {
     const arr = [...pokemons]; // kopiera så vi inte muterar original
@@ -43,35 +45,67 @@ export default function ProductCard({sortBy}: ProductCardProps) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{paddingVertical: 8}}>
-      <View className="flex-row flex-wrap justify-center p-2">
+    <ScrollView contentContainerStyle={{ paddingVertical: 8 }}>
+      <View className="flex-row flex-wrap justify-center p-2 index-10">
         {sorted.map((pokemon) => (
           <View
             key={pokemon.id}
-            className="bg-white rounded-xl shadow-md border border-gray-200 p-3 m-2 w-44"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 m-4 w-44"
           >
             {/* Bild */}
+
             {pokemon.image?.url ? (
-              <Image
-                source={{uri: `http://localhost:1337${pokemon.image.url}`}}
-                className="w-full h-52 rounded-lg mb-3"
-                resizeMode="cover"
-              />
+              <View className="flex-row">
+                <Link href={`/productCardDetailPage/${pokemon.documentId}`}>
+                  <Image
+                    source={{
+                      uri: `http://localhost:1337${pokemon.image.url}`,
+                    }}
+                    className="w-full h-52 rounded-lg mb-3"
+                    resizeMode="cover"
+                  />
+                </Link>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (isInWishlist(pokemon.id)) {
+                      removeFromWishlist(pokemon.id);
+                    } else {
+                      addToWishlist(pokemon);
+                    }
+                  }}
+                  className="relative bottom-6 right-2"
+                >
+                  <Heart
+                    size={30}
+                    fill={isInWishlist(pokemon.id) ? "red" : "none"}
+                    stroke="red"
+                  />
+                </TouchableOpacity>
+              </View>
             ) : (
               <View className="w-full h-36 bg-gray-100 rounded-lg mb-3 items-center justify-center">
                 <Text className="text-gray-400 text-xs">No Image</Text>
               </View>
             )}
-
             <View className="w-full">
-              <Text
-                className="text-base font-semibold text-gray-900"
-                numberOfLines={2}
-              >
-                {pokemon.name}
-              </Text>
+              <View className="flex-row justify-between">
+                <View>
+                  <Text
+                    className="text-base font-semibold text-gray-900"
+                    numberOfLines={2}
+                  >
+                    {pokemon.name}
+                  </Text>
+                </View>
+              </View>
 
-              <Text className="text-xs text-gray-500 mt-1">
+              <Text
+                className={
+                  pokemon.stock
+                    ? "text-xs text-green-600 mt-1"
+                    : "text-xs text-red-600 mt-1"
+                }
+              >
                 {pokemon.stock ? `Stock: ${pokemon.stock}` : "Out of Stock"}
               </Text>
 
@@ -79,26 +113,26 @@ export default function ProductCard({sortBy}: ProductCardProps) {
                 ${Number(pokemon.price).toFixed(2)}
               </Text>
 
-              <Link href={`/productCardDetailPage/${pokemon.documentId}`}>
-                <Text className="text-sm text-blue-600 underline mt-2">
-                  View details
-                </Text>
-              </Link>
-
               <TouchableOpacity
-                className="bg-black py-2 rounded-md mt-3"
+                className="bg-yellow-500 text-white py-2 flex justify-center items-center gap-2 rounded-md mt-3"
                 onPress={() =>
-                  addItem({
-                    id: pokemon.id,
-                    name: pokemon.name,
-                    price: pokemon.price,
-                    image: pokemon.image?.url,
-                    quantity: 1,
-                  })
+                  pokemon.stock > 0
+                    ? addItem({
+                        id: pokemon.id,
+                        documentId: pokemon.documentId,
+                        name: pokemon.name,
+                        price: pokemon.price,
+                        image: pokemon.image?.url,
+                        stock: pokemon.stock,
+                        quantity: 1,
+                      })
+                    : ""
                 }
                 accessibilityLabel={`Add ${pokemon.name} to cart`}
               >
-                <Text className="text-white text-center font-medium">Buy</Text>
+                <Text className="text-white text-center font-medium">
+                  <ShoppingCart size={12} color={"white"} /> Add to cart
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -107,4 +141,3 @@ export default function ProductCard({sortBy}: ProductCardProps) {
     </ScrollView>
   );
 }
-// ...existing code...

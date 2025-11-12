@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {Text, View} from "react-native";
 
 export default function Footer() {
   return (
-    <View className="bg-red-600 py-3 px-4 w-full">
+    <View className="bg-gray-800 py-3 px-4 w-full">
       {/* Pokeball divider */}
       <View className="items-center mb-2">
         <View className="w-8 h-8 relative">
@@ -16,10 +16,10 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <View className="pt-2 items-center">
-        <Text className="text-yellow-100 text-xs mb-1">
+        <Text className="text-yellow-400 text-xs mb-1">
           Gotta Catch Em All!
         </Text>
-        <Text className="text-red-200 text-xs">
+        <Text className="text-yellow-400 text-xs">
           © 2025 Pokémon. All rights reserved.
         </Text>
       </View>

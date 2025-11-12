@@ -1,13 +1,6 @@
-import {View, Text, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import React from "react";
 import {SortOption} from "../../../shared/types/pokemon";
-
-// export type SortOption =
-//   | "name-asc"
-//   | "name-desc"
-//   | "price-asc"
-//   | "price-desc"
-//   | null;
 
 interface FilterProps {
   selectedSort: SortOption;
