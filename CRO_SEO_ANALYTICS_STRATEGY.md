@@ -71,7 +71,7 @@ const jsonLd = {
   offers: {
     "@type": "Offer",
     price: pokemon.price.toFixed(2),
-    priceCurrency: "EUR",
+    priceCurrency: "USD",
     availability:
       (pokemon.stock ?? 0) > 0
         ? "https://schema.org/InStock"
@@ -413,7 +413,7 @@ export function trackProductView(pokemon: {
 
 - Product ID, name, price
 - Type and rarity
-- Currency (EUR)
+- Currency (USD)
 - Category information
 
 **Purpose:**

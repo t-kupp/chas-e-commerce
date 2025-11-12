@@ -94,7 +94,7 @@ export async function generateMetadata({
     // rich snippet data using other metadata
     other: {
       "product:price:amount": pokemon.price.toString(),
-      "product:price:currency": "EUR",
+      "product:price:currency": "USD",
       "product:availability":
         (pokemon.stock ?? 0) > 0 ? "in stock" : "out of stock",
     },
@@ -150,7 +150,7 @@ export default async function ProductPage({
     offers: {
       "@type": "Offer",
       url: `http://localhost:3000/products/${pokemon.slug}`,
-      priceCurrency: "EUR",
+      priceCurrency: "USD",
       price: pokemon.price,
       availability:
         (pokemon.stock ?? 0) > 0

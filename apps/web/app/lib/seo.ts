@@ -95,11 +95,11 @@ export function generateProductMetadata({
     // product-specific meta tags
     other: {
       "product:price:amount": price.toString(),
-      "product:price:currency": "EUR",
+      "product:price:currency": "USD",
       "product:availability": stock > 0 ? "in stock" : "out of stock",
       "product:condition": "new",
       "og:price:amount": price.toString(),
-      "og:price:currency": "EUR",
+      "og:price:currency": "USD",
     },
   };
 }
@@ -135,7 +135,7 @@ export function generateProductSchema({
     offers: {
       "@type": "Offer",
       url: `${SITE_URL}/products/${slug}`,
-      priceCurrency: "EUR",
+      priceCurrency: "USD",
       price: price.toFixed(2),
       availability:
         stock > 0
