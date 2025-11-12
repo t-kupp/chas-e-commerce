@@ -158,11 +158,6 @@ export default async function ProductPage({
           : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "24",
-    },
   };
 
   return (
