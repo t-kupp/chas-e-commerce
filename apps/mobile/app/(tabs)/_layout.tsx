@@ -1,14 +1,17 @@
 import React from "react";
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/auth";
+import {Tabs} from "expo-router";
+import {Ionicons} from "@expo/vector-icons";
+import {useCart} from "../context/CartContext";
+import {useWishlist} from "../context/WishListContext";
+import {useAuth} from "../context/auth";
 
 export default function RootLayout() {
-  const { items = [] } = useCart();
-  const { user } = useAuth();
+  const {items = []} = useCart();
+  const {wishlistCount} = useWishlist();
+  const {user} = useAuth();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const badge = itemCount > 0 ? itemCount : undefined;
+  const wishlistBadge = wishlistCount > 0 ? wishlistCount : undefined;
 
   return (
     <Tabs
@@ -16,13 +19,14 @@ export default function RootLayout() {
         headerShown: false,
         tabBarActiveTintColor: "#fbbf24",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#1F2937" },
-      }}>
+        tabBarStyle: {backgroundColor: "#1F2937"},
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
@@ -31,7 +35,7 @@ export default function RootLayout() {
         name="cart"
         options={{
           title: "Cart",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Ionicons name="cart-outline" size={size} color={color} />
           ),
           tabBarBadge: badge,
@@ -41,16 +45,17 @@ export default function RootLayout() {
         name="wishlist"
         options={{
           title: "Wishlist",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Ionicons name="heart-outline" size={size} color={color} />
           ),
+          tabBarBadge: wishlistBadge,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: user ? "Account" : "Sign in",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Ionicons
               name={user ? "person-outline" : "log-in-outline"}
               size={size}
@@ -62,21 +67,21 @@ export default function RootLayout() {
       <Tabs.Screen
         name="account"
         options={{
-          tabBarItemStyle: { display: "none" },
+          tabBarItemStyle: {display: "none"},
           headerShown: false,
         }}
       />
       <Tabs.Screen
         name="login"
         options={{
-          tabBarItemStyle: { display: "none" },
+          tabBarItemStyle: {display: "none"},
           headerShown: false,
         }}
       />
       <Tabs.Screen
         name="productCardDetailPage/[slug]"
         options={{
-          tabBarItemStyle: { display: "none" },
+          tabBarItemStyle: {display: "none"},
           headerShown: false,
         }}
       />
