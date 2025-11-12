@@ -2,7 +2,10 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-gray-300 border-t-8 border-yellow-400">
+    <footer
+      className="bg-gray-800 text-gray-300 border-t-8 border-yellow-400"
+      role="contentinfo"
+    >
       <div className="xl:mx-16! py-6! px-6! xl:px-0!">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/*  logo */}
@@ -25,8 +28,11 @@ export default function Footer() {
           </div>
 
           {/*  shop categories */}
-          <div>
-            <h3 className="text-lg font-bold text-white mb-4! border-b border-yellow-500/50 pb-1!">
+          <nav aria-labelledby="footer-shop-heading">
+            <h3
+              id="footer-shop-heading"
+              className="text-lg font-bold text-white mb-4! border-b border-yellow-500/50 pb-1!"
+            >
               Shop
             </h3>
             <ul className="space-y-3! text-sm">
@@ -55,11 +61,14 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/*  customer service & account */}
-          <div>
-            <h3 className="text-lg font-bold text-white mb-4! border-b border-yellow-500/50 pb-1!">
+          <nav aria-labelledby="footer-support-heading">
+            <h3
+              id="footer-support-heading"
+              className="text-lg font-bold text-white mb-4! border-b border-yellow-500/50 pb-1!"
+            >
               Support
             </h3>
             <ul className="space-y-3! text-sm">
@@ -96,25 +105,38 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/*  newsletter & social */}
           <div className="col-span-2 md:col-span-1">
-            <h3 className="text-lg font-bold text-white mb-4! border-b border-yellow-500/50 pb-1!">
+            <h3
+              id="footer-newsletter-heading"
+              className="text-lg font-bold text-white mb-4! border-b border-yellow-500/50 pb-1!"
+            >
               Join the League
             </h3>
             <p className="text-sm text-gray-400 mb-4!">
               Get 10% off your first order and news on rare card drops!
             </p>
-            <form className="flex mt-2!">
+            <form
+              className="flex mt-2!"
+              aria-labelledby="footer-newsletter-heading"
+            >
+              <label htmlFor="newsletter-email" className="sr-only">
+                Email address
+              </label>
               <input
+                id="newsletter-email"
                 type="email"
                 placeholder="Enter email"
                 className="w-full bg-white rounded-l-sm border-0 p-2! text-gray-800 focus:ring-yellow-400"
+                aria-label="Enter your email address for newsletter"
+                required
               />
               <button
                 type="submit"
                 className="bg-red-600 hover:bg-red-700 text-white font-bold p-3! rounded-r-md transition-colors"
+                aria-label="Subscribe to newsletter"
               >
                 Go!
               </button>

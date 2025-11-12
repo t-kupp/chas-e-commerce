@@ -23,7 +23,8 @@ export interface AddressFormData {
 export default function CheckoutPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { user } = useAuth();
-  const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } =
+    useCart();
   const [addressData, setAddressData] = useState<AddressFormData>({
     fullName: "",
     email: "",
@@ -51,7 +52,9 @@ export default function CheckoutPage() {
         "country",
       ];
 
-      const missingFields = requiredFields.filter((field) => !addressData[field].trim());
+      const missingFields = requiredFields.filter(
+        (field) => !addressData[field].trim()
+      );
 
       setIsFormValid(missingFields.length === 0);
     }
@@ -85,7 +88,9 @@ export default function CheckoutPage() {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
-          <p className="opacity-60 mb-8">Add some Pokemon cards to get started!</p>
+          <p className="opacity-60 mb-8">
+            Add some Pokemon cards to get started!
+          </p>
           <Link
             href="/products"
             className="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-colors font-medium"
@@ -127,7 +132,9 @@ export default function CheckoutPage() {
                       ${item.price.toFixed(2)} × {item.quantity}
                     </p>
                   </div>
-                  <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-semibold">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </p>
                 </div>
               ))}
             </div>
@@ -157,8 +164,8 @@ export default function CheckoutPage() {
             </svg>
             <h2 className="text-2xl font-bold mb-4">Login Required</h2>
             <p className="text-gray-600 mb-6 max-w-md">
-              Please log in or create an account to complete your order. This allows you to track
-              your orders and manage your purchases.
+              Please log in or create an account to complete your order. This
+              allows you to track your orders and manage your purchases.
             </p>
             <div className="space-y-3 w-full max-w-sm">
               <Link
@@ -174,7 +181,9 @@ export default function CheckoutPage() {
             <p className="text-sm text-gray-500 mt-6">
               Why do I need an account?
               <br />
-              <span className="text-xs">Track orders • View history • Faster checkout</span>
+              <span className="text-xs">
+                Track orders • View history • Faster checkout
+              </span>
             </p>
           </div>
         </div>
@@ -213,7 +222,9 @@ export default function CheckoutPage() {
                   <div className="grow flex flex-col gap-2">
                     <div>
                       <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm opacity-60">${item.price.toFixed(2)}</p>
+                      <p className="text-sm opacity-60">
+                        ${item.price.toFixed(2)}
+                      </p>
                     </div>
 
                     {/* Quantity Controls - Mobile */}
@@ -262,7 +273,9 @@ export default function CheckoutPage() {
 
                 {/* Item Total */}
                 <div className="text-right min-w-16 self-start sm:self-center">
-                  <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-semibold">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </p>
                 </div>
 
                 {/* Remove Button - Desktop */}
@@ -325,28 +338,48 @@ export default function CheckoutPage() {
 
         {/* Module 2: Shipping Address Form */}
         <div className="bg-background rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-6">Shipping Address</h2>
+          <h2
+            id="shipping-address-heading"
+            className="text-2xl font-semibold mb-6"
+          >
+            Shipping Address
+          </h2>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="space-y-4"
+            onSubmit={(e) => e.preventDefault()}
+            aria-labelledby="shipping-address-heading"
+            role="form"
+          >
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Full Name *
               </label>
               <input
                 type="text"
                 id="fullName"
                 value={addressData.fullName}
-                onChange={(e) => handleAddressChange("fullName", e.target.value)}
+                onChange={(e) =>
+                  handleAddressChange("fullName", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="Anna Andersson"
                 required
+                aria-required="true"
+                aria-label="Full name"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Email *
               </label>
               <input
@@ -357,12 +390,17 @@ export default function CheckoutPage() {
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="anna.andersson@example.se"
                 required
+                aria-required="true"
+                aria-label="Email address"
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Phone *
               </label>
               <input
@@ -373,12 +411,17 @@ export default function CheckoutPage() {
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="070-123 45 67"
                 required
+                aria-required="true"
+                aria-label="Phone number"
               />
             </div>
 
             {/* Address */}
             <div>
-              <label htmlFor="address" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Street Address *
               </label>
               <input
@@ -389,12 +432,17 @@ export default function CheckoutPage() {
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="Drottninggatan 123"
                 required
+                aria-required="true"
+                aria-label="Street address"
               />
             </div>
 
             {/* City */}
             <div>
-              <label htmlFor="city" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 City *
               </label>
               <input
@@ -405,28 +453,40 @@ export default function CheckoutPage() {
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="Stockholm"
                 required
+                aria-required="true"
+                aria-label="City"
               />
             </div>
 
             {/* Postal Code */}
             <div>
-              <label htmlFor="postalCode" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="postalCode"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Postal Code *
               </label>
               <input
                 type="text"
                 id="postalCode"
                 value={addressData.postalCode}
-                onChange={(e) => handleAddressChange("postalCode", e.target.value)}
+                onChange={(e) =>
+                  handleAddressChange("postalCode", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="111 21"
                 required
+                aria-required="true"
+                aria-label="Postal code"
               />
             </div>
 
             {/* Country */}
             <div>
-              <label htmlFor="country" className="block text-sm font-medium opacity-70 mb-1">
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium opacity-70 mb-1"
+              >
                 Country *
               </label>
               <input
@@ -437,12 +497,19 @@ export default function CheckoutPage() {
                 className="w-full px-3 py-2 border border-foreground/20 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-background"
                 placeholder="Sweden"
                 required
+                aria-required="true"
+                aria-label="Country"
               />
             </div>
 
             {/* Payment Button */}
-            <PaypalCheckout isFormValid={isFormValid} addressData={addressData} />
-            <p className="text-xs opacity-50 text-center mt-4">* All fields are required</p>
+            <PaypalCheckout
+              isFormValid={isFormValid}
+              addressData={addressData}
+            />
+            <p className="text-xs opacity-50 text-center mt-4" role="note">
+              * All fields are required
+            </p>
           </form>
         </div>
       </div>

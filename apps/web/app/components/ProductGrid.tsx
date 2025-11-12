@@ -149,28 +149,36 @@ export default function ProductGrid({ filters }: ProductGridProps) {
     return <div>{errorMessage ? errorMessage : "Loading..."}</div>;
 
   return (
-    <section id="products-section" className="w-full">
+    <section
+      id="products-section"
+      className="w-full"
+      aria-labelledby="products-heading"
+      role="region"
+    >
       <div className="mx-auto mb-6 mt-6 flex justify-between items-center">
-        <p className="text-sm text-gray-600 ">
+        <p className="text-sm text-gray-600" role="status" aria-live="polite">
           {filteredData.length} products found
         </p>
         <SortDropdown
           value={sortBy}
           onChange={(value) => setSortBy(value as SortOption)}
           options={SORT_OPTIONS}
+          ariaLabel="Sort products by"
         />
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
+      <div
+        className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"
+        role="list"
+        aria-label="Product cards"
+      >
         {filteredData.map((card) => (
-          <ProductCard
-            key={card.id}
-            pokemon={card}
-            onAddToCart={handleAddToCart}
-          />
+          <div key={card.id} role="listitem">
+            <ProductCard pokemon={card} onAddToCart={handleAddToCart} />
+          </div>
         ))}
       </div>
       {filteredData.length === 0 && (
-        <div className="text-center py-16">
+        <div className="text-center py-16" role="status" aria-live="polite">
           <p className="text-gray-500 text-lg">
             No products match your current filters.
           </p>

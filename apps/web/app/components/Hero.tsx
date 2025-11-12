@@ -12,30 +12,48 @@ export default function Hero() {
     }
   };
   return (
-    <section className="relative h-[80vh] flex items-center overflow-hidden">
+    <section
+      className="relative h-[80vh] flex items-center overflow-hidden"
+      aria-labelledby="hero-heading"
+    >
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover"
         style={{
           backgroundImage: `url('/hero_image.jpg')`,
           backgroundPosition: "center center",
-        }}>
+        }}
+        role="img"
+        aria-label="Pokémon trading cards background image"
+      >
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/40" aria-hidden="true"></div>
       </div>
 
       {/* Additional gradient overlays for depth */}
-      <div className="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-black/30"></div>
-      <div className="absolute inset-0 from-transparent via-transparent to-black/50"></div>
+      <div
+        className="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-black/30"
+        aria-hidden="true"
+      ></div>
+      <div
+        className="absolute inset-0 from-transparent via-transparent to-black/50"
+        aria-hidden="true"
+      ></div>
       <div className="ml-10">
         <div className="flex items-center justify-between mr-7">
           {/* Left content */}
           <div className="flex-1 max-w-2xl">
-            <div className="text-yellow-400 text-lg font-medium tracking-wider uppercase mb-4 drop-shadow-lg">
+            <div
+              className="text-yellow-400 text-lg font-medium tracking-wider uppercase mb-4 drop-shadow-lg"
+              aria-label="Slogan"
+            >
               Catch.Collect.Battle.
             </div>
 
-            <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+            <h1
+              id="hero-heading"
+              className="text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 leading-tight drop-shadow-2xl"
+            >
               POKÉMON{" "}
               <span className="text-yellow-400 bg-clip-text">STORE</span>
             </h1>
@@ -45,7 +63,10 @@ export default function Hero() {
               everywhere.
             </p>
             <Link href="/products">
-              <button className="group bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl drop-shadow-lg">
+              <button
+                className="group bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl drop-shadow-lg"
+                aria-label="Browse Pokémon cards in our shop"
+              >
                 <span className="flex items-center gap-2">Shop Cards</span>
               </button>
             </Link>
@@ -56,13 +77,17 @@ export default function Hero() {
       {/* Scroll indicator */}
       <button
         onClick={scrollToProducts}
-        className="absolute bottom-8 left-1/2 transform text-white/80">
+        className="absolute bottom-8 left-1/2 transform text-white/80"
+        aria-label="Scroll down to products section"
+      >
         <div className="animate-bounce">
           <svg
             className="w-6 h-6 drop-shadow-lg"
             fill="none"
             stroke="currentColor"
-            viewBox="0 0 24 24">
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
