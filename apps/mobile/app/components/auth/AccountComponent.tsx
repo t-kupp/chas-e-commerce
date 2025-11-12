@@ -47,7 +47,6 @@ export default function AccountComponent({ onLogout }: AccountComponentProps) {
         return;
       }
 
-      console.log("Fetching orders for user:", user.id);
 
       // Fetch orders with populated data
       const ordersResponse = await fetch(
@@ -63,10 +62,8 @@ export default function AccountComponent({ onLogout }: AccountComponentProps) {
 
       if (ordersResponse.ok) {
         const ordersData = await ordersResponse.json();
-        console.log("Orders data:", JSON.stringify(ordersData, null, 2));
 
         const userOrders = ordersData.data || [];
-        console.log(`Found ${userOrders.length} orders`);
 
         setOrders(userOrders);
 
@@ -233,7 +230,10 @@ export default function AccountComponent({ onLogout }: AccountComponentProps) {
             </View>
 
             <View>
-              <TouchableOpacity className="flex-row items-center p-4 bg-gray-50 rounded-lg mb-3">
+              <TouchableOpacity 
+                className="flex-row items-center p-4 bg-gray-50 rounded-lg mb-3"
+                onPress={() => router.push("/(tabs)/orders")}
+              >
                 <View className="w-10 h-10 bg-yellow-100 rounded-lg items-center justify-center mr-3">
                   <Ionicons name="bag" size={20} color="#d97706" />
                 </View>

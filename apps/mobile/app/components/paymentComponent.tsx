@@ -87,6 +87,7 @@ export default function PaymentComponent({
         },
         body: JSON.stringify(orderData),
       });
+     
 
       if (!response.ok) {
         const errorData = await response.json();

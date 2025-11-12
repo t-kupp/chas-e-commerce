@@ -32,7 +32,7 @@ export default function Wishlist() {
   return (
     <View className="flex-1 bg-gray-50 pt-20">
       {/* Header */}
-      <View className="bg-white px-6 py-4 border-b border-gray-200">
+      <View className=" px-6 py-4 border-b border-gray-200">
         <View className="flex-row items-center justify-between">
           <View>
             <Text className="text-2xl font-bold text-gray-800">
