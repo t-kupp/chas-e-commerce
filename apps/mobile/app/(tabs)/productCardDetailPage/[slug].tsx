@@ -1,15 +1,15 @@
 import React from "react";
-import {View, Text, Image, TouchableOpacity, ScrollView} from "react-native";
-import {useLocalSearchParams} from "expo-router";
-import {useCart} from "../../context/CartContext";
-import {usePokemon} from "@/hooks/usePokemonApiSlug";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { useCart } from "../../context/CartContext";
+import { usePokemon } from "@/hooks/usePokemonApiSlug";
 
 export default function ProductDetail() {
-  const {slug} = useLocalSearchParams();
+  const { slug } = useLocalSearchParams();
   const slugParam = typeof slug === "string" ? slug : undefined;
 
-  const {addItem} = useCart();
-  const {pokemon, loading} = usePokemon(slugParam);
+  const { addItem } = useCart();
+  const { pokemon, loading } = usePokemon(slugParam);
   const STRAPI_URL =
     process.env.EXPO_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 
@@ -31,10 +31,10 @@ export default function ProductDetail() {
 
   return (
     <View className="flex-1 bg-white pt-10">
-      <ScrollView contentContainerStyle={{padding: 16, alignItems: "center"}}>
+      <ScrollView contentContainerStyle={{ padding: 16, alignItems: "center" }}>
         {pokemon.image?.url && (
           <Image
-            source={{uri: `${STRAPI_URL}${pokemon.image.url}`}}
+            source={{ uri: `${STRAPI_URL}${pokemon.image.url}` }}
             className="w-full h-[500px] rounded-lg mb-4"
             resizeMode="cover"
           />
@@ -102,6 +102,7 @@ export default function ProductDetail() {
               pokemon.stock > 0
                 ? addItem({
                     id: pokemon.id,
+                    documentId: pokemon.documentId,
                     name: pokemon.name,
                     price: pokemon.price,
                     image:

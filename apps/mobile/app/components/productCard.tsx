@@ -1,22 +1,22 @@
 // ...existing code...
 import React from "react";
-import {useState} from "react";
-import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Link} from "expo-router";
-import {SortOption} from "../../../shared/types/pokemon";
-import {useCart} from "../context/CartContext";
-import {usePokemons} from "@/hooks/usePokemonApi";
-import {ShoppingCart, ScanEye, Heart} from "lucide-react-native";
-import {useWishlist} from "../context/WishListContext";
+import { useState } from "react";
+import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Link } from "expo-router";
+import { SortOption } from "../../../shared/types/pokemon";
+import { useCart } from "../context/CartContext";
+import { usePokemons } from "@/hooks/usePokemonApi";
+import { ShoppingCart, ScanEye, Heart } from "lucide-react-native";
+import { useWishlist } from "../context/WishListContext";
 
 interface ProductCardProps {
   sortBy?: SortOption;
 }
 
-export default function ProductCard({sortBy}: ProductCardProps) {
-  const {addItem} = useCart();
-  const {pokemons = [], loading} = usePokemons();
-  const {addToWishlist, removeFromWishlist, isInWishlist} = useWishlist();
+export default function ProductCard({ sortBy }: ProductCardProps) {
+  const { addItem } = useCart();
+  const { pokemons = [], loading } = usePokemons();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   function sortedPokemons() {
     const arr = [...pokemons]; // kopiera så vi inte muterar original
@@ -45,7 +45,7 @@ export default function ProductCard({sortBy}: ProductCardProps) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{paddingVertical: 8}}>
+    <ScrollView contentContainerStyle={{ paddingVertical: 8 }}>
       <View className="flex-row flex-wrap justify-center p-2 index-10">
         {sorted.map((pokemon) => (
           <View
@@ -58,7 +58,9 @@ export default function ProductCard({sortBy}: ProductCardProps) {
               {pokemon.image?.url ? (
                 <View className="flex-row">
                   <Image
-                    source={{uri: `http://localhost:1337${pokemon.image.url}`}}
+                    source={{
+                      uri: `http://localhost:1337${pokemon.image.url}`,
+                    }}
                     className="w-full h-52 rounded-lg mb-3"
                     resizeMode="cover"
                   />
@@ -116,6 +118,7 @@ export default function ProductCard({sortBy}: ProductCardProps) {
                     pokemon.stock > 0
                       ? addItem({
                           id: pokemon.id,
+                          documentId: pokemon.documentId,
                           name: pokemon.name,
                           price: pokemon.price,
                           image: pokemon.image?.url,

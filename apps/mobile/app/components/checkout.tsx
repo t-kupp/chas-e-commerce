@@ -66,13 +66,19 @@ const checkOut = () => {
     />
   );
 
-  const renderPaymentStep = () => (
-    <PaymentComponent
-      paymentMethod={paymentMethod}
-      setPaymentMethod={setPaymentMethod}
-      cartTotal={total}
-    />
-  );
+  const renderPaymentStep = () => {
+    // Find the selected address object
+    const address = addresses.find((addr) => addr.id === selectedAddress);
+
+    return (
+      <PaymentComponent
+        paymentMethod={paymentMethod}
+        setPaymentMethod={setPaymentMethod}
+        cartTotal={total}
+        selectedAddress={address}
+      />
+    );
+  };
 
   const renderBottomButtons = () => (
     <View className="flex-row px-6 py-4 bg-white border-t border-gray-200">

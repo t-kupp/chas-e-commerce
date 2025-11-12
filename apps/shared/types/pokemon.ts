@@ -85,6 +85,7 @@ export interface Pokemon {
 
 export type CartItem = {
   id: number;
+  documentId?: string;
   name: string;
   price: number;
   quantity: number;
@@ -111,7 +112,7 @@ export type SortOption =
   | null;
 
 export interface FilterState {
-  priceRange: {min: number; max: number};
+  priceRange: { min: number; max: number };
   types: string[];
   rarities: string[];
   conditions: string[];
@@ -120,8 +121,8 @@ export interface FilterState {
 }
 
 export interface FilterOptions {
-  types: Array<{id: number; title: string}>;
-  rarities: Array<{id: number; title: string}>;
-  conditions: Array<{id: number; title: string}>;
-  priceRange: {min: number; max: number};
+  types: Array<{ id: number; title: string }>;
+  rarities: Array<{ id: number; title: string }>;
+  conditions: Array<{ id: number; title: string }>;
+  priceRange: { min: number; max: number };
 }

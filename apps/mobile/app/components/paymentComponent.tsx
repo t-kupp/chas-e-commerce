@@ -9,17 +9,23 @@ import {
 import { useStripe } from "@stripe/stripe-react-native";
 import { useAuth } from "../context/auth";
 import { useCart } from "../context/CartContext";
+import { Address } from "./adressComponent";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
   paymentMethod: string;
   setPaymentMethod: (m: string) => void;
   cartTotal: number;
+  selectedAddress?: Address;
 }
 
-export default function PaymentComponent({ cartTotal }: Props) {
+export default function PaymentComponent({
+  cartTotal,
+  selectedAddress,
+}: Props) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { user } = useAuth();
-  const { clearCart } = useCart();
+  const { clearCart, items } = useCart();
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paidAmount, setPaidAmount] = useState(0);
@@ -30,6 +36,76 @@ export default function PaymentComponent({ cartTotal }: Props) {
   const totalWithTax = cartTotal + tax;
   // Convert to cents for Stripe (Stripe uses smallest currency unit)
   const amountInCents = Math.round(totalWithTax * 100);
+
+  // Create order in backend
+  const createOrder = async () => {
+    try {
+      const jwt = await AsyncStorage.getItem("jwt");
+      if (!jwt) {
+        Alert.alert("Error", "Authentication token not found");
+        return false;
+      }
+
+      // Map cart items to order items format
+      const orderItems = items.map((item) => ({
+        pokemon: item.documentId, // Using documentId for the relation
+        Quantity: item.quantity,
+      }));
+
+      console.log("Cart items:", JSON.stringify(items, null, 2));
+      console.log("Order items:", JSON.stringify(orderItems, null, 2));
+
+      // Prepare address data
+      const addressData = selectedAddress
+        ? {
+            fullName: selectedAddress.fullName,
+            phone: selectedAddress.phone || "",
+            street: selectedAddress.street,
+            city: selectedAddress.city || "",
+            postalCode: selectedAddress.zip || "",
+            country: selectedAddress.state || "", // Using state as country for now
+          }
+        : undefined;
+
+      const orderData = {
+        data: {
+          orderItems,
+          total: totalWithTax,
+          orderStatus: "pending",
+          users_permissions_user: user?.id,
+          ...(addressData && { userAddress: addressData }),
+        },
+      };
+
+      console.log("Creating order:", JSON.stringify(orderData, null, 2));
+
+      const response = await fetch("http://localhost:1337/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Order creation error:", errorData);
+        throw new Error(errorData.error?.message || "Failed to create order");
+      }
+
+      const createdOrder = await response.json();
+      console.log("Order created successfully:", createdOrder);
+      return true;
+    } catch (error) {
+      console.error("Error creating order:", error);
+      Alert.alert(
+        "Order Error",
+        `Payment successful but failed to create order: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+      return false;
+    }
+  };
 
   // Initialize and present Stripe payment
   const handleStripePayment = async () => {
@@ -96,10 +172,20 @@ export default function PaymentComponent({ cartTotal }: Props) {
       if (presentError) {
         Alert.alert("Payment Cancelled", presentError.message);
       } else {
-        // Payment successful - save amount, clear cart and show success screen
-        setPaidAmount(totalWithTax);
-        clearCart();
-        setPaymentSuccess(true);
+        // Payment successful - create order, save amount, clear cart and show success screen
+        const orderCreated = await createOrder();
+
+        if (orderCreated) {
+          setPaidAmount(totalWithTax);
+          clearCart();
+          setPaymentSuccess(true);
+        } else {
+          // Payment succeeded but order creation failed
+          Alert.alert(
+            "Warning",
+            "Payment was processed but there was an issue saving your order. Please contact support with your payment confirmation."
+          );
+        }
       }
     } catch (error) {
       const errorMessage =
