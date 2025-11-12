@@ -17,7 +17,6 @@ export default function HomePage() {
     scrollViewRef.current?.scrollTo({ y: productY, animated: true });
   };
 
-  // Auto-scroll to products if scrollToProducts param is true
   useEffect(() => {
     if (params.scrollToProducts === "true" && productY > 0) {
       setTimeout(() => {

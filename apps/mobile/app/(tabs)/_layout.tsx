@@ -20,7 +20,8 @@ export default function RootLayout() {
         tabBarActiveTintColor: "#fbbf24",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: { backgroundColor: "#1F2937" },
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{

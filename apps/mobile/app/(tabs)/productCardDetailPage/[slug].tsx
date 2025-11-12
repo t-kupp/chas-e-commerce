@@ -3,10 +3,12 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { useCart } from "../../context/CartContext";
 import { usePokemon } from "@/hooks/usePokemonApiSlug";
-import { ChevronLeft } from "lucide-react-native";
+import { ChevronLeft, Heart } from "lucide-react-native";
+import { useWishlist } from "@/app/context/WishListContext";
 
 export default function ProductDetail() {
   const { slug } = useLocalSearchParams();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const slugParam = typeof slug === "string" ? slug : undefined;
 
   const { addItem } = useCart();
@@ -48,13 +50,41 @@ export default function ProductDetail() {
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={{ padding: 20, alignItems: "center" }}>
-        {pokemon.image?.url && (
-          <Image
-            source={{ uri: `${STRAPI_URL}${pokemon.image.url}` }}
-            className="w-full h-[500px] rounded-lg mb-4"
-            resizeMode="cover"
-          />
-        )}
+        <View className="relative w-full">
+          {pokemon.image?.url && (
+            <Image
+              source={{ uri: `${STRAPI_URL}${pokemon.image.url}` }}
+              className="w-full h-[500px] rounded-lg mb-4"
+              resizeMode="cover"
+            />
+          )}
+
+          {/* Wishlist Heart Button - positioned to overlap card edge */}
+          <TouchableOpacity
+            onPress={() => {
+              if (isInWishlist(pokemon.id)) {
+                removeFromWishlist(pokemon.id);
+              } else {
+                addToWishlist(pokemon);
+              }
+            }}
+            className="absolute -top-6 -right-6 bg-white rounded-full p-3 shadow-lg"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Heart
+              size={28}
+              fill={isInWishlist(pokemon.id) ? "red" : "none"}
+              stroke="red"
+              strokeWidth={2}
+            />
+          </TouchableOpacity>
+        </View>
 
         <View className="w-full items-center">
           <View className="p-4 w-full flex-row justify-between items-center ">
@@ -62,14 +92,16 @@ export default function ProductDetail() {
               {pokemon.name}
             </Text>
 
-            <Text className="text-sm text-gray-600 mb-4 text-center">
+            <Text
+              className={`text-sm ${pokemon.stock ? "text-green-600" : "text-red-600"} mb-4 text-center`}
+            >
               {pokemon.stock ? `${pokemon.stock} in stock` : "Out of Stock"}
             </Text>
           </View>
 
-          <Text className="text-4xl font-bold mb-4 text-center">
+          {/* <Text className="text-4xl font-bold mb-4 text-center">
             ${Number(pokemon.price).toFixed(2)}
-          </Text>
+          </Text> */}
 
           <View className="flex-row justify-between w-full mb-6">
             <View className="flex-1 pr-2 items-center">
@@ -133,7 +165,7 @@ export default function ProductDetail() {
             className="bg-black py-4 rounded-lg w-10/12 self-center mb-8"
           >
             <Text className="text-white text-center font-bold text-lg">
-              Add to Cart
+              Add to Cart • ${Number(pokemon.price).toFixed(2)}
             </Text>
           </TouchableOpacity>
         </View>
